@@ -1,8 +1,8 @@
 # Advent of Code 2018 & Learning to Code again
 
 My attempts at the [Advent of Code](https://adventofcode.com/2018) puzzles.
-I'm using this as a "learning to code again" exercise since I haven't coded for 20+ years
-I've chosen [go](https://goland.org)
+I'm using this as a "learning to code again" exercise since I haven't coded for 20+ years.
+I've chosen [go](https://golang.org)
 
 ## Instructions
 
