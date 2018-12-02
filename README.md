@@ -17,8 +17,9 @@ go build
 ## Days of Advent
 
 + [Day 1](srv/day01.go)
-Day 1 - [How to Write Go Code](https://golang.org/doc/code.html). Well, I've got to start somewhere....
-    ./day01 -file original.txt -part a
-    ./day01 -file original.txt -part b
+Day 1 - [How to Write Go Code](https://golang.org/doc/code.html). A few nasty hacks in part b that don't feel good, especially the "break" in the "for" loop.
+```./day01 -file original.txt -part a
+./day01 -file original.txt -part b
+```
 
-    A few nasty hacks in part b that don't feel good, especially the "break" in the "for" loop.
+
