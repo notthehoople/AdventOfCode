@@ -7,6 +7,7 @@ import (
 	"os"
 	"flag"
 	"strings"
+	"strconv"
 )
 
 // Read the text file passed in by name into a array of strings
@@ -49,6 +50,7 @@ func fabricClaim(fileName string) int {
 	//   <b> - b inches tall
 
 	var resultVar int = 0					// Defining the overall result Variable
+	var a, b, x, y int = 0, 0, 0, 0			// Co-ords and size of claim
 
 	fabricMap := [10][10]int{}
 
@@ -69,25 +71,33 @@ func fabricClaim(fileName string) int {
 		for j := 0; j < len(words); j++ {
 			switch j {
 			case 0:	// First entry is the claim number
-				fmt.Println("Ignore:", words[j])
 			case 1: // Second entry is the '@'
-				fmt.Println("Ignore:", words[j])
 			case 2: // Third entry is the start co-ordinates <x>,<y>
 				tempNumber := strings.Split(words[j], ":")
 				numberString := strings.Split(tempNumber[0], ",")
-				fmt.Println("Number <x>:", numberString[0])
-				fmt.Println("Number <y>:", numberString[1])
+				x, _ = strconv.Atoi(numberString[0])
+				y, _ = strconv.Atoi(numberString[1])
+
+				fmt.Println("Number <x>:", x)
+				fmt.Println("Number <y>:", y)
 			case 3: // Fourth entry is the size <a>x<b>
 				numberString := strings.Split(words[j], "x")
-				fmt.Println("Number <a>:", numberString[0])
-				fmt.Println("Number <b>:", numberString[1])
+				a, _ = strconv.Atoi(numberString[0])
+				b, _ = strconv.Atoi(numberString[1])
+
+				fmt.Println("Number <a>:", a)
+				fmt.Println("Number <b>:", b)
 			}
-			fmt.Println("Word:", j, words[j])
 		}
-		// fmt.Println(words, len(words))
+
+		// Now we have the variables we need it's time to modify the fabricMap
+		// Loop through the fabricMap adding 1 to each relevant area found
+		// Once complete, our result is:
+		//    - loop through the fabricMap
+		//    - count the number of entries > 1
+
 		fmt.Println("Break")
 	}	
-
 
 	resultVar = 15
 
@@ -173,15 +183,11 @@ func main() {
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day02 do you want to calc (a or b)")
 
-
-
 	flag.Parse()
 
 	if *execPartPtr == "a" {
 		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr))
 	} else {
-		firstBoxID, secondBoxID := closeIDs(*fileNamePtr)
-		fmt.Println("Part B - Prototype Clothing is in:", firstBoxID, secondBoxID)
-
+		fmt.Println("Not started yet:")
 	}
 }

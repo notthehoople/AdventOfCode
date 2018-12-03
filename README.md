@@ -31,4 +31,8 @@ Day 2 -
 ./day02 -file original.txt -part b
 ```
 
-
++ [Day 3](src/day03.go)
+Day 3 - Work in progress. Half way through part A
+```
+./day03 -file original.txt -part a
+```
