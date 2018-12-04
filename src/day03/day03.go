@@ -33,7 +33,7 @@ func printStringArray(tempString []string) {
 	}
 }
 
-// Handles everything needed to work out the fabric claim (Day03 part A)
+// Handles everything needed to work out the fabric claim (Day03 part A) and Good Elf (Day03 part B)
 func fabricClaim(fileName string, solutionPart string) int {
 
 	// A claim like #123 @ 3,2: 5x4 means that claim ID 123 specifies a rectangle 3 inches from the
@@ -53,20 +53,13 @@ func fabricClaim(fileName string, solutionPart string) int {
 	var lengthx, lengthy int = 0, 0
 	var elfNumber int = 0
 
-	fabricMap := [2000][2000]int{}
+	fabricMap := [2000][2000]int{}			// Santa's fabric
+	elfList := [2000]int{}					// The list of elves
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
 
-	// Print out what we've read from the file
-	// printStringArray(fileContents)
-
-	// Print the fabricMap starting position
-	// fmt.Println(fabricMap)
-
 	// Loop through the string array; break into component parts then apply to our fabricMap
-
-	fmt.Println("We're doing part:", solutionPart)
 
 	for i := 0; i < len(fileContents); i++ {
 		words := strings.Fields(fileContents[i])
@@ -77,29 +70,22 @@ func fabricClaim(fileName string, solutionPart string) int {
 				tempElf := strings.Split(words[j], "#")
 				elf, _ := strconv.Atoi(tempElf[1])
 				elfNumber = elf
-				//fmt.Println("Our Elf is:", elf)
 			case 1: // Second entry is the '@'
 			case 2: // Third entry is the start co-ordinates <x>,<y>
 				tempNumber := strings.Split(words[j], ":")
 				numberString := strings.Split(tempNumber[0], ",")
 				x, _ = strconv.Atoi(numberString[0])
 				y, _ = strconv.Atoi(numberString[1])
-
-			//	fmt.Println("Number <x>:", x)
-			//	fmt.Println("Number <y>:", y)
 			case 3: // Fourth entry is the size <a>x<b>
 				numberString := strings.Split(words[j], "x")
 				a, _ = strconv.Atoi(numberString[0])
 				b, _ = strconv.Atoi(numberString[1])
-
-			//	fmt.Println("Number <a>:", a)
-			//	fmt.Println("Number <b>:", b)
 			}
 		}
 
 		// Now we have the variables we need it's time to modify the fabricMap
 		// Loop through the fabricMap adding the elf number to each relevant area found
-		// If an elf number is already there, replace it with '-1'
+		// If an elf number is already there, replace it with '-1' and mark the elf as dud in elfList
 		// Once we've built the map, we'll count the number of '-1's for part A
 
 		// k is our "y" axis in the map
@@ -107,30 +93,46 @@ func fabricClaim(fileName string, solutionPart string) int {
 			// l is the "x" axis in the map. We need to modify from x through to x+a
 			for l := x; l < x + a; l++ {
 				if fabricMap[l][k] == 0 {
+					// This is the first time this square has been used. Allocate it to the Elf
 					fabricMap[l][k] = elfNumber
 				} else {
-					fabricMap[l][k] = -1
+					if fabricMap[l][k] > 0 {
+						// The fabricMap is already used by another Elf. Mark that elf as bad, our elf as bad
+						// and mark the fabricMap as being used by multiple elves
+						elfList[fabricMap[l][k]] = -1
+						fabricMap[l][k] = -1
+						elfList[elfNumber] = -1
+					} else {
+						if fabricMap[l][k] < 0 {
+							// If the fabricMap is already a duplicate entry, just mark the elf as bad
+							elfList[elfNumber] = -1
+						}
+					}
 				}
 			}
 		}
 	}	
 
-	// Print the entire Fabric Map
-	//for i:= 0; i < len(fabricMap); i++ {
-	//	fmt.Println("Array entry:",i,fabricMap[i])
-	//}
-
-	// Once complete, our result is:
-	//    - loop through the fabricMap
-	//    - count the number of entries > 1
-	resultVar = 0
-	lengthy = len(fabricMap)
-	lengthx = len(fabricMap[0])
-	for k := 0; k < lengthx; k++ {
-		// l is the "x" axis in the map. We need to modify from x through to x+a
-		for l := 0; l < lengthy; l++ {
-			if fabricMap[l][k] < 0 {
-				resultVar++
+	if solutionPart == "a" {
+		// PART A: Once complete, our result is:
+		//    - loop through the fabricMap
+		//    - count the number of entries > 1
+		resultVar = 0
+		lengthy = len(fabricMap)
+		lengthx = len(fabricMap[0])
+		for k := 0; k < lengthx; k++ {
+			// l is the "x" axis in the map. We need to modify from x through to x+a
+			for l := 0; l < lengthy; l++ {
+				if fabricMap[l][k] < 0 {
+					resultVar++
+				}
+			}
+		}
+	} else {
+		// PART B: Once complete, our answer is the only Elf in elfList that isn't -1
+		for i := 1; i <= elfNumber; i++ {
+			if elfList[i] != -1 {
+				resultVar = i
 			}
 		}
 	}
@@ -148,6 +150,6 @@ func main() {
 	case "a":
 		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr, *execPartPtr))
 	case "b":
-		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr, *execPartPtr))
+		fmt.Println("The only good Elf is:", fabricClaim(*fileNamePtr, *execPartPtr))
 	}
 }
