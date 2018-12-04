@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"bufio"
-	"log"
 	"os"
 	"flag"
 	"strings"
@@ -34,15 +33,8 @@ func printStringArray(tempString []string) {
 	}
 }
 
-//func printIntArray(tempIntArray [][]int) {
-//	// Loop through the array and print each line
-//	for i:= 0; i < len(tempIntArray); i++ {
-//		fmt.Println(tempIntArray[i])
-//	}
-//}
-
 // Handles everything needed to work out the fabric claim (Day03 part A)
-func fabricClaim(fileName string) int {
+func fabricClaim(fileName string, solutionPart string) int {
 
 	// A claim like #123 @ 3,2: 5x4 means that claim ID 123 specifies a rectangle 3 inches from the
 	// left edge, 2 inches from the top edge, 5 inches wide, and 4 inches tall
@@ -59,6 +51,7 @@ func fabricClaim(fileName string) int {
 	var resultVar int = 0					// Defining the overall result Variable
 	var a, b, x, y int = 0, 0, 0, 0			// Co-ords and size of claim
 	var lengthx, lengthy int = 0, 0
+	var elfNumber int = 0
 
 	fabricMap := [2000][2000]int{}
 
@@ -73,12 +66,18 @@ func fabricClaim(fileName string) int {
 
 	// Loop through the string array; break into component parts then apply to our fabricMap
 
+	fmt.Println("We're doing part:", solutionPart)
+
 	for i := 0; i < len(fileContents); i++ {
 		words := strings.Fields(fileContents[i])
 
 		for j := 0; j < len(words); j++ {
 			switch j {
 			case 0:	// First entry is the claim number
+				tempElf := strings.Split(words[j], "#")
+				elf, _ := strconv.Atoi(tempElf[1])
+				elfNumber = elf
+				//fmt.Println("Our Elf is:", elf)
 			case 1: // Second entry is the '@'
 			case 2: // Third entry is the start co-ordinates <x>,<y>
 				tempNumber := strings.Split(words[j], ":")
@@ -99,22 +98,27 @@ func fabricClaim(fileName string) int {
 		}
 
 		// Now we have the variables we need it's time to modify the fabricMap
-		// Loop through the fabricMap adding 1 to each relevant area found
-
+		// Loop through the fabricMap adding the elf number to each relevant area found
+		// If an elf number is already there, replace it with '-1'
+		// Once we've built the map, we'll count the number of '-1's for part A
 
 		// k is our "y" axis in the map
 		for k := y; k < y + b; k++ {
 			// l is the "x" axis in the map. We need to modify from x through to x+a
 			for l := x; l < x + a; l++ {
-				fabricMap[l][k]++
+				if fabricMap[l][k] == 0 {
+					fabricMap[l][k] = elfNumber
+				} else {
+					fabricMap[l][k] = -1
+				}
 			}
 		}
-
-		//printIntArray(fabricMap)
-		//for i:= 0; i < len(fabricMap); i++ {
-		//	fmt.Println("Array entry:",i,fabricMap[i])
-		//}
 	}	
+
+	// Print the entire Fabric Map
+	//for i:= 0; i < len(fabricMap); i++ {
+	//	fmt.Println("Array entry:",i,fabricMap[i])
+	//}
 
 	// Once complete, our result is:
 	//    - loop through the fabricMap
@@ -125,7 +129,7 @@ func fabricClaim(fileName string) int {
 	for k := 0; k < lengthx; k++ {
 		// l is the "x" axis in the map. We need to modify from x through to x+a
 		for l := 0; l < lengthy; l++ {
-			if fabricMap[l][k] > 1 {
+			if fabricMap[l][k] < 0 {
 				resultVar++
 			}
 		}
@@ -134,90 +138,16 @@ func fabricClaim(fileName string) int {
 	return resultVar
 }
 
-func closeIDs(fileName string) (string, string) {
-	var lineA string						// Holds the line read from the file
-	var lineB string						// Holds the comparison line read from the 2nd loop of the file
-	var differencesCount int = 0			// Count of differences between current line and line in file
-
-
-
-	// Confident that your list of box IDs is complete, you're ready to find the boxes full of prototype fabric.
-	// The boxes will have IDs which differ by exactly one character at the same position in both strings.
-
-	// Loop through file to get lineA
-	//    Loop through file to get line B
-	//        For each character in lineA, compare against line B until we get more than 1 difference
-	//        Move on to next line in file
-	// At anytime when we find a line that has exactly 1 difference we can quit
-
-	fileA, err := os.Open(fileName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer fileA.Close()
-
-	scanner := bufio.NewScanner(fileA)
-	
-	// Top level loop starting
-    for scanner.Scan() {
-
-		lineA = scanner.Text()
-
-		fileB, err := os.Open(fileName)
-		if err != nil {
-			log.Fatal(err)
-		}
-		scannerB := bufio.NewScanner(fileB)
-
-		for scannerB.Scan() {
-			differencesCount = 0
-
-			lineB = scannerB.Text()
-
-			// Make sure we don't compare a line with itself
-			if lineA != lineB {
-				// Loop through the characters in lineA and compare with the character at the same pos in lineB
-				// If it's different, count it. If we only get 1 difference in the whole line we've found it.
-				
-				for i, c := range lineA {
-					if string(c) != string(lineB[i]) {
-						differencesCount++
-					}
-				}
-			}
-
-			if differencesCount == 1 {
-				break
-			}
-		}
-
-		if differencesCount == 1 {
-			break
-		}		
-
-		fileB.Close()
-    }
-
-    if err := scanner.Err(); err != nil {
-        log.Fatal(err)
-    }
-
-	if differencesCount == 1 {
-		return lineA, lineB
-	} else {
-		return "No IDs Found", "No IDs Found"
-	}
-}
-
 func main() {
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day02 do you want to calc (a or b)")
 
 	flag.Parse()
 
-	if *execPartPtr == "a" {
-		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr))
-	} else {
-		fmt.Println("Not started yet:")
+	switch *execPartPtr {
+	case "a":
+		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr, *execPartPtr))
+	case "b":
+		fmt.Println("Square inches in two or more claims:", fabricClaim(*fileNamePtr, *execPartPtr))
 	}
 }
