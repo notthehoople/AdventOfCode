@@ -34,6 +34,13 @@ func printStringArray(tempString []string) {
 	}
 }
 
+//func printIntArray(tempIntArray [][]int) {
+//	// Loop through the array and print each line
+//	for i:= 0; i < len(tempIntArray); i++ {
+//		fmt.Println(tempIntArray[i])
+//	}
+//}
+
 // Handles everything needed to work out the fabric claim (Day03 part A)
 func fabricClaim(fileName string) int {
 
@@ -51,17 +58,18 @@ func fabricClaim(fileName string) int {
 
 	var resultVar int = 0					// Defining the overall result Variable
 	var a, b, x, y int = 0, 0, 0, 0			// Co-ords and size of claim
+	var lengthx, lengthy int = 0, 0
 
-	fabricMap := [10][10]int{}
+	fabricMap := [2000][2000]int{}
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
 
 	// Print out what we've read from the file
-	printStringArray(fileContents)
+	// printStringArray(fileContents)
 
 	// Print the fabricMap starting position
-	fmt.Println(fabricMap)
+	// fmt.Println(fabricMap)
 
 	// Loop through the string array; break into component parts then apply to our fabricMap
 
@@ -78,28 +86,50 @@ func fabricClaim(fileName string) int {
 				x, _ = strconv.Atoi(numberString[0])
 				y, _ = strconv.Atoi(numberString[1])
 
-				fmt.Println("Number <x>:", x)
-				fmt.Println("Number <y>:", y)
+			//	fmt.Println("Number <x>:", x)
+			//	fmt.Println("Number <y>:", y)
 			case 3: // Fourth entry is the size <a>x<b>
 				numberString := strings.Split(words[j], "x")
 				a, _ = strconv.Atoi(numberString[0])
 				b, _ = strconv.Atoi(numberString[1])
 
-				fmt.Println("Number <a>:", a)
-				fmt.Println("Number <b>:", b)
+			//	fmt.Println("Number <a>:", a)
+			//	fmt.Println("Number <b>:", b)
 			}
 		}
 
 		// Now we have the variables we need it's time to modify the fabricMap
 		// Loop through the fabricMap adding 1 to each relevant area found
-		// Once complete, our result is:
-		//    - loop through the fabricMap
-		//    - count the number of entries > 1
 
-		fmt.Println("Break")
+
+		// k is our "y" axis in the map
+		for k := y; k < y + b; k++ {
+			// l is the "x" axis in the map. We need to modify from x through to x+a
+			for l := x; l < x + a; l++ {
+				fabricMap[l][k]++
+			}
+		}
+
+		//printIntArray(fabricMap)
+		//for i:= 0; i < len(fabricMap); i++ {
+		//	fmt.Println("Array entry:",i,fabricMap[i])
+		//}
 	}	
 
-	resultVar = 15
+	// Once complete, our result is:
+	//    - loop through the fabricMap
+	//    - count the number of entries > 1
+	resultVar = 0
+	lengthy = len(fabricMap)
+	lengthx = len(fabricMap[0])
+	for k := 0; k < lengthx; k++ {
+		// l is the "x" axis in the map. We need to modify from x through to x+a
+		for l := 0; l < lengthy; l++ {
+			if fabricMap[l][k] > 1 {
+				resultVar++
+			}
+		}
+	}
 
 	return resultVar
 }
