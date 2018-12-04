@@ -32,7 +32,8 @@ Day 2 -
 ```
 
 + [Day 3](src/day03.go)
-Day 3 - Work in progress. Half way through part A
+Day 3 - Done. A silly bug in my thoughts caused an hour of head scratching but sorted now.
 ```
 ./day03 -file original.txt -part a
+./day03 -file original.txt -part b
 ```
