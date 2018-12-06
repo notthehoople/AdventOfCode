@@ -5,9 +5,9 @@ import (
 	"bufio"
 	"os"
 	"flag"
-	"strings"
-	"strconv"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 type GuardSleeping struct {
@@ -43,141 +43,149 @@ func printStringArray(tempString []string) {
 func printGuardMap(tempGuard [2000]GuardSleeping) {
 	// Loop through the array and print each line
 	for i:= 0; tempGuard[i].date != ""; i++ {
-		fmt.Println(tempGuard[i])
+		fmt.Printf("%s %s ", tempGuard[i].date, tempGuard[i].guardID)
+		for j := 0; j < len(tempGuard[i].minute); j++ {
+			fmt.Printf("%c ", tempGuard[i].minute[j])
+		}
+		fmt.Println("")
 	}
 }
 
+// Returns:
+//   - string: the ID of the Sleepiest Guard
+//   - int: the minute of the hour that the guard is most likely to be asleep
+func mostSleepyGuard(tempguardMap [2000]GuardSleeping) (string, int) {
+	var tempMinutes int = 0
+	var sleepiestGuard = make(map[string]int)
+	var sleepiestMinute = make(map[int]int)
+	var mostMinutesSlept int = 0
+	var overallSleepiestGuard string
+
+	// Loop through the built guardMap and count the number of sleeping minutes per guard
+
+	for i := 0; tempguardMap[i].date != ""; i++ {
+		tempMinutes = 0
+		for j := 0; j < len(tempguardMap[i].minute); j++ {
+			if tempguardMap[i].minute[j] == '#' {
+				tempMinutes++
+			}
+		}
+
+		sleepiestGuard[tempguardMap[i].guardID] += tempMinutes
+	}
+
+	for k, tempval := range sleepiestGuard {
+		if tempval > mostMinutesSlept {
+			mostMinutesSlept = tempval
+			overallSleepiestGuard = k
+		}
+	}
+
+	// Now let's get the sleepiest minute
+	for i := 0; tempguardMap[i].date != ""; i++ {
+		if tempguardMap[i].guardID == overallSleepiestGuard {
+			for j := 0; j < len(tempguardMap[i].minute); j++ {
+				if tempguardMap[i].minute[j] == '#' {
+					sleepiestMinute[j]++ 
+				}
+			}
+		}
+	}
+
+	// The largest value in the sleepiestGuard map shows the minute he's asleep most
+	
+	var answerCount int = 0
+	var answerMinute int = 0
+	//var tempMin string
+	//var tempCount int = 0
+
+	for tempMin, tempCount := range sleepiestMinute {
+		if tempCount > answerCount {
+			answerMinute = tempMin
+			answerCount = tempCount
+		}
+	}
+
+	return overallSleepiestGuard, answerMinute
+}
+
+
 // Handles everything needed to work out the sleepy Guard (Day04 part A)
+// Situations to take account of:
+//     List needs to be sorted before use
+//     A single guard can fall asleep and wake up multiple times during their shift
+//     A single guard can stay awake during their shift so have 2 "Guard" input lines next to each other
+//     A guard can come on duty at 23:xx hours the previous day
+//     No guard ever falls asleep at 23:xx hours, always 00:xx hours
+//     Any guard that doesn't sleep isn't important
+//     There should never be a "falls asleep" without a "wakes up"
 func sleepyGuard(fileName string) int {
+
 	var guardMap [2000]GuardSleeping			// Our record of sleepy guards
-	var resultVar int = 0					// Defining the overall result Variable
-	var restVar string
+	var dateVar, actionVar, extraVar, currentGuard, wakeUpDate string
+	var sleepStartTime int = 0
+	var wakeUpTime int = 0
+	var storagePoint int = 0
+
+	for i := 0; i < len(guardMap); i++ {
+		for j := 0; j < len(guardMap[i].minute); j++ {
+			guardMap[i].minute[j] = '.'
+		}
+	}
 
 	// Read contents of file into a string array then sort that array
 	fileContents, _ := readLines(fileName)
 	sort.Strings(fileContents)
 
-	//printStringArray(fileContents)
-
 	for i := 0; i < len(fileContents); i++ {
-		var tempHourVar int
 
-		fmt.Println("Line:", fileContents[i])
-		fmt.Sscanf(fileContents[i], "[1518-%s %d:%d] %s", &guardMap[i].date, &tempHourVar, &guardMap[i].minute, &restVar)
+		// Loop through data
+		//   read line
+		//   if guard then grab id and move on
+		//   if falls asleep then grab start time and date and move on
+		//   if wakes up then process properly with data gathered
+		var tempHour, tempMinute int
+
+		fmt.Sscanf(fileContents[i], "[1518-%s %d:%d] %s %s", &dateVar, &tempHour, &tempMinute, &actionVar, &extraVar)
+
+		switch actionVar {
+		case "Guard":
+			// Grab ID and move on
+			currentGuard = extraVar
+		case "falls":
+			sleepStartTime = tempMinute
+		case "wakes":
+			wakeUpTime = tempMinute
+			wakeUpDate = dateVar
+	
+			if storagePoint > 0 {
+				if guardMap[storagePoint - 1].date == wakeUpDate {
+					storagePoint--
+				}
+			}
+
+			guardMap[storagePoint].date = wakeUpDate
+			guardMap[storagePoint].guardID = currentGuard
+			for j := sleepStartTime; j < wakeUpTime; j++ {
+				guardMap[storagePoint].minute[j] = '#'
+			}
+
+			storagePoint++
+		}
 	}
 
 	printGuardMap(guardMap)
 
-	return resultVar
+	// get the numbers, convert the guard id to int, and return the answer
+	chosenGuard, chosenMinute := mostSleepyGuard(guardMap)
+	tmpChosenGuard1 := strings.Split(chosenGuard, "#")
+	tmpChosenGuard2, _ := strconv.Atoi(tmpChosenGuard1[1])
+	fmt.Printf ("Chosen Guard: %d Chosen Minute: %d\n", tmpChosenGuard2, chosenMinute)
+
+	return tmpChosenGuard2 * chosenMinute
 }
 
-// Handles everything needed to work out the fabric claim (Day03 part A) and Good Elf (Day03 part B)
-func fabricClaim(fileName string, solutionPart string) int {
-
-	// A claim like #123 @ 3,2: 5x4 means that claim ID 123 specifies a rectangle 3 inches from the
-	// left edge, 2 inches from the top edge, 5 inches wide, and 4 inches tall
-
-	// We read through the file once, reading in each Elf's fabric claim
-	// Each line is #<num> @ <x>,<y>: <a>x<b>
-	//   #<num> - claim number
-	//   @ - seperator. We don't care about this
-	//   <x> - x inches from the left edge
-	//   <y> - y inches from the top edge
-	//   <a> - a inches wide
-	//   <b> - b inches tall
-
-	var resultVar int = 0					// Defining the overall result Variable
-	var a, b, x, y int = 0, 0, 0, 0			// Co-ords and size of claim
-	var lengthx, lengthy int = 0, 0
-	var elfNumber int = 0
-
-	fabricMap := [2000][2000]int{}			// Santa's fabric
-	elfList := [2000]int{}					// The list of elves
-
-	// Read contents of file into a string array
-	fileContents, _ := readLines(fileName)
-
-	// Loop through the string array; break into component parts then apply to our fabricMap
-
-	for i := 0; i < len(fileContents); i++ {
-		words := strings.Fields(fileContents[i])
-
-		for j := 0; j < len(words); j++ {
-			switch j {
-			case 0:	// First entry is the claim number
-				tempElf := strings.Split(words[j], "#")
-				elf, _ := strconv.Atoi(tempElf[1])
-				elfNumber = elf
-			case 1: // Second entry is the '@'
-			case 2: // Third entry is the start co-ordinates <x>,<y>
-				tempNumber := strings.Split(words[j], ":")
-				numberString := strings.Split(tempNumber[0], ",")
-				x, _ = strconv.Atoi(numberString[0])
-				y, _ = strconv.Atoi(numberString[1])
-			case 3: // Fourth entry is the size <a>x<b>
-				numberString := strings.Split(words[j], "x")
-				a, _ = strconv.Atoi(numberString[0])
-				b, _ = strconv.Atoi(numberString[1])
-			}
-		}
-
-		// Now we have the variables we need it's time to modify the fabricMap
-		// Loop through the fabricMap adding the elf number to each relevant area found
-		// If an elf number is already there, replace it with '-1' and mark the elf as dud in elfList
-		// Once we've built the map, we'll count the number of '-1's for part A
-
-		// k is our "y" axis in the map
-		for k := y; k < y + b; k++ {
-			// l is the "x" axis in the map. We need to modify from x through to x+a
-			for l := x; l < x + a; l++ {
-				if fabricMap[l][k] == 0 {
-					// This is the first time this square has been used. Allocate it to the Elf
-					fabricMap[l][k] = elfNumber
-				} else {
-					if fabricMap[l][k] > 0 {
-						// The fabricMap is already used by another Elf. Mark that elf as bad, our elf as bad
-						// and mark the fabricMap as being used by multiple elves
-						elfList[fabricMap[l][k]] = -1
-						fabricMap[l][k] = -1
-						elfList[elfNumber] = -1
-					} else {
-						if fabricMap[l][k] < 0 {
-							// If the fabricMap is already a duplicate entry, just mark the elf as bad
-							elfList[elfNumber] = -1
-						}
-					}
-				}
-			}
-		}
-	}	
-
-	if solutionPart == "a" {
-		// PART A: Once complete, our result is:
-		//    - loop through the fabricMap
-		//    - count the number of entries > 1
-		resultVar = 0
-		lengthy = len(fabricMap)
-		lengthx = len(fabricMap[0])
-		for k := 0; k < lengthx; k++ {
-			// l is the "x" axis in the map. We need to modify from x through to x+a
-			for l := 0; l < lengthy; l++ {
-				if fabricMap[l][k] < 0 {
-					resultVar++
-				}
-			}
-		}
-	} else {
-		// PART B: Once complete, our answer is the only Elf in elfList that isn't -1
-		for i := 1; i <= elfNumber; i++ {
-			if elfList[i] != -1 {
-				resultVar = i
-			}
-		}
-	}
-
-	return resultVar
-}
-
+// Main routine
 func main() {
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day04 do you want to calc (a or b)")
@@ -189,7 +197,5 @@ func main() {
 		fmt.Println("Guard ID multiplied by minute chosen:", sleepyGuard(*fileNamePtr))
 	case "b":
 		fmt.Println("Not there yet")
-	case "c":
-		fmt.Println("Guard ID multiplied by minute chosen:", fabricClaim(*fileNamePtr, *execPartPtr))
 	}
 }
