@@ -37,3 +37,10 @@ Day 3 - Done. A silly bug in my thoughts caused an hour of head scratching but s
 ./day03 -file original.txt -part a
 ./day03 -file original.txt -part b
 ```
+
++ [Day 4](src/day04.go)
+Day 4 - Done. Finally. Struggled getting part "b" map to work
+```
+./day04 -file original.txt -part a
+./day04 -file original.txt -part b
+```

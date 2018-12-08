@@ -52,6 +52,43 @@ func printGuardMap(tempGuard [2000]GuardSleeping) {
 }
 
 // Returns:
+//   - string: the ID of the Guard who sleeps most on the chosen Minute
+//   - int: the minute of the hour that is the most slept
+func mostSleepyMinute(tempguardMap [2000]GuardSleeping) (string, int) {
+	minutes := map[string]*[60]int{}
+
+	// Loop through the built guardMap and count the number of sleeping minutes per guard
+	for i := 0; tempguardMap[i].date != ""; i++ {
+		if minutes[tempguardMap[i].guardID] == nil {
+			// Allocate space in the minutes map for the guard, if that guard isn't in the map already
+			minutes[tempguardMap[i].guardID] = &[60]int{}
+		}
+		for j := 0; j < len(tempguardMap[i].minute); j++ {
+			if tempguardMap[i].minute[j] == '#' {
+				// Add 1 to tempGuardNumSlept[tempguardMap[i].guardID] then lookup Minute
+				minutes[tempguardMap[i].guardID][j]++
+			}
+		}
+	}
+	
+	var overallSleepiestGuard string
+	var mostSleptMinute int = 0
+	var mostTimesSleptPerMinute int = 0
+
+	for tempGuard := range minutes {
+		for i := 0; i < 60; i++ {
+			if minutes[tempGuard][i] > mostTimesSleptPerMinute {
+				mostTimesSleptPerMinute = minutes[tempGuard][i]
+				mostSleptMinute = i
+				overallSleepiestGuard = tempGuard
+			}
+		}
+	}
+
+	return overallSleepiestGuard, mostSleptMinute
+}
+
+// Returns:
 //   - string: the ID of the Sleepiest Guard
 //   - int: the minute of the hour that the guard is most likely to be asleep
 func mostSleepyGuard(tempguardMap [2000]GuardSleeping) (string, int) {
@@ -119,13 +156,15 @@ func mostSleepyGuard(tempguardMap [2000]GuardSleeping) (string, int) {
 //     No guard ever falls asleep at 23:xx hours, always 00:xx hours
 //     Any guard that doesn't sleep isn't important
 //     There should never be a "falls asleep" without a "wakes up"
-func sleepyGuard(fileName string) int {
+func sleepyGuard(fileName string, part byte) int {
 
 	var guardMap [2000]GuardSleeping			// Our record of sleepy guards
 	var dateVar, actionVar, extraVar, currentGuard, wakeUpDate string
 	var sleepStartTime int = 0
 	var wakeUpTime int = 0
 	var storagePoint int = 0
+	var chosenGuard string
+	var chosenMinute int = 0
 
 	for i := 0; i < len(guardMap); i++ {
 		for j := 0; j < len(guardMap[i].minute); j++ {
@@ -138,7 +177,6 @@ func sleepyGuard(fileName string) int {
 	sort.Strings(fileContents)
 
 	for i := 0; i < len(fileContents); i++ {
-
 		// Loop through data
 		//   read line
 		//   if guard then grab id and move on
@@ -176,8 +214,12 @@ func sleepyGuard(fileName string) int {
 
 	printGuardMap(guardMap)
 
-	// get the numbers, convert the guard id to int, and return the answer
-	chosenGuard, chosenMinute := mostSleepyGuard(guardMap)
+	if part == 'a' {
+		// get the numbers, convert the guard id to int, and return the answer
+		chosenGuard, chosenMinute = mostSleepyGuard(guardMap)
+	} else {
+		chosenGuard, chosenMinute = mostSleepyMinute(guardMap)
+	}
 	tmpChosenGuard1 := strings.Split(chosenGuard, "#")
 	tmpChosenGuard2, _ := strconv.Atoi(tmpChosenGuard1[1])
 	fmt.Printf ("Chosen Guard: %d Chosen Minute: %d\n", tmpChosenGuard2, chosenMinute)
@@ -194,8 +236,8 @@ func main() {
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Guard ID multiplied by minute chosen:", sleepyGuard(*fileNamePtr))
+		fmt.Println("Part a - Guard ID multiplied by minute chosen:", sleepyGuard(*fileNamePtr, 'a'))
 	case "b":
-		fmt.Println("Not there yet")
+		fmt.Println("Part b - Guard ID multiplied by minute chosen:", sleepyGuard(*fileNamePtr, 'b'))
 	}
 }
