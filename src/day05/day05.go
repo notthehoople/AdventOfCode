@@ -8,7 +8,7 @@ import (
 //	"sort"
 //	"strconv"
 	"unicode"
-//	"strings"
+	"strings"
 )
 
 // Read the text file passed in by name into a array of strings
@@ -33,6 +33,15 @@ func printStringArray(tempString []string) {
 	for i:= 0; i < len(tempString); i++ {
 		fmt.Println(tempString[i])
 	}
+}
+
+// Remove the letter "tempLetter" from the string "tempPolymer" then return the result
+func removeUnitType(tempLetter string, tempPolymer string)(string) {
+
+	tempPolymer = strings.Replace(tempPolymer, strings.ToLower(tempLetter), "", -1)
+	tempPolymer = strings.Replace(tempPolymer, strings.ToUpper(tempLetter), "", -1)
+
+	return tempPolymer
 }
 
 // Carries out the destruction of Polymer units
@@ -88,18 +97,43 @@ func actionPolymerDestroy(tempPolymer string)(bool, string) {
 func polymerLength(fileName string, part string) int {
 	var didDestroy bool = true
 	var reducedPolymer string
+	var polymerReductionResults = make(map[string]int)
+	var alphabet string = "abcdefghijklmnopqrstuvwxyz"
+	var shortestPolymer int = 0
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
+	reducedPolymer = fileContents[0]
+	shortestPolymer = len(fileContents[0])
 
-	didDestroy, reducedPolymer = actionPolymerDestroy(fileContents[0])
-	for ; didDestroy; {
-		didDestroy, reducedPolymer = actionPolymerDestroy(reducedPolymer)
+	if part == "a" {
+		for ; didDestroy; {
+			didDestroy, reducedPolymer = actionPolymerDestroy(reducedPolymer)
+		}
+		return len(reducedPolymer)
+
+	} else {
+		for i := 0; i < len(alphabet); i++ {
+			reducedPolymer = fileContents[0]
+			reducedPolymer = removeUnitType(string(alphabet[i]), reducedPolymer)
+
+			didDestroy = true
+			for ; didDestroy; {
+				didDestroy, reducedPolymer = actionPolymerDestroy(reducedPolymer)
+			}
+			polymerReductionResults[string(alphabet[i])] = len(reducedPolymer)
+		}
+
+		for _, tempval := range polymerReductionResults {
+			if shortestPolymer > tempval {
+				shortestPolymer = tempval
+			}
+		}
+		return shortestPolymer
+
 	}
 
-	//fmt.Printf("Length of string: %d\n", len(fileContents[0]))
-
-	return len(reducedPolymer)
+	return 0
 }
 
 // Main routine
@@ -113,6 +147,8 @@ func main() {
 	case "a":
 		fmt.Println("Part a - Length of Polymer:", polymerLength(*fileNamePtr, "a"))
 	case "b":
-		fmt.Println("Not there yet")
+		fmt.Println("Part b - After removing one type, shortest polymer:", polymerLength(*fileNamePtr, "b"))
+	default:
+		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
 }
