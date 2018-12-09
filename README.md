@@ -44,3 +44,10 @@ Day 4 - Done. Finally. Struggled getting part "b" map to work
 ./day04 -file original.txt -part a
 ./day04 -file original.txt -part b
 ```
+
++ [Day 5](src/day05.go)
+Day 5 - Done. Part "b" runs really slow. Could do with some more work!
+```
+./day05 -file original.txt -part a
+./day05 -file original.txt -part b
+```
