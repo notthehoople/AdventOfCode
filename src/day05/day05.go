@@ -44,88 +44,62 @@ func printStringArray(tempString []string) {
 //       In abAB, no two adjacent units are of the same type, and so nothing happens.
 //       In aabAAB, even though aa and AA are of the same type, their polarities match, so nothing happens.
 //     After pass 1 destruction there may be new pairings that will again destroy themselves
-func actionPolymerDestroy(tempPolymer string)(int, string) {
+func actionPolymerDestroy(tempPolymer string)(bool, string) {
 	var tempReturnPolymer string
-	var numDestroyed int = 0
-	var j int = 0
-
-	//tempReturnPolymer = tempPolymer
-
-	// Loop through
-	// Test for characters being the same
-	// Test for upper vs lower or lower vs upper
-	// If match then destroy
-	// If match then need to ignore future matches, just build temp string
-	// Return that we did a destroy
+	var didDestroy bool = false
+	var treatAsFirstChar bool = true
+	var previousChar byte
+	var currentChar byte
 
 	for i := 0; i < len(tempPolymer); i++ {
-		if i > 0 {
-			currentChar := tempPolymer[i]
-			previousChar := tempPolymer[i-1]
 
-			if unicode.ToLower(rune(currentChar)) != unicode.ToLower(rune(previousChar)) {
+		if treatAsFirstChar {
+			treatAsFirstChar = false
+			continue
+		}
+		currentChar = tempPolymer[i]
+		previousChar = tempPolymer[i-1]
+
+		// Are previous and current characters the same, ignoring case?
+		if unicode.ToLower(rune(currentChar)) != unicode.ToLower(rune(previousChar)) {
+			// No, so we can return the previousChar as it won't be destroyed
+			tempReturnPolymer += string(previousChar)
+		} else {
+			// Are they the same *including* case?
+			if currentChar == previousChar {
+				// Yes, so we can return the previousChar as it won't be destroyed
 				tempReturnPolymer += string(previousChar)
-				// Note - this doesn't currently deal with the last character of the string
-
 			} else {
-				// Do proper checking here to see if it's a destroy
-				i++
+				// They are different case but the same character so will be destroyed
+				treatAsFirstChar = true
+				didDestroy = true
+				continue
 			}
 		}
 	}
-
-
-	for i, currentChar := range tempPolymer {
-		if i > 0 && numDestroyed == 0 {
-			previousChar := tempPolymer[i-1]
-			fmt.Printf("Loop: %d Char: %s previous Char: %s\n", i, string(currentChar), string(previousChar))
-
-			if unicode.ToLower(rune(currentChar)) == unicode.ToLower(rune(previousChar)) {
-				if unicode.IsLower(rune(currentChar)) && unicode.IsUpper(rune(previousChar)) {
-					fmt.Printf("Destroy found: %s and %s\n", string(previousChar), string(currentChar))
-					numDestroyed++
-
-					// what to do with return string here?
-				} else {
-					if unicode.IsUpper(rune(currentChar)) && unicode.IsLower(rune(previousChar)) {
-						fmt.Printf("Destroy found: %s and %s\n", string(previousChar), string(currentChar))
-						numDestroyed++
-
-						// what to do with return string here?
-					} else {
-						// If previous and current chars are the same but not destroying, add previous to return string
-						tempReturnPolymer += string(previousChar)
-					}
-				}
-			} else {
-				// there's no match of strings here so add previous char to return string
-				tempReturnPolymer += string(previousChar)
-			}
-		}
-		fmt.Println(i, " => ", string(currentChar))
+	if !treatAsFirstChar {
+		tempReturnPolymer += string(currentChar)
 	}
 
-	fmt.Println("tempReturnPolymer: ", tempReturnPolymer)
-	return numDestroyed, tempReturnPolymer
+	return didDestroy, tempReturnPolymer
 }
 
 // Handles everything needed to work out the polymerLength (Day05 part A)
 func polymerLength(fileName string, part string) int {
-	var numDestroyed int = 0
+	var didDestroy bool = true
+	var reducedPolymer string
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
 
-	numDestroyed, reducedPolymer := actionPolymerDestroy(fileContents[0])
-//	for ; numDestroyed > 0; {
-//		numDestroyed, reducedPolymer := actionPolymerDestroys(reducedPolymer)
-//		fmt.Printf("numDestroyed: %d reducedPolymer: %s", numDestroyed, reducedPolymer)
-//	}
+	didDestroy, reducedPolymer = actionPolymerDestroy(fileContents[0])
+	for ; didDestroy; {
+		didDestroy, reducedPolymer = actionPolymerDestroy(reducedPolymer)
+	}
 
-	fmt.Printf("Length of string: %d\n", len(fileContents[0]))
-	fmt.Printf("num destroyed: %d reducedPolymer: %s", numDestroyed, reducedPolymer)
+	//fmt.Printf("Length of string: %d\n", len(fileContents[0]))
 
-	return 1
+	return len(reducedPolymer)
 }
 
 // Main routine
