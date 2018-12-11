@@ -107,7 +107,7 @@ func checkWorkList(noPreReqList []string, toDoList map[string]string) []string {
 	return reducedNoPreReqList
 }
 
-func stepOrder(fileName string, part string) string {
+func stepOrder(fileName string, part string, timeconst int) string {
 	var noPreReqList []string
 	var reducedNoPreReqList []string
 	var toDoList = make(map[string]string)
@@ -128,6 +128,9 @@ func stepOrder(fileName string, part string) string {
 	}
 
 	// Double check the Start List (reducedNoPreReqList) is correct
+
+	// This section will change for part B
+	
 	reducedNoPreReqList = checkWorkList(noPreReqList, toDoList)
 
 	var workToDo bool = true
@@ -154,14 +157,15 @@ func stepOrder(fileName string, part string) string {
 func main() {
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day07 do you want to calc (a or b)")
+	timeConstantPtr := flag.Int("const", 0, "Time constant to add to each task for part B")
 
 	flag.Parse()
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Order of steps:", stepOrder(*fileNamePtr, "a"))
+		fmt.Println("Part a - Order of steps:", stepOrder(*fileNamePtr, "a", 0))
 	case "b":
-		fmt.Println("Part b - Not there yet")
+		fmt.Println("Part b - Order of steps:", stepOrder(*fileNamePtr, "b", *timeConstantPtr))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
