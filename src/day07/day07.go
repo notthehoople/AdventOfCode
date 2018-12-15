@@ -95,6 +95,7 @@ func workItemCompleted(workItem string, toDoList map[string]string, reducedNoPre
 	return toDoList, reducedNoPreReqList
 }
 
+// Checks if an item already exists in the toDoList. If not, it adds it in there.
 func checkWorkList(noPreReqList []string, toDoList map[string]string) []string {
 	var reducedNoPreReqList []string
 
@@ -105,6 +106,50 @@ func checkWorkList(noPreReqList []string, toDoList map[string]string) []string {
 	}
 
 	return reducedNoPreReqList
+}
+
+// Carries out the work for PartA
+func goPartA(reducedNoPreReqList []string, toDoList map[string]string) string {
+	var solutionOrder string
+	var workToDo bool = true
+	var workItem string
+	var ok bool
+
+	for workToDo {
+		workItem, reducedNoPreReqList, ok = popTopItem(reducedNoPreReqList)
+		if !ok {
+			workToDo = false
+			continue
+		} else {
+			solutionOrder += workItem
+
+			// Remove completed item from toDoList
+			toDoList, reducedNoPreReqList = workItemCompleted(workItem, toDoList, reducedNoPreReqList)
+		}
+	}
+	return solutionOrder
+}
+
+// Carries out the work for PartA
+func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeconst int) string {
+	var solutionOrder string
+	var workToDo bool = true
+	var workItem string
+	var ok bool
+
+	for workToDo {
+		workItem, reducedNoPreReqList, ok = popTopItem(reducedNoPreReqList)
+		if !ok {
+			workToDo = false
+			continue
+		} else {
+			solutionOrder += workItem
+
+			// Remove completed item from toDoList
+			toDoList, reducedNoPreReqList = workItemCompleted(workItem, toDoList, reducedNoPreReqList)
+		}
+	}
+	return solutionOrder
 }
 
 func stepOrder(fileName string, part string, timeconst int) string {
@@ -128,26 +173,13 @@ func stepOrder(fileName string, part string, timeconst int) string {
 	}
 
 	// Double check the Start List (reducedNoPreReqList) is correct
-
-	// This section will change for part B
 	
 	reducedNoPreReqList = checkWorkList(noPreReqList, toDoList)
 
-	var workToDo bool = true
-	var workItem string
-	var ok bool
-
-	for workToDo {
-		workItem, reducedNoPreReqList, ok = popTopItem(reducedNoPreReqList)
-		if !ok {
-			workToDo = false
-			continue
-		} else {
-			solutionOrder += workItem
-
-			// Remove completed item from toDoList
-			toDoList, reducedNoPreReqList = workItemCompleted(workItem, toDoList, reducedNoPreReqList)
-		}
+	if part == "a" {
+		solutionOrder = goPartA(reducedNoPreReqList, toDoList)
+	} else {
+		solutionOrder = goPartB(reducedNoPreReqList, toDoList, timeconst)
 	}
 
 	return solutionOrder
