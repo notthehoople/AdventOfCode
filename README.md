@@ -59,6 +59,15 @@ Day 6 - Skipped.
 
 + [Day 7](src/day07/day07.go)
 Day 7 - Part A done.
+Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one less than that listed
 ```
-./day05 -file original.txt -part a
+./day07 -file original.txt -part a
+./day07 -file original.txt -part a -const 60 -workers 5
+```
+
++ [Day 8](src/day08/day08.go)
+Day 8 - Part A done.
+Day 8 - Part B not started
+```
+./day08 -file original.txt -part a
 ```
