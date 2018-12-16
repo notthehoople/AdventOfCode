@@ -67,7 +67,8 @@ Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one les
 
 + [Day 8](src/day08/day08.go)
 Day 8 - Part A done.
-Day 8 - Part B not started
+Day 8 - Part B done.
 ```
 ./day08 -file original.txt -part a
+./day08 -file original.txt -part b
 ```
