@@ -163,9 +163,22 @@ func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst
 		//    Any worker found that isn't busy, grab an item from the worklist reducedNoPreReqList (if any)
 		//       and give to that worker
 		for i := 0; i < len(workers); i++ {
+			if workers[i].timeToComplete == currentTime && currentTime > 0 {
+				// We have a finisher!
+				//fmt.Printf("Worker %d has completed work %s\n", i, workers[i].workItem)
+				solutionOrder += workers[i].workItem
+				// Remove completed item from toDoList
+				toDoList, reducedNoPreReqList = workItemCompleted(workers[i].workItem, toDoList, reducedNoPreReqList)
+				// Clear the workItem from the worker
+				workers[i].workItem = "-"
+				workInProgress--
+				// Avoid time counting upwards
+			}
+			// no else. we want a free worker to be picked up immediately
+
 			if workers[i].workItem == "" || workers[i].workItem == "-" {
 				// Worker ready and waiting for orders
-				fmt.Println("Worker waiting:", i)
+				//fmt.Println("Worker waiting:", i)
 				tempWorkItem, reducedNoPreReqList, ok = popTopItem(reducedNoPreReqList)
 				if !ok {
 					workToDo = false
@@ -174,26 +187,14 @@ func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst
 					workers[i].workItem = tempWorkItem
 					// Time is currentTime + timeConst + number relating to letter (1-26)
 					workers[i].timeToComplete = currentTime + int(tempWorkItem[0]) + timeConst - 64
-					fmt.Println("Time to complete for:", tempWorkItem, workers[i].timeToComplete)
+					//fmt.Println("Time to complete for:", tempWorkItem, workers[i].timeToComplete)
 					workInProgress++
-				}
-			} else {
-				if workers[i].timeToComplete == currentTime {
-					// We have a finisher!
-					fmt.Printf("Worker %d has completed work %s\n", i, workers[i].workItem)
-					solutionOrder += workers[i].workItem
-					// Remove completed item from toDoList
-					toDoList, reducedNoPreReqList = workItemCompleted(workers[i].workItem, toDoList, reducedNoPreReqList)
-					// Clear the workItem from the worker
-					workers[i].workItem = "-"
-					workInProgress--
-					// Avoid time counting upwards
 				}
 			}
 		}
 
-		if len(workers) > 1 {
-			fmt.Printf("%d,    %s,    %s,    %s\n", currentTime, workers[0].workItem, workers[1].workItem, solutionOrder)
+		if len(workers) > 4 {
+			fmt.Printf("%d, %s, %s, %s, %s, %s, %s\n", currentTime, workers[0].workItem, workers[1].workItem, workers[2].workItem, workers[3].workItem, workers[4].workItem, solutionOrder)
 		} else {
 			fmt.Printf("%d, %s, %s, %d\n", currentTime, workers[0].workItem, solutionOrder, workInProgress)
 		}
