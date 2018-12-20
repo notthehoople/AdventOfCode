@@ -75,7 +75,8 @@ Day 8 - Part B done.
 
 + [Day 18](src/day18/day18.go)
 Day 18 - Part A done.
-Day 18 - Still working on it.
+Day 18 - Got answer. Need to automate.
 ```
 ./day18 -file original.txt -part a -minutes 10 -grid 50
+./day18 -file original.txt -part b -minutes 1000 -grid 50
 ```

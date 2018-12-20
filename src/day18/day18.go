@@ -60,8 +60,8 @@ func readInitialState(tempString []string, tempSlice [][]byte) {
 // func checkArea
 // returns: lumberYards, openAcre, trees
 func checkArea(tempArea [][]byte, yCoord int, xCoord int) (int, int) {
-	var lumberYards = 0
-	var trees = 0
+	var lumberYards int = 0
+	var trees int = 0
 	var startX, startY, maxX, maxY int
 
 	// To consider: the edges. So if xCoord / yCoord == 0 or xCoord / yCoord = len(tempArea)
@@ -178,6 +178,8 @@ func playRound(tempArea [][]byte, scratchArea [][]byte) {
 // Handles everything needed to work out the size of the lumbar resources (day 18)
 func processLumber(fileName string, yardX int, yardY int, minutes int, part byte) int {
 	var woodedArea, lumberYards int = 0, 0
+	var fingerPrint int = 0
+	var openAreaFinger, woodedAreaFinger, lumberYardsFinger int = 0, 0, 0
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
@@ -185,6 +187,7 @@ func processLumber(fileName string, yardX int, yardY int, minutes int, part byte
 
 	lumberArea1 := make([][]byte, yardY)
 	lumberArea2 := make([][]byte, yardY)
+	fingerPrintRecord := make(map[int]int)
 
 	for i := 0; i < yardY; i++ {
 		lumberArea1[i] = make([]byte, yardX)	
@@ -196,7 +199,51 @@ func processLumber(fileName string, yardX int, yardY int, minutes int, part byte
 	// Loop through a round of life
 	for i := 0; i < minutes; i++ {
 		playRound(lumberArea1, lumberArea2)
-	//	fmt.Println("Minutes:", i)
+
+		if part == 'b' {
+			// Need to record the fingerprint in a map (openArea x trees x lumberYard?)
+			// If we find that we have already seen that fingerprint, print it out then update
+			// we can view the repeats easily then. Run over 10,000 iterations, work out the repeat
+			// then scale up to the number of minutes we've been asked for
+
+			// Generate fingerprint
+			openAreaFinger = 0
+			woodedAreaFinger = 0
+			lumberYardsFinger = 0
+
+			for i := 0; i < len(lumberArea1); i++ {
+				for j := 0; j < len(lumberArea1[i]); j++ {
+					if lumberArea1[i][j] == '|' {
+						woodedAreaFinger++
+					} else {
+						if lumberArea1[i][j] == '#' {
+							lumberYardsFinger++
+						} else {
+							if lumberArea1[i][j] == '.' {
+								openAreaFinger++
+							}
+						}
+					}
+				}
+			}
+
+			fingerPrint = openAreaFinger * lumberYardsFinger * woodedAreaFinger
+
+			result := fingerPrintRecord[fingerPrint]
+			if result > 0 {
+				fmt.Println("We have a match at:", i, result)
+				fingerPrintRecord[fingerPrint] = i
+			} else {
+				fingerPrintRecord[fingerPrint] = i
+			}
+
+			// 1000 is 201341
+			// Repeats every 28 cycles
+			// Need for 1000000000
+			// Need to work this out automatically but done for now
+
+		}
+
 	}
 
 	for i := 0; i < len(lumberArea1); i++ {
@@ -225,14 +272,15 @@ func main() {
 
 	flag.Parse()
 
+	yardX, _ = strconv.Atoi(*yardSizePtr)
+	yardY = yardX
+	minutes, _ = strconv.Atoi(*minutesPtr)
+
 	switch *execPartPtr {
 	case "a":
-		yardX, _ = strconv.Atoi(*yardSizePtr)
-		yardY = yardX
-		minutes, _ = strconv.Atoi(*minutesPtr)
 		fmt.Println("Part a - Lumber Resource Value:", processLumber(*fileNamePtr, yardX, yardY, minutes, 'a'))
 	case "b":
-		fmt.Println("Part b - Not there yet")
+		fmt.Println("Part b - Lumber Resource Value:", processLumber(*fileNamePtr, yardX, yardY, minutes, 'b'))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
