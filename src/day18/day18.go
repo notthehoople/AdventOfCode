@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"bufio"
 	"os"
+	"os/exec"
 	"flag"
 	"strconv"
 	//"strings"
@@ -34,6 +35,10 @@ func printStringArray(tempString []string) {
 }
 
 func print2DSlice(tempSlice [][]byte) {
+	cmd := exec.Command("clear") //Linux example, its tested
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+
 	for i := 0; i < len(tempSlice); i++ {
 		for j := 0; j < len(tempSlice[i]); j++ {
 			fmt.Printf("%c ", tempSlice[i][j])
@@ -54,70 +59,129 @@ func readInitialState(tempString []string, tempSlice [][]byte) {
 
 // func checkArea
 // returns: lumberYards, openAcre, trees
-func checkArea(tempArea [][]byte, yCoord int, xCoord int) (int, int, int) {
-	lumberYards = 0
-	openAcre = 0
-	trees = 0
+func checkArea(tempArea [][]byte, yCoord int, xCoord int) (int, int) {
+	var lumberYards = 0
+	var trees = 0
+	var startX, startY, maxX, maxY int
 
 	// To consider: the edges. So if xCoord / yCoord == 0 or xCoord / yCoord = len(tempArea)
 
 	// x x   x o   o x   x x   x o x   x x x   x x   x x
 	// o x   x x   x x   x o   x x x   x o x   o x   x o
-	//                                          x x   x x
+	//                                         x x   x x
+
+	//fmt.Println("Printing 2D Slice in checkArea")
+	//print2DSlice(tempArea)
+
+	startX = xCoord - 1
+	startY = yCoord - 1
+	maxX = xCoord + 1
+	maxY = yCoord + 1
+
+	if xCoord == 0 {
+		startX = 0
+	} else {
+		if xCoord == len(tempArea[yCoord])-1 {
+			maxX = xCoord
+		}
+	}
+	if yCoord == 0 {
+		startY = 0
+	} else {
+		if yCoord == len(tempArea)-1 {
+			maxY = yCoord
+		}
+	}
+
+	//fmt.Println("================")
+	//fmt.Printf("xCoord: %d yCoord: %d MaxX: %d MaxY: %d startX: %d startY: %d\n", xCoord, yCoord, maxX, maxY, startX, startY)
+
+	for i := startY; i <= maxY; i++ {
+		for j := startX; j <= maxX; j++ {
+			if i == yCoord && j == xCoord {
+				// Do nothing
+			} else {
+				if tempArea[i][j] == '|' {
+					trees++
+				} else {
+					if tempArea[i][j] == '#' {
+						lumberYards++
+					}
+				}
+			}
+		}
+	}
+
+	return lumberYards, trees
 }
 
 
 // func playRound
 // Play a round of Life!
-func playRound(tempArea [][]byte) {
-	var lumberYards, openAcre, trees int = 0, 0, 0
+func playRound(tempArea [][]byte, scratchArea [][]byte) {
+	var lumberYards, trees int = 0, 0
+	var lenTempArea, lenTempAreaI int = 0, 0
 
-	tempCalcSpace := make([][]byte, len(tempArea))
+	//tempCalcSpace := make([][]byte, len(tempArea))
+	//
+	//for i := 0; i < len(tempArea); i++ {
+	//	tempCalcSpace[i] = make([]byte, len(tempArea[i]))	
+	//}
 
-	for i := 0; i < len(tempArea); i++ {
-		tempCalcSpace[i] = make([]byte, len(tempArea[i]))	
-	}
-
-	for i := 0; i < len(tempArea); i++ {
-		for j := 0; j < len(tempArea[i]); j++ {
-			lumberYards, openAcre, trees = checkArea(tempArea, i, j)
+	lenTempArea = len(tempArea)
+	for i := 0; i < lenTempArea; i++ {
+		lenTempAreaI = len(tempArea[i])
+		for j := 0; j < lenTempAreaI; j++ {
+			lumberYards, trees = checkArea(tempArea, i, j)
 
 			// An open acre ('.') will become filled with trees if three or more adjacent acres contained 
 			// trees. Otherwise, nothing happens.
-			if tempArea[i][j] == '.' && trees > 2 {
-				tempCalcSpace[i][j] = '|'
-			} else {
-				tempCalcSpace[i][j] = '.'
+			if tempArea[i][j] == '.' {
+				if trees > 2 {
+					scratchArea[i][j] = '|'
+				} else {
+					scratchArea[i][j] = '.'
+				}
 			}
 
 			// An acre filled with trees ('|') will become a lumberyard if three or more adjacent acres were
 			//    lumberyards. Otherwise, nothing happens.
-			if tempArea[i][j] == '|' && lumberYards > 2 {
-				tempCalcSpace[i][j] = '#'
-			} else {
-				tempCalcSpace[i][j] = '|'
+			if tempArea[i][j] == '|' {
+				if lumberYards > 2 {
+					scratchArea[i][j] = '#'
+				} else {
+					scratchArea[i][j] = '|'
+				}
 			}
 
 			// An acre containing a lumberyard ('#') will remain a lumberyard if it was adjacent to at least 
 			//    one other lumberyard and at least one acre containing trees. Otherwise, it becomes open.
-			if tempArea[i][j] == '#' && lumberYards > 0 && trees > 0 {
-				tempCalcSpace[i][j] = '#'
-			} else {
-				tempCalcSpace[i][j] = '.'
+			if tempArea[i][j] == '#' {
+				if lumberYards > 0 && trees > 0 {
+					scratchArea[i][j] = '#'
+				} else {
+					scratchArea[i][j] = '.'
+				}
 			}
 		}
 	}
 
-	print2DSlice(tempCalcSpace)
+	// Now copy it back to the original so all the changes happen at the same time
+	for i := 0; i < lenTempArea; i++ {
+		for j := 0; j < lenTempAreaI; j++ {
+			tempArea[i][j] = scratchArea[i][j]
+		}
+	}
 }
 
 // func processLumber
 // Handles everything needed to work out the size of the lumbar resources (day 18)
 func processLumber(fileName string, yardX int, yardY int, minutes int, part byte) int {
-	
+	var woodedArea, lumberYards int = 0, 0
+
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
-	printStringArray(fileContents)
+	//printStringArray(fileContents)
 
 	lumberArea1 := make([][]byte, yardY)
 	lumberArea2 := make([][]byte, yardY)
@@ -129,15 +193,25 @@ func processLumber(fileName string, yardX int, yardY int, minutes int, part byte
 
 	readInitialState(fileContents, lumberArea1)
 
-	//for t := 0; t < minutes; t++ {
-	//
-	//}
+	// Loop through a round of life
+	for i := 0; i < minutes; i++ {
+		playRound(lumberArea1, lumberArea2)
+	//	fmt.Println("Minutes:", i)
+	}
 
-	playRound(lumberArea1)
+	for i := 0; i < len(lumberArea1); i++ {
+		for j := 0; j < len(lumberArea1[i]); j++ {
+			if lumberArea1[i][j] == '|' {
+				woodedArea++
+			} else {
+				if lumberArea1[i][j] == '#' {
+					lumberYards++
+				}
+			}
+		}
+	}
 
-	print2DSlice(lumberArea1)
-
-	return 0
+	return woodedArea * lumberYards
 }
 
 // Main routine
