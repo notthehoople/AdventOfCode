@@ -86,10 +86,11 @@ Day 10 - Part B done. Need to automate
 ```
 
 + [Day 11](src/day11/day11.go)
-Day 11 - Part A started
-Day 11 -
+Day 11 - Part A done
+Day 11 - Part B done. Slow, but it works
 ```
-./day11 -part a -input 7165
+./day11 -part a -puzzle 7165
+./day11 -part b -puzzle 7165
 ```
 
 + [Day 18](src/day18/day18.go)
