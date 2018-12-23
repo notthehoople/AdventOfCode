@@ -73,6 +73,25 @@ Day 8 - Part B done.
 ./day08 -file original.txt -part b
 ```
 
++ [Day 10](src/day10/day10.go)
+Day 10 - Part A done. Need to automate
+Day 10 - Part B done. Need to automate
+```
+./day10 -file original.txt -grid 100 -max 100000 -part a | grep -v 50
+    # Look for the highest number - this is the most likely time of the message. Then:
+./day10 -file original.txt -grid 100 -max 100000 -part a -printsecond <time> | grep -v 50
+    # Prints out the message
+./day10 -file original.txt -grid 100 -max 100000 -part a -printsecond <time> | grep -v 50
+    # Remember we count time from 0, so add 1 to the "printsecond" time to get your result
+```
+
++ [Day 11](src/day11/day11.go)
+Day 11 - Part A started
+Day 11 -
+```
+./day11 -part a -input 7165
+```
+
 + [Day 18](src/day18/day18.go)
 Day 18 - Part A done.
 Day 18 - Got answer. Need to automate.
