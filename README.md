@@ -93,6 +93,14 @@ Day 11 - Part B done. Slow, but it works
 ./day11 -part b -puzzle 7165
 ```
 
++ [Day 12](src/day12/day12.go)
+Day 12 - Part A done
+Day 12 - Part B done
+```
+./day12 -file original.txt -part a -generations 20
+./day12 -file original.txt -part b
+```
+
 + [Day 18](src/day18/day18.go)
 Day 18 - Part A done.
 Day 18 - Got answer. Need to automate.
