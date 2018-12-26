@@ -58,7 +58,7 @@ Day 6 - Skipped.
 ```
 
 + [Day 7](src/day07/day07.go)
-Day 7 - Part A done.
+Day 7 - Part A done.; 
 Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one less than that listed
 ```
 ./day07 -file original.txt -part a
@@ -66,7 +66,7 @@ Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one les
 ```
 
 + [Day 8](src/day08/day08.go)
-Day 8 - Part A done.
+Day 8 - Part A done.; 
 Day 8 - Part B done.
 ```
 ./day08 -file original.txt -part a
@@ -74,7 +74,7 @@ Day 8 - Part B done.
 ```
 
 + [Day 10](src/day10/day10.go)
-Day 10 - Part A done. Need to automate
+Day 10 - Part A done. Need to automate; 
 Day 10 - Part B done. Need to automate
 ```
 ./day10 -file original.txt -grid 100 -max 100000 -part a | grep -v 50
@@ -86,7 +86,7 @@ Day 10 - Part B done. Need to automate
 ```
 
 + [Day 11](src/day11/day11.go)
-Day 11 - Part A done
+Day 11 - Part A done; 
 Day 11 - Part B done. Slow, but it works
 ```
 ./day11 -part a -puzzle 7165
@@ -94,7 +94,7 @@ Day 11 - Part B done. Slow, but it works
 ```
 
 + [Day 12](src/day12/day12.go)
-Day 12 - Part A done
+Day 12 - Part A done; 
 Day 12 - Part B done
 ```
 ./day12 -file original.txt -part a -generations 20
@@ -102,15 +102,15 @@ Day 12 - Part B done
 ```
 
 + [Day 14](src/day14/day14.go)
-Day 14 - Part A done
-Day 14 - Not started
+Day 14 - Part A done; 
+Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in output for other numbers. Needs work on the comparison
 ```
 ./day14 -part a -recipes 825401 -answers 10 [-print]
-
+./day14 -part b -result "825401"
 ```
 
 + [Day 18](src/day18/day18.go)
-Day 18 - Part A done.
+Day 18 - Part A done; 
 Day 18 - Got answer. Need to automate.
 ```
 ./day18 -file original.txt -part a -minutes 10 -grid 50
