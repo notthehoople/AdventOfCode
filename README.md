@@ -101,6 +101,14 @@ Day 12 - Part B done
 ./day12 -file original.txt -part b
 ```
 
++ [Day 14](src/day14/day14.go)
+Day 14 - Part A done
+Day 14 - Not started
+```
+./day14 -part a -recipes 825401 -answers 10 [-print]
+
+```
+
 + [Day 18](src/day18/day18.go)
 Day 18 - Part A done.
 Day 18 - Got answer. Need to automate.
