@@ -4,9 +4,16 @@ import (
 	"fmt"
 	"bufio"
 	"os"
-	"os/exec"
+//	"os/exec"
 	"flag"
 )
+
+// Used to build a work list of water sources to be followed
+type workListCoords struct {
+	done	bool	
+	xCoord	int
+	yCoord	int
+}
 
 type pointStruct struct {
 	xCoordStart	int
@@ -40,10 +47,12 @@ func printStringArray(tempString []string) {
 }
 
 func print2DSlice(tempSlice [][]byte) {
-	cmd := exec.Command("clear") //Linux example, its tested
-	cmd.Stdout = os.Stdout
-	cmd.Run()
+	//cmd := exec.Command("clear") //Linux example, its tested
+	//cmd.Stdout = os.Stdout
+	//cmd.Run()
 
+	fmt.Println("=========================================================")
+	fmt.Println("=========================================================")
 	for i := 0; i < len(tempSlice); i++ {
 		for j := 0; j < len(tempSlice[i]); j++ {
 			fmt.Printf("%c", tempSlice[i][j])
@@ -52,11 +61,31 @@ func print2DSlice(tempSlice [][]byte) {
 	}
 }
 
+// func countWaterSquares
+// Count the '~' and '|' squares in undergroundArea
+func countWaterSquares(undergroundArea [][]byte) int {
+	var count int = 0
+
+	for i := 0; i < len(undergroundArea); i++ {
+		for j := 0; j < len(undergroundArea[i]); j++ {
+			if undergroundArea[i][j] == '~' || undergroundArea[i][j] == '|' {
+				count++
+			}
+		}
+	}
+	return count
+}
+
+func addWorkListItem(workList []workListCoords, workX int, workY int) []workListCoords {
+	workList = append(workList, workListCoords{done: false, xCoord: workX, yCoord: workY})
+	return workList
+}
+
 // func: readInitialState
 // takes an array of strings and breaks it into a 2D array of bytes
 func readInitialState(coordData []pointStruct, undergroundArea [][]byte, springX int, springY int, minX int, minY int) {
 
-	fmt.Printf("minX %d minY %d\n", minX, minY)
+	//fmt.Printf("minX %d minY %d\n", minX, minY)
 	for i := 0; i < len(undergroundArea); i++ {
 		for j := 0; j < len(undergroundArea[i]); j++ {
 			undergroundArea[i][j] = '.'
@@ -66,15 +95,15 @@ func readInitialState(coordData []pointStruct, undergroundArea [][]byte, springX
 	for i := 0; i < len(coordData); i++ {
 		if coordData[i].xCoordStart == coordData[i].xCoordEnd {
 			for y := (coordData[i].yCoordStart - minY); y <= (coordData[i].yCoordEnd - minY); y++ {
-				fmt.Printf("y is %d x is %d MODIFIED: y is %d x is %d\n", y, coordData[i].xCoordStart, y, (coordData[i].xCoordStart-minX))
+				//fmt.Printf("y is %d x is %d MODIFIED: y is %d x is %d\n", y, coordData[i].xCoordStart, y, (coordData[i].xCoordStart-minX))
 				undergroundArea[y][coordData[i].xCoordStart-minX] = '#'
-				fmt.Println("Done")
+				//fmt.Println("Done")
 			}
 		} else {
 			// must be 'y'
 
 			for x := (coordData[i].xCoordStart - minX); x < (coordData[i].xCoordEnd - minX); x++ {
-				fmt.Printf("x is %d y is %d MODIFIED: x is %d y is %d\n", x, coordData[i].yCoordStart, x, (coordData[i].yCoordStart-minY))
+				//fmt.Printf("x is %d y is %d MODIFIED: x is %d y is %d\n", x, coordData[i].yCoordStart, x, (coordData[i].yCoordStart-minY))
 
 				undergroundArea[coordData[i].yCoordStart-minY][x] = '#'
 			}
@@ -138,14 +167,11 @@ func processInputFile(fileContents []string) []pointStruct {
 	var coordData []pointStruct
 	var a, b, c int
 	var coord1, coord2 byte
-	var result int
+	//var result int
 
 	for i := 0; i < len(fileContents); i++ {
-		result, _ = fmt.Sscanf(fileContents[i], "%c=%d, %c=%d..%d\n", &coord1, &a, &coord2, &b, &c)
-		if result == 5 {
-			fmt.Printf("Scan run: %c is %d %c starts: %d ends: %d\n", coord1, a, coord2, b, c)
-		}
-
+		fmt.Sscanf(fileContents[i], "%c=%d, %c=%d..%d\n", &coord1, &a, &coord2, &b, &c)
+		
 		if coord1 == 'x' {
 			coordData = append(coordData, pointStruct{xCoordStart: a, xCoordEnd: a, yCoordStart: b, yCoordEnd: c})
 		} else {
@@ -157,107 +183,223 @@ func processInputFile(fileContents []string) []pointStruct {
 	return coordData
 }
 
-func fillLine(undergroundArea [][]byte, currentFlowX int, currentFlowY int) bool {
+func fillLine(undergroundArea [][]byte, workList []workListCoords, currentFlowX int, currentFlowY int, maxiMins pointStruct) (bool, []workListCoords) {
 	var x int = currentFlowX
 	var y int = currentFlowY
+	var leftEdge, rightEdge int = currentFlowX, currentFlowX
+	var isEnclosed bool = true
 
-	// This needs to change to a "look all the way left, look all the way right" to decide if we're in an enclosed area or not
-	// If not enclosed then we change all '~' or '.' to '|' and spill over the edge.
-	// No idea how to handle when we spill over the edge in multiple places
-	// Probably need to maintain a work list that contains a list of all the spill areas. We can then loop through the spills
-	// Until each of them runs out
+	print2DSlice(undergroundArea)
+
+	// Look for left extent
 	for {
-		if undergroundArea[y][x] != '#' {
+		if undergroundArea[y][x] != '#' && x > maxiMins.xCoordStart {
+			// This doesn't work when we fall off the end of something
 			if undergroundArea[y+1][x] == '#' || undergroundArea[y+1][x] == '~' {
-				undergroundArea[y][x] = '~'
 				x--
+			} else {
+				fmt.Println("Fallen off the edge")
+				isEnclosed = false
+				leftEdge = x
+				workList = addWorkListItem(workList, x, y)
+				fmt.Println("fillLine:", workList)
+				break
 			}
 		} else {
-			break
+			if undergroundArea[y][x] == '#' {
+				fmt.Println("We have a left edge")
+				leftEdge = x+1
+				break
+			} else {
+				fmt.Println("No edge found")
+				isEnclosed = false
+				break
+			}
 		}
 	}
-	return true
-}
-
-func letTheWaterFlow(undergroundArea [][]byte, springX int, springY int) int {
-	var currentFlowX, currentFlowY int = springX, springY
-	var loopCount int = 0
-
-	if undergroundArea[currentFlowY][currentFlowX] == '+' {
-		fmt.Println("All is good2")
+	// Look for right extent
+	x = currentFlowX
+	for {
+		if undergroundArea[y][x] != '#' && x < maxiMins.xCoordEnd {
+			// This doesn't work when we fall off the end of something
+			if undergroundArea[y+1][x] == '#' || undergroundArea[y+1][x] == '~' {
+				x++
+			} else {
+				fmt.Println("Fallen off the edge")
+				isEnclosed = false
+				rightEdge = x
+				workList = addWorkListItem(workList, x, y)
+				fmt.Println("fillLine:", workList)
+				break
+			}
+		} else {
+			if undergroundArea[y][x] == '#' {
+				rightEdge = x-1
+				break
+			} else {
+				fmt.Println("No right edge found")
+				isEnclosed = false
+				break
+			}
+		}
 	}
 
+	fmt.Printf("Source X: %d Source Y: %d\n", currentFlowX, currentFlowY)
+	fmt.Printf("Left Edge: %d Right Edge: %d\n", leftEdge, rightEdge)
+
+	if isEnclosed {
+		for i := leftEdge; i <= rightEdge; i++ {
+			undergroundArea[y][i] = '~'
+		}
+	} else {
+		for i := leftEdge; i <= rightEdge; i++ {
+			undergroundArea[y][i] = '|'
+		}
+	}
+
+	return isEnclosed, workList
+}
+
+// func letTheWaterFlow
+// Handles how the water flows from the source x, y point until it either reaches the end of the undergroundArea or
+// it splits into 2 sources itself
+func letTheWaterFlow(undergroundArea [][]byte, workList []workListCoords, sourceX int, sourceY int, maxiMins pointStruct) (bool, []workListCoords) {
+	var currentFlowX, currentFlowY int = sourceX, sourceY
+	var loopThis bool = true
+	var result bool
+	//var loopCount int = 0
+
+	fmt.Println("currentFlowY, currentFlowX:", currentFlowY, currentFlowX)
+	fmt.Println("From letTheWaterFlow:")
+	print2DSlice(undergroundArea)
+
 	// forever loop as we're following water. We'll control the loop count ourselves
-	for {
+	for loopThis {
 		switch undergroundArea[currentFlowY][currentFlowX] {
 
 		case '+': currentFlowY++
 
 		case '.':
+			fmt.Println("Dot: currentFlowX, currentFlowY:", currentFlowX, currentFlowY)
+			// Check what's next:
+			//    If free area then add '|' and continue
+			//    If reached blocker
+			//       check if line is fillable
+			//          yes -> fill line with '~' and y--
+			//          no -> find water sources (spills) and create new water sources in workList
+			//             -> fill line with '|'
+			//             -> mark this water source as complete
 			if undergroundArea[currentFlowY + 1][currentFlowX] == '.' {
 				undergroundArea[currentFlowY][currentFlowX] = '|'
 				currentFlowY++
 			} else {
-				if undergroundArea[currentFlowY + 1][currentFlowX] == '#' {
-					if fillLine(undergroundArea, currentFlowX, currentFlowY) {
+				if undergroundArea[currentFlowY + 1][currentFlowX] == '#' || undergroundArea[currentFlowY + 1][currentFlowX] == '~' {
+					result, workList = fillLine(undergroundArea, workList, currentFlowX, currentFlowY, maxiMins)
+					if result {
 						currentFlowY--
+					} else {
+						break
 					}
 				}
 			}
 
 		case '|':
-			if undergroundArea[currentFlowY + 1][currentFlowX] == '~' {
-				if fillLine(undergroundArea, currentFlowX, currentFlowY) {
-					currentFlowY--
+			fmt.Println("Bar")
+
+			if currentFlowX == sourceX && currentFlowY == sourceY {
+				currentFlowY++
+			} else {
+				if undergroundArea[currentFlowY + 1][currentFlowX] == '~' {
+					result, workList = fillLine(undergroundArea, workList, currentFlowX, currentFlowY, maxiMins)
+					if result {
+						currentFlowY--
+					} else {
+						fmt.Println("Bar: Found an edge")
+						loopThis = false
+						break
+					}
 				}
 			}
 
 		case '~':
+			fmt.Println("Tilde")
 
-		}
-
-		fmt.Println("In a loop:", loopCount)
-		loopCount++
-		if loopCount > 10 {
-			break
+			// Need to do something here too. This means that we're a water source that has reached the water created by a
+			// difference water source. We still have to do something, since we could be on the other side of a blocker and
+			// capable of filling where the other water source can't
 		}
 	}
 	
-	return 0
+	fmt.Println("Exit: letTheWaterFlow")
+	return true, workList
 }
 
 // func processWaterFlow
 // Handles everything needed to work out the water flow (day 17 part A)
 func processWaterFlow(fileName string, springX int, springY int, part byte) int {
-	var minX, maxX, minY, maxY, gridSizeX, gridSizeY int
+	var minX, maxX, minY, maxY, gridSizeX, gridSizeY, workX, workY int
 	var coordData []pointStruct
+	var workList []workListCoords
+	var letsLoopThis bool
+	var maxiMins pointStruct
+	var didWork bool
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
 	coordData = processInputFile(fileContents)
-	fmt.Println(coordData)
 
 	minX, maxX, minY, maxY = scanInputForMaxMins(coordData, springX, springY)
-	fmt.Printf("minX: %d maxX: %d minY: %d maxY: %d\n", minX, maxX, minY, maxY)
+
+	fmt.Println(minX, maxX, minY, maxY)
+	maxiMins.xCoordStart = 0
+	maxiMins.xCoordEnd = maxX - minX
+	maxiMins.yCoordStart = 0
+	maxiMins.yCoordEnd = maxY - minY
 
 	gridSizeX = (maxX - minX) + 1
 	gridSizeY = (maxY - minY) + 1
-	fmt.Printf("gridSizeX: %d gridSizeY: %d\n", gridSizeX, gridSizeY)
 
 	undergroundArea := make([][]byte, gridSizeY)
 	for i := 0; i < gridSizeY; i++ {
 		undergroundArea[i] = make([]byte, gridSizeX)	
 	}
 
+	workList = make([]workListCoords, 0)
+
 	readInitialState(coordData, undergroundArea, springX, springY, minX, minY)
 
+	workList = addWorkListItem(workList, springX - minX, springY - minY)
+	letsLoopThis = true
+
+	for letsLoopThis {
+		didWork = false
+
+		fmt.Println("In processWaterFlow")
+		// this loop won't work in practice. It needs to be self controlled to loop through an ever-changing workList
+		for i := 0; i < len(workList); i++ {
+			fmt.Println(workList)
+			print2DSlice(undergroundArea)
+			fmt.Println("workX, workY:", workList[i].xCoord, workList[i].yCoord)
+
+			if !workList[i].done {
+				workX = workList[i].xCoord
+				workY = workList[i].yCoord
+
+				letsLoopThis, workList = letTheWaterFlow(undergroundArea, workList, workX, workY, maxiMins)
+				workList[i].done = true
+				didWork = true
+			}
+		}
+		if !didWork {
+			letsLoopThis = false
+		}
+
+	}
+	
+	fmt.Println("Printing water flow")
 	print2DSlice(undergroundArea)
 
-	letTheWaterFlow(undergroundArea, springX - minX, springY - minY)
-
-	print2DSlice(undergroundArea)
-
-	return 0
+	return countWaterSquares(undergroundArea)
 }
 
 // Main routine
