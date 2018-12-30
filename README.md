@@ -110,11 +110,11 @@ Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in out
 ```
 
 + [Day 17](src/day17/day17.go)
-Day 17 - Part way through. Probably going to change the way I'm doing it. Need to build a work list of spillages to keep track of them. 
-Day 17 - Not here yet.
+Day 17 - Part A done. Tricky! Not an elegant solution; 
+Day 17 - Part B done. Nothing to this, just an extra print statement.
 ```
-./day17 -file original.txt -part a
-
+./day17 -file original.txt -part a [> output]
+./day17 -file original.txt -part b [> output]
 ```
 
 + [Day 18](src/day18/day18.go)
