@@ -25,7 +25,7 @@ Day 1 - [How to Write Go Code](https://golang.org/doc/code.html). A few nasty ha
 ```
 
 + [Day 2](src/day02/day02.go)
-Day 2 - 
+Day 2 - Done
 ```
 ./day02 -file original.txt -part a
 ./day02 -file original.txt -part b
@@ -73,6 +73,11 @@ Day 8 - Part B done.
 ./day08 -file original.txt -part b
 ```
 
++ [Day 9](src/day09)
+Day 9 - Skipped.
+```
+```
+
 + [Day 10](src/day10/day10.go)
 Day 10 - Part A done. Need to automate; 
 Day 10 - Part B done. Need to automate
@@ -101,12 +106,27 @@ Day 12 - Part B done
 ./day12 -file original.txt -part b
 ```
 
++ [Day 13](src/day13)
+Day 13 - Skipped.
+```
+```
+
 + [Day 14](src/day14/day14.go)
 Day 14 - Part A done; 
 Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in output for other numbers. Needs work on the comparison
 ```
 ./day14 -part a -recipes 825401 -answers 10 [-print]
 ./day14 -part b -result "825401"
+```
+
++ [Day 15](src/day15)
+Day 15 - Skipped.
+```
+```
+
++ [Day 16](src/day16)
+Day 16 - Skipped.
+```
 ```
 
 + [Day 17](src/day17/day17.go)
