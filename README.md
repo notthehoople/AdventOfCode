@@ -74,8 +74,11 @@ Day 8 - Part B done.
 ```
 
 + [Day 9](src/day09)
-Day 9 - Skipped.
+Day 9 - Part A done;
+Day 9 - Part B done but very, very slow. Needs to be rewritten to use ring package (https://golang.org/pkg/container/ring/) instead of array
 ```
+./day09 -part a -marble 71223 -players 455
+./day09 -part b -marble 7122300 -players 455
 ```
 
 + [Day 10](src/day10/day10.go)
