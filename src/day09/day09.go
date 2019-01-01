@@ -20,48 +20,6 @@ func printMarbleBoard(marbleBoard []int, currentElf int, placedMarble int) {
 	fmt.Printf("\n")
 }
 
-// func recipeMakerA
-// PARTA: Handles the proocessing of recipes to generate our answer
-// recipesToMake - number of recipes to make prior to the answer being produced
-// answersRequired - number of answers to create following the recipesToMake
-// part - the section of the puzzle we're on (should be a)
-//
-// Need to know the position in the array that Elf 1 and Elf 2 has (can i increase this to elf 'n' easily?)
-// Need to know each Elf's current recipe
-// While the number of recipes created < the recipesToMake
-//    add Elf 1 to Elf 2 recipe (elf 'n') to create new recipe. If > 9 then split into 2 digits
-//    add the new recipe(s) to the end of the array
-//    increase the number of recipes by 1 or 2
-//    move each Elf forward by 1 + current recipe value. Loop from end of array to the start if needed
-//        NOTE - Elf must move forward on the NEW version of the recipe board including newly added entries
-/*func recipeMakerA(recipesToMake int, answersRequired int, printRecipeBoard bool, part byte) string {
-	var recipeBoard[]int
-	var elf1, elf2 int = 0, 1
-	var newrecipe int = 0
-	var resultString string
-	
-	for r := 0; r < recipesToMake + answersRequired; r++ {
-		newrecipe = recipeBoard[elf1] + recipeBoard[elf2]
-
-		if newrecipe / 10 >= 1 {
-			// we've got a double digit. First mod gets the "tens" number. Second mod gets the "digits"
-			// Add an extra 1 to 'r' since we've created 2 recipes
-			recipeBoard = append(recipeBoard, int(math.Mod(float64(newrecipe / 10), 10)))
-			recipeBoard = append(recipeBoard, int(math.Mod(float64(newrecipe), 10)))
-
-			r++
-		} else {
-			// single digit so it's easier
-			recipeBoard = append(recipeBoard, newrecipe)
-		}
-
-		// Divide the amount to move by the length of the current recipe board. The remainder is how much we move
-		elf1 = int(math.Mod(float64(recipeBoard[elf1] + 1 + elf1), float64(len(recipeBoard))))
-		elf2 = int(math.Mod(float64(recipeBoard[elf2] + 1 + elf2), float64(len(recipeBoard))))
-		
-	}
-}*/
-
 func insertMarbleToBoard(marbleBoard []int, marbleToPlace int, placedMarble int) []int {
 	marbleBoard = append(marbleBoard, 0)
 
