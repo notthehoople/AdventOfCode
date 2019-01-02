@@ -128,8 +128,9 @@ Day 15 - Skipped.
 ```
 
 + [Day 16](src/day16)
-Day 16 - Skipped.
+Day 16 - Part A done.
 ```
+./day16 -part a -file original.txt
 ```
 
 + [Day 17](src/day17/day17.go)

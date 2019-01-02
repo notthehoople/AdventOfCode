@@ -51,6 +51,205 @@ func printStringArray(tempString []string) {
 	}
 }
 
+// **********************************************************************************************************************
+// Supporting functions for instructions and registers
+
+// func decodeInstruction
+// returns: regA, regB, regC
+func decodeInstruction(partAInstruction instructions) (int, int, int) {
+	return partAInstruction.a, partAInstruction.b, partAInstruction.c
+}
+
+func decodeSingleRegister(register registers, inputReg int) int {
+	switch inputReg {
+	case 0: return register.register0
+	case 1: return register.register1
+	case 2: return register.register2
+	case 3: return register.register3
+	}
+
+	return 0
+}
+
+// func decodeRegisters
+// returns: reg0, reg1, reg2, reg3
+func decodeRegisters(register registers, regA int, regB int, regC int) (int, int, int) {
+	return decodeSingleRegister(register, regA), decodeSingleRegister(register, regB), decodeSingleRegister(register, regC)
+}
+
+// Check the non-changing registers are the same before and after the sum
+// Reference to the changing register is passed in regC
+func checkRegisterChanges(beforeRegister registers, afterRegister registers, regC int) bool {
+	switch regC {
+	case 0: if (beforeRegister.register1 == afterRegister.register1) &&
+			   (beforeRegister.register2 == afterRegister.register2) &&
+			   (beforeRegister.register3 == afterRegister.register3) {
+				   return true
+			   }
+	case 1: if (beforeRegister.register0 == afterRegister.register0) &&
+				(beforeRegister.register2 == afterRegister.register2) &&
+				(beforeRegister.register3 == afterRegister.register3) {
+					return true
+				}
+	case 2: if (beforeRegister.register0 == afterRegister.register0) &&
+				(beforeRegister.register1 == afterRegister.register1) &&
+				(beforeRegister.register3 == afterRegister.register3) {
+					return true
+			}
+	case 3: if (beforeRegister.register0 == afterRegister.register0) &&
+				(beforeRegister.register1 == afterRegister.register1) &&
+				(beforeRegister.register2 == afterRegister.register2) {
+					return true
+			}
+	}
+	return false
+}
+
+// **********************************************************************************************************************
+// OpCodes
+//
+func runOpcode(opCode string, beforeRegister registers, partAInstruction instructions, afterRegister registers) bool {
+	var regA, regB, regC int = 0, 0, 0
+	// var regBeforeC int = 0
+	var regBeforeA, regBeforeB int = 0, 0
+	//var regAfterA, regAfterB, regAfterC int = 0, 0, 0
+	var regAfterC int = 0
+
+	regA, regB, regC = decodeInstruction(partAInstruction)
+	
+	// check only regC has changed between before and After registers. Otherwise it's not us
+	if !checkRegisterChanges(beforeRegister, afterRegister, regC) {
+		fmt.Println("Can't be addr as the non-changing registers are different")
+		return false
+	}
+
+//	regBeforeA, regBeforeB, regBeforeC = decodeRegisters(beforeRegister, regA, regB, regC)
+
+	regBeforeA, regBeforeB, _ = decodeRegisters(beforeRegister, regA, regB, regC)
+	_, _, regAfterC = decodeRegisters(afterRegister, regA, regB, regC)
+
+	switch opCode {
+		case "addr": 	// CHECKED addr (add register) stores into register C the result of adding register A and register B.
+						if (regBeforeA + regBeforeB) == regAfterC {
+							return true
+						}
+		case "addi":	// CHECKED addi (add immediate) stores into register C the result of adding register A and value B.
+						if (regBeforeA + regB) == regAfterC {
+							return true
+						}
+
+		case "mulr":	// CHECKED mulr (multiply register) stores into register C the result of multiplying register A and register B.
+						if (regBeforeA * regBeforeB) == regAfterC {
+							return true
+						}
+		case "muli":	// CHECKED muli (multiply immediate) stores into register C the result of multiplying register A and value B.
+						if (regBeforeA * regB) == regAfterC {
+							return true
+						}
+
+		case "banr":	// CHECKED banr (bitwise AND register) stores into register C the result of the bitwise AND of register A and register B.
+						if (regBeforeA & regBeforeB) == regAfterC {
+							return true
+						}
+
+		case "bani":	// bani (bitwise AND immediate) stores into register C the result of the bitwise AND of register A and value B.
+						if (regBeforeA & regB) == regAfterC {
+							return true
+						}
+
+		case "borr":	// borr (bitwise OR register) stores into register C the result of the bitwise OR of register A and register B.
+						if (regBeforeA | regBeforeB) == regAfterC {
+							return true
+						}
+
+		case "bori":	// bori (bitwise OR immediate) stores into register C the result of the bitwise OR of register A and value B.
+						if (regBeforeA | regB) == regAfterC {
+							return true
+						}
+
+		case "setr":	// setr (set register) copies the contents of register A into register C. (Input B is ignored.)
+						if regBeforeA == regAfterC {
+							return true
+						}
+		case "seti":	// seti (set immediate) stores value A into register C. (Input B is ignored.)
+						if regA == regAfterC {
+							return true
+						}
+		
+		case "gtir":	// gtir (greater-than immediate/register) sets register C to 1 if value A is greater than register B. Otherwise, register C is set to 0
+						if (regA > regBeforeB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regA <= regBeforeB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+		case "gtri":	// gtri (greater-than register/immediate) sets register C to 1 if register A is greater than value B. Otherwise, register C is set to 0
+						if (regBeforeA > regB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regBeforeA <= regB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+		case "gtrr":	// gtrr (greater-than register/register) sets register C to 1 if register A is greater than register B. Otherwise, register C is set to 0
+						if (regBeforeA > regBeforeB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regBeforeA <= regBeforeB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+		case "eqir":	// eqir (equal immediate/register) sets register C to 1 if value A is equal to register B. Otherwise, register C is set to 0
+						if (regA == regBeforeB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regA != regBeforeB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+		case "eqri":	// eqri (equal register/immediate) sets register C to 1 if register A is equal to value B. Otherwise, register C is set to 0
+						if (regBeforeA == regB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regBeforeA != regB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+		case "eqrr":	// eqrr (equal register/register) sets register C to 1 if register A is equal to register B. Otherwise, register C is set to 0
+						if (regBeforeA == regBeforeB) && (regAfterC == 1) {
+							return true
+						} else {
+							if (regBeforeA != regBeforeB) && (regAfterC == 0) {
+								return true
+							} else {
+								return false
+							}
+						}
+
+	}
+	
+
+	return false
+}
+
+// **********************************************************************************************************************
+// Main Functions
 func processFirstInstructions(fileContents []string) ([]registers, []instructions, []registers) {
 	var partAInstructions []instructions
 	var beforeRegisters []registers
@@ -83,21 +282,33 @@ func processFirstInstructions(fileContents []string) ([]registers, []instruction
 // func processOpcodes
 //
 func processOpcodes(fileName string, printInstructions bool, part byte) int {
+	var numPossibleOpCodes, threeOrMore int = 0, 0
+	var beforeRegisters []registers
+	var partAInstructions []instructions
+	var afterRegisters []registers
+	var allOpCodes = [16]string{"addr","addi", "mulr", "muli", "banr", "bani", "borr", "bori", "setr", "seti", "gtir", "gtri", "gtrr", "eqir", "eqri", "eqrr"}
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
 
 	if part == 'a' {
-		beforeRegisters, partAInstructions, afterRegisters := processFirstInstructions(fileContents)
-
-		fmt.Println(beforeRegisters)
-		fmt.Println(partAInstructions)
-		fmt.Println(afterRegisters)
+		beforeRegisters, partAInstructions, afterRegisters = processFirstInstructions(fileContents)
 	}
 
 	// Now we need to work through the input data and run it through the operations we have
+	for i := 0; i < len(beforeRegisters); i++ {
+		for _, tryOpCode := range allOpCodes {
+			if runOpcode(tryOpCode, beforeRegisters[i], partAInstructions[i], afterRegisters[i]) {
+				numPossibleOpCodes++
+			}
+		}
+		if numPossibleOpCodes > 2 {
+			threeOrMore++
+		}
+		numPossibleOpCodes = 0
+	}
 
-	return 0
+	return threeOrMore
 }
 
 // Main routine
