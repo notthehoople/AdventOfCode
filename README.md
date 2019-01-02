@@ -127,10 +127,13 @@ Day 15 - Skipped.
 ```
 ```
 
-+ [Day 16](src/day16)
++ [Day 16a](src/day16a)
++ [Day 16b](src/day16b)
 Day 16 - Part A done.
+Day 16 - Part B done but included manual work. Will need to come back to it. Also hacked around with the original.txt input file
 ```
-./day16 -part a -file original.txt
+./day16a -part a -file original.txt
+./day16b -part b -file originalb.txt
 ```
 
 + [Day 17](src/day17/day17.go)
