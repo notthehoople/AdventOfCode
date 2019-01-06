@@ -151,3 +151,12 @@ Day 18 - Got answer. Need to automate.
 ./day18 -file original.txt -part a -minutes 10 -grid 50
 ./day18 -file original.txt -part b -minutes 1000 -grid 50
 ```
+
++ [Day 19](src/day19/day19.go)
++ [Day 19b](src/day19/day19b.go)
+Day 19 - Part A done; 
+Day 19 - Part B done. Doesn't use the input files. Works exactly for my input file data only
+```
+./day19 -file original.txt -part a
+./day19b
+```
