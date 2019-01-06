@@ -8,12 +8,8 @@ Afterwards, move to the next instruction by adding one to the instruction pointe
 The instruction pointer is 0 during first instruction, 1 during second, and so on. If the instruction pointer ever causes the
 device to attempt to load an instruction outside the instructions defined in the program, the program immediately halts
 
-Four registers numbered 0 to 3.
-- registers can be manipulated by instructions containing one of 16 opcodes
-- start with the value 0
-
 Instructions contain 4 values
-- an opcode (numbered from 0 to 15, but don't know what number relates to which opcode)
+- an opcode (string)
 - two inputs (A and B)
 - an output (C)
 - opcode specifies the behavious of the instruction and how the inputs are interpreted
