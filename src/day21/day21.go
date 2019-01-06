@@ -6,7 +6,7 @@ import (
 )
 
 // Main routine
-func runProgram(reg0Val int) (int, int) {
+func runProgram(reg0Val int, maxLoop int) (int, int) {
 		var reg0, reg2, reg3, reg4, reg5 int = 0, 0, 0, 0, 0
 		var loopCounter int = 0
 
@@ -47,7 +47,7 @@ func runProgram(reg0Val int) (int, int) {
 
 	goto28:
 		//fmt.Printf("Goto28: reg0: %d reg2: %d reg3: %d reg4: %d reg5: %d\n", reg0, reg2, reg3, reg4, reg5)
-		if loopCounter > 10000 {
+		if loopCounter > maxLoop {
 			return 0, 0
 		}
 		if reg5 == reg0 {
@@ -59,11 +59,15 @@ func runProgram(reg0Val int) (int, int) {
 
 // Main routine
 func main() {
+	var maxLoop = 2000
 
-	for tryIt := 0; tryIt < 40000; tryIt++ {
-		result, loopResult := runProgram(tryIt)
+	for tryIt := 0; tryIt < 100000000; tryIt++ {
+		result, loopResult := runProgram(tryIt, maxLoop)
 		if result != 0 {
-			fmt.Println("Result worked:", result, loopResult)
+			fmt.Println("Result worked:", result, loopResult, maxLoop)
+			if maxLoop > loopResult {
+				maxLoop = loopResult + 1
+			}
 		} else {
 			//fmt.Println("Failed:", tryIt)
 		}
