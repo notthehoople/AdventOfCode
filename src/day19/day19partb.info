@@ -1,0 +1,63 @@
+Day 19 part 2 simplification
+
+Start Point:
+
+reg 0: 0
+reg 1: don't care
+reg 2: 0
+reg 3: 10551408
+reg 4: 0
+reg 5: 0
+
+(1) set reg 4 to 1
+
+Note: instruction 2 is resetting the loop counter after reg 2 > reg 3, we added 1 to reg 4 but reg 4 wasn't big enough to END
+
+(2) set reg 2 to 1
+
+Note: when we FIRST hit instruction 3 we already have the big number established in reg 3
+
+(3) multiple reg 4 by reg 2 and store in reg 5
+    if reg 5 = reg 3 (big number) then
+        // reg 5 = 1
+        // add reg 5 to reg 1 (skips instruction 6)
+        add reg 4 to reg 0
+        add 1 to reg 2
+        if reg 2 > reg 3 then
+            // reg 5 = 1
+            // add reg 5 to reg 1 (skips 11)
+            add 1 to reg 4
+            if reg 4 > reg 3 then
+                // reg 5 = 1
+                // add reg 5 to reg 1 (skip instruction 15)
+                // multiply reg 1 by itself (i.e. END)
+                END 
+            else
+                // reg 5 = 0
+                // add reg 5 to reg 1 (does nothing)
+                set reg 1 to 1 (goto 2)
+        else
+            // reg 5 = 0
+            // add reg 5 to reg 1 (does nothing)
+            set reg 1 to 2 (goto 3)
+    else
+        // reg 5 = 0
+        // add 1 to reg 1 (skips instruction 7)
+        add 1 to reg 2
+        if reg 2 > reg 3 then
+            // reg 5 = 1
+            // add reg 5 to reg 1 (skips 11)
+            add 1 to reg 4
+            if reg 4 > reg 3 then
+                // reg 5 = 1
+                // add reg 5 to reg 1 (skip instruction 15)
+                // multiply reg 1 by itself (i.e. END)
+                END 
+            else
+                // reg 5 = 0
+                // add reg 5 to reg 1 (does nothing)
+                set reg 1 to 1 (goto 2)
+        else
+            // reg 5 = 0
+            // add reg 5 to reg 1 (does nothing)
+            set reg 1 to 2 (goto 3)
