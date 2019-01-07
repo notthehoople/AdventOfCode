@@ -18,6 +18,7 @@ go build
 ## Days of Advent
 
 + [Day 1](src/day01/day01.go)
+
 Day 1 - [How to Write Go Code](https://golang.org/doc/code.html). A few nasty hacks in part b that don't feel good, especially the "break" in the "for" loop.
 ```
 ./day01 -file original.txt -part a
@@ -25,6 +26,7 @@ Day 1 - [How to Write Go Code](https://golang.org/doc/code.html). A few nasty ha
 ```
 
 + [Day 2](src/day02/day02.go)
+
 Day 2 - Done
 ```
 ./day02 -file original.txt -part a
@@ -32,6 +34,7 @@ Day 2 - Done
 ```
 
 + [Day 3](src/day03/day03.go)
+
 Day 3 - Done. A silly bug in my thoughts caused an hour of head scratching but sorted now.
 ```
 ./day03 -file original.txt -part a
@@ -39,6 +42,7 @@ Day 3 - Done. A silly bug in my thoughts caused an hour of head scratching but s
 ```
 
 + [Day 4](src/day04/day04.go)
+
 Day 4 - Done. Finally. Struggled getting part "b" map to work
 ```
 ./day04 -file original.txt -part a
@@ -46,6 +50,7 @@ Day 4 - Done. Finally. Struggled getting part "b" map to work
 ```
 
 + [Day 5](src/day05/day05.go)
+
 Day 5 - Done. Part "b" runs really slow. Could do with some more work!
 ```
 ./day05 -file original.txt -part a
@@ -53,12 +58,15 @@ Day 5 - Done. Part "b" runs really slow. Could do with some more work!
 ```
 
 + [Day 6](src/day06)
+
 Day 6 - Skipped.
 ```
 ```
 
 + [Day 7](src/day07/day07.go)
+
 Day 7 - Part A done.; 
+
 Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one less than that listed
 ```
 ./day07 -file original.txt -part a
@@ -66,15 +74,19 @@ Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one les
 ```
 
 + [Day 8](src/day08/day08.go)
+
 Day 8 - Part A done.; 
+
 Day 8 - Part B done.
 ```
 ./day08 -file original.txt -part a
 ./day08 -file original.txt -part b
 ```
 
-+ [Day 9](src/day09)
++ [Day 9](src/day09/day09.go)
+
 Day 9 - Part A done;
+
 Day 9 - Part B done but very, very slow. Needs to be rewritten to use ring package (https://golang.org/pkg/container/ring/) instead of array
 ```
 ./day09 -part a -marble 71223 -players 455
@@ -82,7 +94,9 @@ Day 9 - Part B done but very, very slow. Needs to be rewritten to use ring packa
 ```
 
 + [Day 10](src/day10/day10.go)
+
 Day 10 - Part A done. Need to automate; 
+
 Day 10 - Part B done. Need to automate
 ```
 ./day10 -file original.txt -grid 100 -max 100000 -part a | grep -v 50
@@ -94,7 +108,9 @@ Day 10 - Part B done. Need to automate
 ```
 
 + [Day 11](src/day11/day11.go)
+
 Day 11 - Part A done; 
+
 Day 11 - Part B done. Slow, but it works
 ```
 ./day11 -part a -puzzle 7165
@@ -102,7 +118,9 @@ Day 11 - Part B done. Slow, but it works
 ```
 
 + [Day 12](src/day12/day12.go)
+
 Day 12 - Part A done; 
+
 Day 12 - Part B done
 ```
 ./day12 -file original.txt -part a -generations 20
@@ -110,12 +128,15 @@ Day 12 - Part B done
 ```
 
 + [Day 13](src/day13)
+
 Day 13 - Skipped.
 ```
 ```
 
 + [Day 14](src/day14/day14.go)
+
 Day 14 - Part A done; 
+
 Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in output for other numbers. Needs work on the comparison
 ```
 ./day14 -part a -recipes 825401 -answers 10 [-print]
@@ -123,13 +144,16 @@ Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in out
 ```
 
 + [Day 15](src/day15)
+
 Day 15 - Skipped.
 ```
 ```
 
 + [Day 16a](src/day16a)
 + [Day 16b](src/day16b)
+
 Day 16 - Part A done.
+
 Day 16 - Part B done but included manual work. Will need to come back to it. Also hacked around with the original.txt input file
 ```
 ./day16a -part a -file original.txt
@@ -137,7 +161,9 @@ Day 16 - Part B done but included manual work. Will need to come back to it. Als
 ```
 
 + [Day 17](src/day17/day17.go)
+
 Day 17 - Part A done. Tricky! Not an elegant solution; 
+
 Day 17 - Part B done. Nothing to this, just an extra print statement.
 ```
 ./day17 -file original.txt -part a [> output]
@@ -145,7 +171,9 @@ Day 17 - Part B done. Nothing to this, just an extra print statement.
 ```
 
 + [Day 18](src/day18/day18.go)
+
 Day 18 - Part A done; 
+
 Day 18 - Got answer. Need to automate.
 ```
 ./day18 -file original.txt -part a -minutes 10 -grid 50
@@ -154,9 +182,28 @@ Day 18 - Got answer. Need to automate.
 
 + [Day 19](src/day19/day19.go)
 + [Day 19b](src/day19/day19b.go)
+
 Day 19 - Part A done; 
+
 Day 19 - Part B done. Doesn't use the input files. Works exactly for my input file data only
 ```
 ./day19 -file original.txt -part a
 ./day19b
+```
+
++ [Day 21](src/day21/day21.go)
++ [Day 21a](src/day21a/day21a.go)
++ [Day 21b](src/day21b/day21b.go)
+
+**Note for all parts of day 21 the answers are hardcoded to the specific input I've been given, and do not refer to the input files at all.**
+
+Day 21 - Part A done. Brute force method;
+
+Day 21a - Part A done after realising what's going on. Not brute force! 
+
+Day 21b - Part B done. Not a clean answer, and needs manual work on the output file. Come back to this!
+```
+./day21
+./day21a
+./day21b > output      # Needs manual work done on the output file to find the answer
 ```

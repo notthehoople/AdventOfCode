@@ -6,7 +6,7 @@ import (
 )
 
 // Main routine
-func runProgram(reg0Val int, maxLoop int) (int, int) {
+func runProgram(reg0Val int, maxLoop int) int {
 		var reg0, reg2, reg3, reg4, reg5 int = 0, 0, 0, 0, 0
 		var loopCounter int = 0
 
@@ -46,29 +46,20 @@ func runProgram(reg0Val int, maxLoop int) (int, int) {
 		goto goto8
 
 	goto28:
-		if loopCounter > maxLoop {
-			return 0, 0
-		}
+		return reg5
 		if reg5 == reg0 {
-			return reg0, loopCounter
+			return reg0
 		} else {
 			goto goto6
 		}
 	}
 
 // Main routine
+// In Day 21 part a we're looking at the FIRST value that makes it through to the comparison.
 func main() {
-	var maxLoop = 2000
+	var maxLoop = 50000
 
-	for tryIt := 0; tryIt < 100000000; tryIt++ {
-		result, loopResult := runProgram(tryIt, maxLoop)
-		if result != 0 {
-			fmt.Println("Result worked:", result, loopResult, maxLoop)
-			if maxLoop > loopResult {
-				maxLoop = loopResult + 1
-			}
-		} else {
-			//fmt.Println("Failed:", tryIt)
-		}
-	}
+	// Having worked out what's going on with my first "brute force" day21 part a answer, here's one that returns the same result faster
+	
+	fmt.Println("Answer is:", runProgram(0, maxLoop))
 }

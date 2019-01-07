@@ -49,6 +49,7 @@ func runProgram(reg0Val int, maxLoop int) (int, int) {
 		if loopCounter > maxLoop {
 			return 0, 0
 		}
+		fmt.Printf("reg0: %d reg5: %d\n", reg0, reg5)
 		if reg5 == reg0 {
 			return reg0, loopCounter
 		} else {
@@ -57,10 +58,14 @@ func runProgram(reg0Val int, maxLoop int) (int, int) {
 	}
 
 // Main routine
+// In Day 21 part b we're looking at the LAST value before the loop repeats.
+// No idea how to code that yet. Will hopefully come back to it. To find it run the code and dump to a text file
+// Search for the LAST reg0: 0 code that doesn't repeat in the reg0: 0 loop. That's your answer.
 func main() {
-	var maxLoop = 2000
+	var maxLoop = 50000
 
-	for tryIt := 0; tryIt < 100000000; tryIt++ {
+	// Unlike part a we don't need to loop lots. In fact, part a doesn't need to loop lots either. Doh
+	for tryIt := 0; tryIt < 3; tryIt++ {
 		result, loopResult := runProgram(tryIt, maxLoop)
 		if result != 0 {
 			fmt.Println("Result worked:", result, loopResult, maxLoop)
