@@ -207,3 +207,12 @@ Day 21b - Part B done. Not a clean answer, and needs manual work on the output f
 ./day21a
 ./day21b > output      # Needs manual work done on the output file to find the answer
 ```
+
++ [Day 23](src/day23/day23.go)
+
+Day 23 - Part A done; 
+
+Day 23 - Part B Not started yet
+```
+./day23 -file original.txt -part a [-debug]
+```
