@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"bufio"
-	"os"
-	"math"
 	"flag"
 )
 
@@ -16,180 +13,64 @@ type nanoCoordsStruct struct {
 	signalRange	int
 }
 
-// Read the text file passed in by name into a array of strings
-// Returns the array as the first return variable
-func readLines(filename string) ([]string, error) {
-	file, err := os.Open(filename)
-	if err != nil {
-	  return nil, err
-	}
-	defer file.Close()
-  
-	var lines []string
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-	  lines = append(lines, scanner.Text())
-	}
-	return lines, scanner.Err()
-}
+// func: nanoBotControlB
+// 
+func nanoBotControlB(fileName string, debug bool) (int) {
+	var nanoBotLocation []nanoCoordsStruct
+	var minX, maxX, minY, maxY, minZ, maxZ int
+	var botsInRange, tempDistance int = 0, 0
+	var maxBotsInRange, maxArrayPos int = 0, 0
 
-// func scanInputForMaxMins
-// Walks through the coordData array and works out the minimum and maximum values of X and Y
-/*func scanInputForMaxMins(coordData []pointStruct, springX int, springY int) (int, int, int, int, int) {
-	var minX, maxX, minY, maxY, yCountStart int = 0, 0, 1000, 0, 0
-
-	minX = coordData[0].xCoordStart
-	maxX = coordData[0].xCoordEnd
-	minY = coordData[0].yCoordStart
-	maxY = coordData[0].yCoordEnd
-
-	for i := 0; i < len(coordData); i++ {
-		if coordData[i].xCoordStart < minX {
-			minX = coordData[i].xCoordStart
-		}
-		if coordData[i].xCoordEnd > maxX {
-			maxX = coordData[i].xCoordEnd + 5
-		}
-		if coordData[i].yCoordStart < minY {
-			minY = coordData[i].yCoordStart
-		}
-		if coordData[i].yCoordEnd > maxY {
-			maxY = coordData[i].yCoordEnd
-		}
-	}
-
-	yCountStart = minY
-
-	if springX < minX {
-		minX = springX
-	} else {
-		if springX > maxX {
-			maxX = springX
-		}
-	}
-	if springY < minY {
-		minY = springY
-	} else {
-		if springY > maxY {
-			maxY = springY
-		}
-	}
-
-	return minX, maxX, minY, maxY, yCountStart
-}*/
-
-// func processInputFile
-// Returns a pointStruct array with the processed data in it
-// Data is provided in the file as follows:
-//   pos=<1,3,1>, r=4 e.g.
-//   pos=<X,Y,Z>, r=R
-func processInputFile(fileContents []string) ([]nanoCoordsStruct) {
-	var tempBotLocation []nanoCoordsStruct
-	var x, y, z, r int
-
-	for i := 0; i < len(fileContents); i++ {
-		fmt.Sscanf(fileContents[i], "pos=<%d,%d,%d>, r=%d\n", &x, &y, &z, &r)
-		
-		tempBotLocation = append(tempBotLocation, nanoCoordsStruct{xCoord: x, yCoord: y, zCoord: z, signalRange: r})
-	}
-
-	return tempBotLocation
-}
-
-// func processWaterFlow
-// Handles everything needed to work out the water flow (day 17 part A)
-/*func processWaterFlow(fileName string, springX int, springY int, part byte) int {
-	var minX, maxX, minY, maxY, gridSizeX, gridSizeY, workX, workY, yCountStart int
-	var coordData []pointStruct
-	var workList []workListCoords
-	var letsLoopThis bool
-	var maxiMins pointStruct
-	var didWork bool
-
-	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
-	coordData = processInputFile(fileContents)
+	nanoBotLocation = processInputFile(fileContents)
 
-	minX, maxX, minY, maxY, yCountStart = scanInputForMaxMins(coordData, springX, springY)
+	minX, maxX, minY, maxY, minZ, maxZ = scanInputForMaxMins(nanoBotLocation)
 
-	maxiMins.xCoordStart = 0
-	maxiMins.xCoordEnd = maxX - minX
-	maxiMins.yCoordStart = 0
-	maxiMins.yCoordEnd = maxY - minY + 1
-	maxiMins.yCountStart = yCountStart
-
-	gridSizeX = (maxX - minX) + 1
-	gridSizeY = (maxY - minY) + 2
-
-	undergroundArea := make([][]byte, gridSizeY)
-	for i := 0; i < gridSizeY; i++ {
-		undergroundArea[i] = make([]byte, gridSizeX)	
+	if debug {
+		fmt.Printf("minX: %d maxX: %d minY: %d maxY: %d minZ: %d maxZ: %d\n", minX, maxX, minY, maxY, minZ, maxZ)
 	}
 
-	workList = make([]workListCoords, 0)
-
-	readInitialState(coordData, undergroundArea, springX, springY, minX, minY)
-
-	workList = addWorkListItem(workList, springX - minX, springY - minY)
-	letsLoopThis = true
-
-	for letsLoopThis {
-		didWork = false
-
-		// Loop through the list of work we have. This list is a list of water sources
-		for i := 0; i < len(workList); i++ {
-			if !workList[i].done {
-				workX = workList[i].xCoord
-				workY = workList[i].yCoord
-
-				letsLoopThis, workList = letTheWaterFlow(undergroundArea, workList, workX, workY, maxiMins)
-				workList[i].done = true
-				didWork = true
-			}
-		}
-		if !didWork {
-			letsLoopThis = false
-		}
-
-	}
-	
-	// Print final water flow
-	print2DSlice(undergroundArea)
-
-	return countWaterSquares(undergroundArea, part, maxiMins.yCountStart)
-}*/
-
-// func: findMostPowerful
-// Find the most powerful nanobot in the nanoBotLocation array
-// Return the array position of the most powerful nanobot
-func findMostPowerful(nanoBotLocation []nanoCoordsStruct) (int) {
-	var mostPowerfulPos, mostPower int = 0, 0
 
 	for i := 0; i < len(nanoBotLocation); i++ {
-		if nanoBotLocation[i].signalRange > mostPower {
-			mostPower = nanoBotLocation[i].signalRange
-			mostPowerfulPos = i
+		botsInRange = 0
+		for j := 0; j < len(nanoBotLocation); j++ {
+			tempDistance = manhattanDistance(nanoBotLocation[j], nanoBotLocation[i])
+			//if tempDistance <= nanoBotLocation[i].signalRange {
+			if tempDistance <= 50000000 {
+					botsInRange++
+			}
+
+		}
+		if debug {
+			if botsInRange > 300 {
+				fmt.Printf("Bot at %d,%d,%d range %d has %d bots in range\n", nanoBotLocation[i].xCoord, nanoBotLocation[i].yCoord, nanoBotLocation[i].zCoord, nanoBotLocation[i].signalRange, botsInRange)
+			}
+		}
+		if botsInRange > maxBotsInRange {
+			maxArrayPos = i
+			fmt.Printf("High Number found at pos: %d Bots: %d\n", maxArrayPos, botsInRange)
+			maxBotsInRange = botsInRange
 		}
 	}
 
-	return mostPowerfulPos
+	fmt.Println("Max bots:", nanoBotLocation[maxArrayPos], maxBotsInRange)
+
+	// Need to do some thinking here. How can we work out what is close?
+	// Basically we're looking for the intersection of the most number of nanobots
+	// If you take the coords of a nanobot and the signal range it desribes a "circular" area of space
+	// Where the most intersections between nanobot circles happens is our answer
+	//
+	// So how do I build a model of all the circles and work out what intersects what?
+	// Perhaps build a circle for point [i] then compare against all the other points' circles, counting intersections (and where they are)
+	// at the end of it I should have an idea of roughly where the most intersections happened, then I can walk through each of the
+	// points in the intersection area and test them all specifically against the nanobots
+
+	return 0
 }
 
-// func: manhattanDistance
-// Difference between 2 3D points using Manhattan distance calc
-// Returns the distance as an int
-func manhattanDistance(firstPoint nanoCoordsStruct, secondPoint nanoCoordsStruct) (int) {
-	var distance float64 = 0
-
-	distance = math.Abs(float64(firstPoint.xCoord - secondPoint.xCoord)) + math.Abs(float64(firstPoint.yCoord - secondPoint.yCoord)) + math.Abs(float64(firstPoint.zCoord - secondPoint.zCoord))
-
-	return int(distance)
-
-}
-
-// func: nanoBotControl
+// func: nanoBotControl-A
 // 
-func nanoBotControl(fileName string, debug bool, part byte) (int) {
+func nanoBotControlA(fileName string, debug bool) (int) {
 	var nanoBotLocation []nanoCoordsStruct
 	var mostPowerfulPos, mostPowerfulRange int							// Array reference to the most powerful nanoBot
 	var botsInRange int = 0
@@ -215,8 +96,7 @@ func nanoBotControl(fileName string, debug bool, part byte) (int) {
 			botsInRange++
 		}
 		if debug {
-			fmt.Printf("Nano %d,%d,%d is %d distance away\n", nanoBotLocation[i].xCoord, nanoBotLocation[i].yCoord,
-		nanoBotLocation[i].zCoord, tempDistance)
+			fmt.Printf("Nano %d,%d,%d is %d distance away\n", nanoBotLocation[i].xCoord, nanoBotLocation[i].yCoord, nanoBotLocation[i].zCoord, tempDistance)
 		}
 	}
 	
@@ -239,9 +119,9 @@ func main() {
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Number of nanobots in range:", nanoBotControl(*fileNamePtr, debug, 'a'))
+		fmt.Println("Part a - Number of nanobots in range:", nanoBotControlA(*fileNamePtr, debug))
 	case "b":
-		fmt.Println("Not here yet")
+		fmt.Println("Part b - Distance from best position to 0,0,0:", nanoBotControlB(*fileNamePtr, debug))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

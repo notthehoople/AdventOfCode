@@ -212,7 +212,8 @@ Day 21b - Part B done. Not a clean answer, and needs manual work on the output f
 
 Day 23 - Part A done; 
 
-Day 23 - Part B Not started yet
+Day 23 - Part B Not complete. Not sure what to do with this yet
 ```
 ./day23 -file original.txt -part a [-debug]
+./day23 -file original.txt -part b [-debug]
 ```
