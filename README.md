@@ -59,8 +59,11 @@ Day 5 - Done. Part "b" runs really slow. Could do with some more work!
 
 + [Day 6](src/day06)
 
-Day 6 - Skipped.
+Day 6 - Part A done.
+
+Day 6 - Part B not started yet
 ```
+./day06 -file original.txt -part a [-debug]
 ```
 
 + [Day 7](src/day07/day07.go)
@@ -222,7 +225,7 @@ Day 23 - Part B Not complete. Not sure what to do with this yet
 
 Day 25 - Part A done; 
 
-Day 23 - Part B.....there is no part B
+Day 25 - Part B.....there is no part B
 ```
 ./day25 -file original.txt -range 3
 or
