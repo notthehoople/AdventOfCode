@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo -n "1: "; ./day25 -file input1.txt -range 3
+echo -n "1a:"; ./day25 -file input1a.txt -range 3
+echo -n "2: "; ./day25 -file input2.txt -range 3
+echo -n "3: "; ./day25 -file input3.txt -range 3
+echo -n "4: "; ./day25 -file input4.txt -range 3
+echo -n "x: "; ./day25 -file original.txt -range 3

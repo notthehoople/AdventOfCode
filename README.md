@@ -217,3 +217,14 @@ Day 23 - Part B Not complete. Not sure what to do with this yet
 ./day23 -file original.txt -part a [-debug]
 ./day23 -file original.txt -part b [-debug]
 ```
+
++ [Day 25](src/day25/day25.go)
+
+Day 25 - Part A done; 
+
+Day 23 - Part B.....there is no part B
+```
+./day25 -file original.txt -range 3
+or
+./runtests
+```
