@@ -11,7 +11,72 @@ type spaceCoordsStruct struct {
 	yCoord			int
 }
 
-// func: constellationsControlA
+// func: spaceControlB
+//
+func spaceControlB(fileName string, totalDistance int, debug bool) (int) {
+	var pointLocation []spaceCoordsStruct
+	var minX, maxX, minY, maxY int = 0, 0, 0, 0
+	var tempDistance int = 0
+	var sumOfDistance int = 0
+	var maxAreaSize int = 0
+	var printChars byte = 'A'
+
+	fileContents, _ := readLines(fileName)
+	pointLocation = processInputFile(fileContents)
+
+	if debug {
+		fmt.Println(pointLocation)
+	}
+
+	minX, maxX, minY, maxY = scanInputForMaxMins(pointLocation, 2)
+
+	if debug {
+		fmt.Printf("MinX: %d MaxX: %d\n", minX, maxX)
+		fmt.Printf("MinY: %d MaxY: %d\n", minY, maxY)
+	}
+
+	areaMap := make([][]byte, maxY)
+	for i := 0; i < len(areaMap); i++ {
+		areaMap[i] = make([]byte, maxX)
+	}
+
+	for i := 0; i < len(pointLocation); i++ {
+		areaMap[pointLocation[i].yCoord][pointLocation[i].xCoord] = printChars + byte(i)
+	}
+
+	if debug {
+		print2DSlice(areaMap)
+	}
+
+	// Loop through the entire areaMap
+	// Work out the manhattanDistance from our current point to each of the points in pointLocation
+	// Add those distances together. When we reach the end of pointLocation, if the sum of distances is <= totalDistance
+	// then we have our answer
+
+
+	for y := 0; y < len(areaMap); y++ {
+		for x := 0; x < len(areaMap[y]); x++ {
+			sumOfDistance = 0
+			for i := 0; i < len(pointLocation); i++ {
+				tempDistance = manhattanDistance2D(x, y, pointLocation[i])
+				sumOfDistance += tempDistance
+			}
+
+			if sumOfDistance < totalDistance {
+				areaMap[y][x] = '#'
+				maxAreaSize++
+			}
+		}
+	}
+
+	if debug {
+		print2DSlice(areaMap)
+	}
+
+	return maxAreaSize
+}
+
+// func: spaceControlA
 // 
 func spaceControlA(fileName string, debug bool) (int) {
 	var pointLocation []spaceCoordsStruct
@@ -109,9 +174,11 @@ func spaceControlA(fileName string, debug bool) (int) {
 // Main routine
 func main() {
 	var debug bool
+	var totalDistance int
 
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	flag.BoolVar(&debug, "debug", false, "turns print debugging on")
+	flag.IntVar(&totalDistance, "distance", 10000, "sum of distance to all points")
 	execPartPtr := flag.String("part", "a", "Which part of day06 do you want to calc (a or b)")
 
 	flag.Parse()
@@ -120,7 +187,7 @@ func main() {
 	case "a":
 		fmt.Println("Part a - Largest non-infinite area:", spaceControlA(*fileNamePtr, debug))
 	case "b":
-		fmt.Println("Not here yet")
+		fmt.Printf("Part b - Region size with distance less than %d is: %d\n", totalDistance, spaceControlB(*fileNamePtr, totalDistance, debug))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

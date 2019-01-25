@@ -61,9 +61,10 @@ Day 5 - Done. Part "b" runs really slow. Could do with some more work!
 
 Day 6 - Part A done.
 
-Day 6 - Part B not started yet
+Day 6 - Part B done.
 ```
 ./day06 -file original.txt -part a [-debug]
+./day06 -file original.txt -part b [-debug] [-distance 10000]
 ```
 
 + [Day 7](src/day07/day07.go)
