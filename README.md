@@ -51,7 +51,7 @@ Day 4 - Done. Finally. Struggled getting part "b" map to work
 
 + [Day 5](src/day05/day05.go)
 
-Day 5 - Done. Part "b" runs really slow. Could do with some more work!
+Day 5 - Redone. Changed naive string += to use a slice and append. Reduced part a from 10 secs to 0.15
 ```
 ./day05 -file original.txt -part a
 ./day05 -file original.txt -part b
