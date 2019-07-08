@@ -9,6 +9,8 @@ import (
 //	"strconv"
 	"unicode"
 	"strings"
+	"runtime/pprof"
+	"log"
 )
 
 // Read the text file passed in by name into a array of strings
@@ -54,7 +56,9 @@ func removeUnitType(tempLetter string, tempPolymer string)(string) {
 //       In aabAAB, even though aa and AA are of the same type, their polarities match, so nothing happens.
 //     After pass 1 destruction there may be new pairings that will again destroy themselves
 func actionPolymerDestroy(tempPolymer string)(bool, string) {
-	var tempReturnPolymer string
+	// Use a slice for tempReturnPolymer so we can build the return string using append
+	// Much, much faster than using += on strings
+	var tempReturnPolymer []byte
 	var didDestroy bool = false
 	var treatAsFirstChar bool = true
 	var previousChar byte
@@ -72,12 +76,12 @@ func actionPolymerDestroy(tempPolymer string)(bool, string) {
 		// Are previous and current characters the same, ignoring case?
 		if unicode.ToLower(rune(currentChar)) != unicode.ToLower(rune(previousChar)) {
 			// No, so we can return the previousChar as it won't be destroyed
-			tempReturnPolymer += string(previousChar)
+			tempReturnPolymer = append(tempReturnPolymer, previousChar)
 		} else {
 			// Are they the same *including* case?
 			if currentChar == previousChar {
 				// Yes, so we can return the previousChar as it won't be destroyed
-				tempReturnPolymer += string(previousChar)
+				tempReturnPolymer = append(tempReturnPolymer, previousChar)
 			} else {
 				// They are different case but the same character so will be destroyed
 				treatAsFirstChar = true
@@ -87,10 +91,10 @@ func actionPolymerDestroy(tempPolymer string)(bool, string) {
 		}
 	}
 	if !treatAsFirstChar {
-		tempReturnPolymer += string(currentChar)
+		tempReturnPolymer = append(tempReturnPolymer, currentChar)
 	}
 
-	return didDestroy, tempReturnPolymer
+	return didDestroy, string(tempReturnPolymer)
 }
 
 // Handles everything needed to work out the polymerLength (Day05 part A)
@@ -100,6 +104,7 @@ func polymerLength(fileName string, part string) int {
 	var polymerReductionResults = make(map[string]int)
 	var alphabet string = "abcdefghijklmnopqrstuvwxyz"
 	var shortestPolymer int = 0
+	var partaCount int = 0
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(fileName)
@@ -109,6 +114,7 @@ func polymerLength(fileName string, part string) int {
 	if part == "a" {
 		for ; didDestroy; {
 			didDestroy, reducedPolymer = actionPolymerDestroy(reducedPolymer)
+			partaCount++
 		}
 		return len(reducedPolymer)
 
@@ -140,8 +146,21 @@ func polymerLength(fileName string, part string) int {
 func main() {
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day05 do you want to calc (a or b)")
+	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to `file`")
 
 	flag.Parse()
+
+    if *cpuprofile != "" {
+        f, err := os.Create(*cpuprofile)
+        if err != nil {
+            log.Fatal("could not create CPU profile: ", err)
+        }
+        defer f.Close()
+        if err := pprof.StartCPUProfile(f); err != nil {
+            log.Fatal("could not start CPU profile: ", err)
+        }
+        defer pprof.StopCPUProfile()
+    }
 
 	switch *execPartPtr {
 	case "a":
