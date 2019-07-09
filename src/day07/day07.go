@@ -137,7 +137,7 @@ func goPartA(reducedNoPreReqList []string, toDoList map[string]string) string {
 }
 
 // Carries out the work for PartA
-func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst int, numWorkers int) string {
+func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst int, numWorkers int) (string, int) {
 	var solutionOrder string
 	var workToDo bool = true
 	var workInProgress int = 0
@@ -165,7 +165,6 @@ func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst
 		for i := 0; i < len(workers); i++ {
 			if workers[i].timeToComplete == currentTime && currentTime > 0 {
 				// We have a finisher!
-				//fmt.Printf("Worker %d has completed work %s\n", i, workers[i].workItem)
 				solutionOrder += workers[i].workItem
 				// Remove completed item from toDoList
 				toDoList, reducedNoPreReqList = workItemCompleted(workers[i].workItem, toDoList, reducedNoPreReqList)
@@ -178,7 +177,6 @@ func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst
 
 			if workers[i].workItem == "" || workers[i].workItem == "-" {
 				// Worker ready and waiting for orders
-				//fmt.Println("Worker waiting:", i)
 				tempWorkItem, reducedNoPreReqList, ok = popTopItem(reducedNoPreReqList)
 				if !ok {
 					workToDo = false
@@ -194,21 +192,27 @@ func goPartB(reducedNoPreReqList []string, toDoList map[string]string, timeConst
 		}
 
 		if len(workers) > 4 {
-			fmt.Printf("%d, %s, %s, %s, %s, %s, %s\n", currentTime, workers[0].workItem, workers[1].workItem, workers[2].workItem, workers[3].workItem, workers[4].workItem, solutionOrder)
+			fmt.Printf("%d, %s, %s, %s, %s, %s, %s, %d\n", currentTime, workers[0].workItem, workers[1].workItem, workers[2].workItem, workers[3].workItem, workers[4].workItem, solutionOrder, workInProgress)
 		} else {
-			fmt.Printf("%d, %s, %s, %d\n", currentTime, workers[0].workItem, solutionOrder, workInProgress)
+			if len(workers) == 2 {
+				fmt.Printf("%d, %s, %s, %s, %d\n", currentTime, workers[0].workItem, workers[1].workItem, solutionOrder, workInProgress)
+			} else {
+				fmt.Printf("%d, %s, %s, %d\n", currentTime, workers[0].workItem, solutionOrder, workInProgress)
+			}
 		}
 
 		currentTime++
 	}
-	return solutionOrder
+	
+	return solutionOrder, currentTime - 2
 }
 
-func stepOrder(fileName string, part string, timeconst int, numWorkers int) string {
+func stepOrder(fileName string, part string, timeconst int, numWorkers int) (string, int) {
 	var noPreReqList []string
 	var reducedNoPreReqList []string
 	var toDoList = make(map[string]string)
 	var solutionOrder string
+	var currentTime int = 0
 
 	// Read contents of file into a string array then sort that array
 	fileContents, _ := readLines(fileName)
@@ -231,14 +235,16 @@ func stepOrder(fileName string, part string, timeconst int, numWorkers int) stri
 	if part == "a" {
 		solutionOrder = goPartA(reducedNoPreReqList, toDoList)
 	} else {
-		solutionOrder = goPartB(reducedNoPreReqList, toDoList, timeconst, numWorkers)
+		solutionOrder, currentTime = goPartB(reducedNoPreReqList, toDoList, timeconst, numWorkers)
 	}
 
-	return solutionOrder
+	return solutionOrder, currentTime
 }
 
 // Main routine
 func main() {
+	var solutionOrder string
+	var currentTime int
 	fileNamePtr := flag.String("file", "input1.txt", "A filename containing input strings")
 	execPartPtr := flag.String("part", "a", "Which part of day07 do you want to calc (a or b)")
 	timeConstantPtr := flag.Int("const", 0, "Time constant to add to each task for part b")
@@ -248,12 +254,14 @@ func main() {
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Order of steps:", stepOrder(*fileNamePtr, "a", 0, 1))
+		solutionOrder, currentTime = stepOrder(*fileNamePtr, "a", 0, 1)
+		fmt.Println("Part a - Order of steps:", solutionOrder)
 	case "b":
 		if *numWorkersPtr < 1 {
 			*numWorkersPtr = 1
 		}
-		fmt.Println("Part b - Order of steps:", stepOrder(*fileNamePtr, "b", *timeConstantPtr, *numWorkersPtr))
+		solutionOrder, currentTime = stepOrder(*fileNamePtr, "b", *timeConstantPtr, *numWorkersPtr)
+		fmt.Printf("Part b - Order of steps: %s Time: %d\n", solutionOrder, currentTime)
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
