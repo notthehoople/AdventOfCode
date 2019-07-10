@@ -51,7 +51,7 @@ Day 4 - Done. Finally. Struggled getting part "b" map to work
 
 + [Day 5](src/day05/day05.go)
 
-Day 5 - Redone. Changed naive string += to use a slice and append. Reduced part a from 10 secs to 0.15
+Day 5 - Redone. Changed naive string += to use a slice and append. Reduced part a from 10 secs to 0.15 and part b from "can't be bothered waiting to time it" to approx 3 seconds
 ```
 ./day05 -file original.txt -part a
 ./day05 -file original.txt -part b
@@ -69,9 +69,9 @@ Day 6 - Part B done.
 
 + [Day 7](src/day07/day07.go)
 
-Day 7 - Part A done.; 
+Day 7 - Part A done. 
 
-Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one less than that listed
+Day 7 - Part B done. Not sure this works right. It all looks fine, but answer needed "adjusted"
 ```
 ./day07 -file original.txt -part a
 ./day07 -file original.txt -part a -const 60 -workers 5
@@ -79,7 +79,7 @@ Day 7 - Part B done. Output isn't cleaned up. Answer for original.txt is one les
 
 + [Day 8](src/day08/day08.go)
 
-Day 8 - Part A done.; 
+Day 8 - Part A done. 
 
 Day 8 - Part B done.
 ```
@@ -89,7 +89,7 @@ Day 8 - Part B done.
 
 + [Day 9](src/day09/day09.go)
 
-Day 9 - Part A done;
+Day 9 - Part A done
 
 Day 9 - Part B done but very, very slow. Needs to be rewritten to use ring package (https://golang.org/pkg/container/ring/) instead of array
 ```
@@ -113,7 +113,7 @@ Day 10 - Part B done. Need to automate
 
 + [Day 11](src/day11/day11.go)
 
-Day 11 - Part A done; 
+Day 11 - Part A done 
 
 Day 11 - Part B done. Slow, but it works
 ```
@@ -123,7 +123,7 @@ Day 11 - Part B done. Slow, but it works
 
 + [Day 12](src/day12/day12.go)
 
-Day 12 - Part A done; 
+Day 12 - Part A done 
 
 Day 12 - Part B done
 ```
@@ -139,7 +139,7 @@ Day 13 - Skipped.
 
 + [Day 14](src/day14/day14.go)
 
-Day 14 - Part A done; 
+Day 14 - Part A done 
 
 Day 14 - Part B done. Kinda. Produces the right answer, but has many bugs in output for other numbers. Needs work on the comparison
 ```
@@ -176,7 +176,7 @@ Day 17 - Part B done. Nothing to this, just an extra print statement.
 
 + [Day 18](src/day18/day18.go)
 
-Day 18 - Part A done; 
+Day 18 - Part A done 
 
 Day 18 - Got answer. Need to automate.
 ```
@@ -187,12 +187,18 @@ Day 18 - Got answer. Need to automate.
 + [Day 19](src/day19/day19.go)
 + [Day 19b](src/day19/day19b.go)
 
-Day 19 - Part A done; 
+Day 19 - Part A done 
 
 Day 19 - Part B done. Doesn't use the input files. Works exactly for my input file data only
 ```
 ./day19 -file original.txt -part a
 ./day19b
+```
+
++ [Day 20](src/day20)
+
+Day 20 - Skipped.
+```
 ```
 
 + [Day 21](src/day21/day21.go)
@@ -212,9 +218,15 @@ Day 21b - Part B done. Not a clean answer, and needs manual work on the output f
 ./day21b > output      # Needs manual work done on the output file to find the answer
 ```
 
++ [Day 22](src/day22)
+
+Day 22 - Skipped.
+```
+```
+
 + [Day 23](src/day23/day23.go)
 
-Day 23 - Part A done; 
+Day 23 - Part A done 
 
 Day 23 - Part B Not complete. Not sure what to do with this yet
 ```
@@ -222,9 +234,15 @@ Day 23 - Part B Not complete. Not sure what to do with this yet
 ./day23 -file original.txt -part b [-debug]
 ```
 
++ [Day 24](src/day24)
+
+Day 24 - Skipped.
+```
+```
+
 + [Day 25](src/day25/day25.go)
 
-Day 25 - Part A done; 
+Day 25 - Part A done 
 
 Day 25 - Part B.....there is no part B
 ```

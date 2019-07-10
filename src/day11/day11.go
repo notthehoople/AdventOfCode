@@ -5,6 +5,9 @@ import (
 	"flag"
 	"strconv"
 	"math"
+	"runtime/pprof"
+	"log"
+	"os"
 )
 
 // Calc the power values over the entire map
@@ -35,19 +38,26 @@ func checkPower(powerMap [][]int, xCoord int, yCoord int, part byte) (int, int) 
 				powerLevel += powerMap[y][x]
 			}
 		}
-		fmt.Printf("adding x: %d y: %d powerlevel: %d\n", xCoord, yCoord, powerLevel)
+		// fmt.Printf("adding x: %d y: %d powerlevel: %d\n", xCoord, yCoord, powerLevel)
 
 		return powerLevel, 3
 	} else {
 		for t := 3; (xCoord + t) < 300 && (yCoord + t) < 300; t++ {
 			powerLevel = 0
-			//fmt.Printf("t: %d xCoord: %d yCoord: %d\n", t, xCoord, yCoord)
+
 			for x := xCoord; x < xCoord + t; x++ {
+				// Slow code follows
+				// First line is 1 minute
+				// Second line 7-8 minutes
+				//
+				// Possible answer is to change the way the code works completely
+				// merge calcPowerOverMap into this function so we aren't passing a slice around
+				// then for each square in the grid, calc the power then add the powerLevel up
 				for y := yCoord; y < yCoord + t; y++ {
-					powerLevel += powerMap[y][x]
+					powerLevel = powerLevel + powerMap[y][x]
 				}
 			}
-			//fmt.Printf("adding x: %d y: %d grid size: %d powerlevel: %d\n", xCoord, yCoord, t, powerLevel)
+
 			if powerLevel > bestPower {
 				bestPower = powerLevel
 				bestGridSize = t
@@ -106,7 +116,7 @@ func printPowerMap(powerMap [][]int, grid int, xPrint int, yPrint int) {
 // Subtract 5 from the power level.
 func powerCalc(puzzleInput int, gridSize int, part byte, xPrint int, yPrint int) (int, int, int) {
 	var bestXCoord, bestYCoord, sizeOfGrid int = 0, 0, 0
-	
+
 	powerMap := make([][]int, gridSize)
 	for i := 1; i < len(powerMap); i++ {
 		powerMap[i] = make([]int, gridSize)
@@ -131,8 +141,21 @@ func main() {
 	xPrintPtr := flag.String("x", "10", "xcoord to print")
 	yPrintPtr := flag.String("y", "10", "y coord to print")
 	execPartPtr := flag.String("part", "a", "Which part of day10 do you want to calc (a or b)")
+	cpuprofile := flag.String("cpuprofile", "", "write cpu profile to `file`")
 
 	flag.Parse()
+
+    if *cpuprofile != "" {
+        f, err := os.Create(*cpuprofile)
+        if err != nil {
+            log.Fatal("could not create CPU profile: ", err)
+        }
+        defer f.Close()
+        if err := pprof.StartCPUProfile(f); err != nil {
+            log.Fatal("could not start CPU profile: ", err)
+        }
+        defer pprof.StopCPUProfile()
+    }
 
 	puzzleInput, _ = strconv.Atoi(*puzzleInputPtr)
 	gridSize, _ = strconv.Atoi(*gridSizePtr)
