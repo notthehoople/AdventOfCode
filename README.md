@@ -220,7 +220,7 @@ Day 21b - Part B done. Not a clean answer, and needs manual work on the output f
 
 + [Day 22](src/day22)
 
-Day 22 - Skipped.
+Day 22 - Part A started.
 ```
 ```
 
