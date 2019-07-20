@@ -27,55 +27,102 @@ func readLines(filename string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-// The cave is divided into square regions which are either dominantly rocky, narrow, or wet (called its type).
-// Each region occupies exactly one coordinate in X,Y format where X and Y are integers and zero or greater.
-// (Adjacent regions can be the same type.)
-
-// The scan (your puzzle input) is not very detailed: it only reveals the depth of the cave system and the
-// coordinates of the target. However, it does not reveal the type of each region. The mouth of the cave is at 0,0.
-
-// The man explains that due to the unusual geology in the area, there is a method to determine any region's
-// type based on its erosion level. The erosion level of a region can be determined from its geologic index.
-// The geologic index can be determined using the first rule that applies from the list below:
-
-// The region at 0,0 (the mouth of the cave) has a geologic index of 0.
-// The region at the coordinates of the target has a geologic index of 0.
-// If the region's Y coordinate is 0, the geologic index is its X coordinate times 16807.
-// If the region's X coordinate is 0, the geologic index is its Y coordinate times 48271.
-// Otherwise, the region's geologic index is the result of multiplying the erosion levels of the regions at
-// X-1,Y and X,Y-1.
-// A region's erosion level is its geologic index plus the cave system's depth, all modulo 20183. Then:
-
-// If the erosion level modulo 3 is 0, the region's type is rocky.
-// If the erosion level modulo 3 is 1, the region's type is wet.
-// If the erosion level modulo 3 is 2, the region's type is narrow.
-// For example, suppose the cave system's depth is 510 and the target's coordinates are 10,10. Using % to
-// represent the modulo operator, the cavern would look as follows:
-
-// At 0,0, the geologic index is 0. The erosion level is (0 + 510) % 20183 = 510. The type is 510 % 3 = 0, rocky.
-// At 1,0, because the Y coordinate is 0, the geologic index is 1 * 16807 = 16807. The erosion level is
-// (16807 + 510) % 20183 = 17317. The type is 17317 % 3 = 1, wet.
-// At 0,1, because the X coordinate is 0, the geologic index is 1 * 48271 = 48271. The erosion level is
-// (48271 + 510) % 20183 = 8415. The type is 8415 % 3 = 0, rocky.
-// At 1,1, neither coordinate is 0 and it is not the coordinate of the target, so the geologic index is the
-// erosion level of 0,1 (8415) times the erosion level of 1,0 (17317), 8415 * 17317 = 145722555. The erosion
-// level is (145722555 + 510) % 20183 = 1805. The type is 1805 % 3 = 2, narrow.
-// At 10,10, because they are the target's coordinates, the geologic index is 0. The erosion level is
-// (0 + 510) % 20183 = 510. The type is 510 % 3 = 0, rocky.
-// Drawing this same cave system with rocky as ., wet as =, narrow as |, the mouth as M, the target as T,
-// with 0,0 in the top-left corner, X increasing to the right, and Y increasing downward, the top-left corner
-// of the map looks like this:
-
 func calcRiskLevel(fileName string, part string, debug bool) int {
-	var totalRiskLevel = 0
+	var riskLevel = 0
+	var caveDepth, xTarget, yTarget int = 0, 0, 0
+	var maxXGrid, maxYGrid int = 0, 0
 	
+	// Read in the file contents
+	fileContents, _ := readLines(fileName)
+	_, _ = fmt.Sscanf(fileContents[0], "depth: %d", &caveDepth)
+	_, _ = fmt.Sscanf(fileContents[1], "target: %d,%d", &xTarget, &yTarget,)
+
+	maxXGrid = xTarget + 5
+	maxYGrid = yTarget + 5
+
+	erosionLevel := make([][]int, maxXGrid)
+    for i := 0; i < maxXGrid; i++ {
+        erosionLevel[i] = make([]int, maxYGrid)
+    }
+
+	fmt.Printf("maxXGrid: %d maxYGrid: %d\n", maxXGrid, maxYGrid)
+
 	if part == "a" {
 		// Let's do part a
+		if debug {
+			fmt.Println("Depth:", caveDepth)
+			fmt.Println("X and Y:", xTarget, yTarget)
+		}
+
+		for y := 0; y < maxYGrid; y++ {
+			for x := 0; x < maxXGrid; x++ {
+
+				if debug {
+					fmt.Printf("x: %d y: %d\n", x, y)
+				}
+
+				if y == 0 {
+					// If the region's Y coordinate is 0, the geologic index is its X coordinate times 16807.
+					erosionLevel[x][y] = ((x * 16807) + caveDepth) % 20183
+					if debug {
+						fmt.Printf("y is zero and x: %d y: %d erosionLevel: %d\n", x, y, erosionLevel[x][y])
+					}
+
+				} else {
+					if (x == 0 && y == 0) || (x == xTarget && y == yTarget) {
+						// The region at 0,0 (the mouth of the cave) has a geologic index of 0.
+						// The region at the coordinates of the target has a geologic index of 0.
+
+						erosionLevel[x][y] = (0 + caveDepth) % 20183
+						if debug {
+							fmt.Printf("x and y are zero and x: %d y: %d erosionLevel: %d\n", x, y, erosionLevel[x][y])
+						}
+
+					} else {
+						if x == 0 {
+							// If the region's X coordinate is 0, the geologic index is its Y coordinate times 48271.
+							erosionLevel[x][y] = ((y * 48271) + caveDepth) % 20183
+							if debug {
+								fmt.Printf("x is zero and x: %d y: %d erosionLevel: %d\n", x, y, erosionLevel[x][y])
+							}
+
+						} else {
+							// The region's geologic index = multiplying the erosion levels of the regions at X-1,Y and X,Y-1.
+							//fmt.Println("erosionLevel x - 1:", erosionLevel[x-1][y])
+							//fmt.Println("erosionLevel y - 1:", erosionLevel[x][y-1])
+
+							erosionLevel[x][y] = ((erosionLevel[x-1][y] * erosionLevel[x][y-1]) + caveDepth) % 20183
+							if debug {
+								fmt.Printf("x is zero and x: %d y: %d erosionLevel: %d\n", x, y, erosionLevel[x][y])
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Print and Calulate the RiskLevel
+		for y := 0; y <= yTarget; y++ {
+			for x := 0; x <= xTarget; x++ {
+				switch erosionLevel[x][y] % 3 {
+				case 0: fmt.Printf(".")
+						riskLevel += 0
+				case 1: fmt.Printf("=")
+						riskLevel += 1
+				case 2: fmt.Printf("|")
+						riskLevel += 2
+				}
+			}
+			fmt.Printf("\n")
+		}
+		fmt.Printf("\n")
+
+				
 	} else {
 		// part b is where it's at
 	}
 
-	return totalRiskLevel
+	return riskLevel
 }
 
 // Main routine

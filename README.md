@@ -220,8 +220,11 @@ Day 21b - Part B done. Not a clean answer, and needs manual work on the output f
 
 + [Day 22](src/day22)
 
-Day 22 - Part A started.
+Day 22 - Part A done.
+
+Day 22 - Part B not started.
 ```
+./day22 -part a -file original.txt [-debug]
 ```
 
 + [Day 23](src/day23/day23.go)
