@@ -1,1 +1,3 @@
 module advent2019
+
+go 1.11.2
