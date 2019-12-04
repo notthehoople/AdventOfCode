@@ -47,4 +47,5 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 
 ```
 ./day04 -start 156218 -end 652527 -part a
+./day04 -start 156218 -end 652527 -part b
 ```
