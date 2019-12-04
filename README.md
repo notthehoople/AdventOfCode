@@ -14,12 +14,37 @@ go build
 
 ## Days of Advent
 
-+ [Day 1](src/day01/day01a.go)
-+ [Day 1](src/day01/day01b.go)
+### Day 1 - The Tyranny of the Rocket Equation
 
-Day 1 - The Tyranny of the Rocket Equation
++ [Day 1a](src/day01/day01a.go)
++ [Day 1b](src/day01/day01b.go)
+
 Nothing clever here. Hard coded the input data into a variable declaration. Would be nicer to have this read from the file
 ```
 ./day01a
 ./day01b
+```
+
+### Day 2
+
++ [Day 2](src/day02)
+
+```
+
+```
+
+### Day 3
+
++ [Day 3](src/day03)
+
+```
+
+```
+
+### Day 4 - Secure Container
+
++ [Day 4](src/day04/day04.go)
+
+```
+./day04 -start 156218 -end 652527 -part a
 ```

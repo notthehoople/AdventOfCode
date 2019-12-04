@@ -3,19 +3,43 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strconv"
 )
 
+// Takes an integer and returns true if two adjacent digits are the same
+func containsDoubleLetters(numberToCheck int) bool {
+	tempString := strconv.Itoa(numberToCheck)
+
+	for i := 1; i < len(tempString); i++ {
+		if tempString[i] == tempString[i-1] {
+			return true
+		}
+	}
+	return false
+}
+
+// Takes an integer and returns true if, Going from left to right, the digits never decrease; they only ever increase or stay the same
+func isAscendingDigits(numberToCheck int) bool {
+	tempString := strconv.Itoa(numberToCheck)
+
+	for i := 1; i < len(tempString); i++ {
+		if tempString[i] < tempString[i-1] {
+			return false
+		}
+	}
+
+	return true
+}
+
+// Need to count the number of possible passwords in the range passed through
+// A password is a potential IF:
+//   - Rule1: It is a six-digit number
+//   - Rule2: Two adjacent digits are the same (like 22 in 122345).
+//   - Rule3: Going from left to right, the digits never decrease; they only ever increase or stay the same
+//
 // func countUniquePasswords
 func countUniquePasswords(startRange string, endRange string, part byte) int {
-
-	// Need to count the number of possible passwords in the range passed through
-	// A password is a potential IF:
-	//   - It is a six-digit number
-	//   - The value is within the range bounded by startRange and endRange
-	//   - Two adjacent digits are the same (like 22 in 122345).
-	//   - Going from left to right, the digits never decrease; they only ever increase or stay the same
-
-	fmt.Printf("Start Range: %s End Range: %s Part: %c\n", startRange, endRange, part)
+	var countPotential int
 
 	// Data validation. Rule 1 - startPtr and endPtr must be exactly 6 digits
 	if len(startRange) != 6 || len(endRange) != 6 {
@@ -23,19 +47,33 @@ func countUniquePasswords(startRange string, endRange string, part byte) int {
 		return 0
 	}
 
-	// Start counting from startRange
-	//   If reached endRange then done
-	//   For the increasing digit, count from same as previous digit upwards (speed up)
-	//     If 2 digits the same then count it
+	// Make sure that startRange < endRange so we don't count forever
+	if startRange > endRange {
+		fmt.Println("Invalid input. Start must be < end")
+		return 0
+	}
 
-	return 0
+	// Convert from string to integer for easy looping
+	currentCheckInt, _ := strconv.Atoi(startRange)
+	endRangeInt, _ := strconv.Atoi(endRange)
+
+	// Loop through our potential passwords from start to end
+	for ; currentCheckInt <= endRangeInt; currentCheckInt++ {
+
+		// Check if Rule3 (ascending or equal digits) is followed
+		if isAscendingDigits(currentCheckInt) {
+			// Check if Rule2 (double digit) is followed
+			if containsDoubleLetters(currentCheckInt) {
+				countPotential++
+			}
+		}
+	}
+
+	return countPotential
 }
 
 // Main routine
 func main() {
-	var runTests bool
-
-	flag.BoolVar(&runTests, "runtests", false, "runtests to Run initial tests")
 	startPtr := flag.String("start", "111111", "Start range of the passwords")
 	endPtr := flag.String("end", "222222", "End range of the passwords")
 	execPartPtr := flag.String("part", "a", "Which part of day18 do you want to calc (a or b)")
@@ -44,11 +82,7 @@ func main() {
 
 	switch *execPartPtr {
 	case "a":
-		if runTests {
-			fmt.Println("Part a - test 1:", countUniquePasswords("111111", "222222", 'a'))
-		} else {
-			fmt.Println("Part a - Number of different passwords:", countUniquePasswords(*startPtr, *endPtr, 'a'))
-		}
+		fmt.Println("Part a - Number of different passwords:", countUniquePasswords(*startPtr, *endPtr, 'a'))
 	case "b":
 		fmt.Println("Part b - Not implemented yet")
 	default:
