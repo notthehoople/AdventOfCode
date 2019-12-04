@@ -30,8 +30,8 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 + [Day 2](src/day02/day02.go)
 
 ```
-./day02 -file input-modified.txt -part a
-
+./day02 -file input.txt -noun 12 -verb 2 -part a
+./day02 -file input.txt -part b
 ```
 
 ### Day 3

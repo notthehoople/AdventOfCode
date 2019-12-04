@@ -17,7 +17,7 @@ import (
 //
 // When you've done your op code, step forward 4 positions to work on the next
 
-func gravityAssistProgram(filename string, part byte) int {
+func gravityAssistProgram(filename string, noun int, verb int, debug bool, part byte) int {
 	var currPos int
 
 	csvFile, _ := os.Open(filename)
@@ -25,6 +25,8 @@ func gravityAssistProgram(filename string, part byte) int {
 
 	// Only reading 1 line from the file and ignoring errors like a bad person
 	lineRead, _ := reader.Read()
+	// added explicit close so we can call gravityAssistProgram many times
+	csvFile.Close()
 
 	// Create an array the same size as the records we've read from the file, then assign corresponding entries to the array
 	programArray := make([]int, len(lineRead))
@@ -32,7 +34,12 @@ func gravityAssistProgram(filename string, part byte) int {
 		programArray[i], _ = strconv.Atoi(lineRead[i])
 	}
 
-	fmt.Println(programArray)
+	programArray[1] = noun
+	programArray[2] = verb
+
+	if debug {
+		fmt.Println(programArray)
+	}
 
 	// While something to do
 	// Read op code at current position
@@ -44,27 +51,39 @@ func gravityAssistProgram(filename string, part byte) int {
 	for {
 		switch programArray[currPos] {
 		case 99: // Exit
-			fmt.Println("Time to exit")
+			if debug {
+				fmt.Println("Time to exit")
+			}
 			return programArray[0]
 		case 1:
-			fmt.Printf("opcode 1: adding %d to %d and storing in position %d\n",
-				programArray[programArray[currPos+1]],
-				programArray[programArray[currPos+2]],
-				programArray[currPos+3])
+			if debug {
+				fmt.Printf("opcode 1: adding %d to %d and storing in position %d\n",
+					programArray[programArray[currPos+1]],
+					programArray[programArray[currPos+2]],
+					programArray[currPos+3])
+			}
 
 			programArray[programArray[currPos+3]] = programArray[programArray[currPos+1]] + programArray[programArray[currPos+2]]
 			currPos += 4
-			fmt.Println("After addition:", programArray)
+
+			if debug {
+				fmt.Println("After addition:", programArray)
+			}
 
 		case 2:
-			fmt.Printf("opcode 2: multiplying %d to %d and storing in position %d\n",
-				programArray[programArray[currPos+1]],
-				programArray[programArray[currPos+2]],
-				programArray[currPos+3])
+			if debug {
+				fmt.Printf("opcode 2: multiplying %d to %d and storing in position %d\n",
+					programArray[programArray[currPos+1]],
+					programArray[programArray[currPos+2]],
+					programArray[currPos+3])
+			}
 
 			programArray[programArray[currPos+3]] = programArray[programArray[currPos+1]] * programArray[programArray[currPos+2]]
 			currPos += 4
-			fmt.Println("After multiply:", programArray)
+
+			if debug {
+				fmt.Println("After multiply:", programArray)
+			}
 
 		default: // This shouldn't happen
 			fmt.Println("Things have gone horribly wrong. Exiting")
@@ -77,16 +96,35 @@ func gravityAssistProgram(filename string, part byte) int {
 
 // Main routine
 func main() {
+	var debug bool
+
 	filenamePtr := flag.String("file", "input.txt", "Filename containing the program to run")
 	execPartPtr := flag.String("part", "a", "Which part of day18 do you want to calc (a or b)")
+	nounPtr := flag.Int("noun", 12, "Noun to change for part a")
+	verbPtr := flag.Int("verb", 2, "verb to change for part a")
+	flag.BoolVar(&debug, "debug", false, "Turn debug on")
 
 	flag.Parse()
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Gravity Assit Program output:", gravityAssistProgram(*filenamePtr, 'a'))
+		fmt.Println("Part a - Gravity Assit Program output:", gravityAssistProgram(*filenamePtr, *nounPtr, *verbPtr, debug, 'a'))
 	case "b":
-		fmt.Println("Not implemented yet")
+		for nounCount := 0; nounCount < 99; nounCount++ {
+			for verbCount := 0; verbCount < 99; verbCount++ {
+				if debug {
+					fmt.Printf("nounCount: %d, verbCount: %d\n", nounCount, verbCount)
+				}
+
+				if gravityAssistProgram(*filenamePtr, nounCount, verbCount, debug, 'b') == 19690720 {
+					if debug {
+						fmt.Printf("Noun: %d Verb: %d\n", nounCount, verbCount)
+					}
+					fmt.Println("Part b - 100 * Noun + Verb:", 100*nounCount+verbCount)
+					return
+				}
+			}
+		}
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
