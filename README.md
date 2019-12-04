@@ -27,9 +27,10 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 
 ### Day 2
 
-+ [Day 2](src/day02)
++ [Day 2](src/day02/day02.go)
 
 ```
+./day02 -file input-modified.txt -part a
 
 ```
 
