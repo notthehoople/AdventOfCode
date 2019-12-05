@@ -25,7 +25,7 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 ./day01b
 ```
 
-### Day 2
+### Day 2 - 1202 Program Alarm
 
 + [Day 2](src/day02/day02.go)
 
@@ -34,12 +34,12 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 ./day02 -file input.txt -part b
 ```
 
-### Day 3
-
-+ [Day 3](src/day03)
+### Day 3 - Crossed Wires
+This is awful. It works for part a but is really slow and inefficient, and isn't going to work for part b. I'll come back to this later and rework it
++ [Day 3](src/day03/day03.go)
 
 ```
-
+./day03 -file input.txt
 ```
 
 ### Day 4 - Secure Container
