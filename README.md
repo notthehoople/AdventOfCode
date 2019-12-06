@@ -35,7 +35,7 @@ Nothing clever here. Hard coded the input data into a variable declaration. Woul
 ```
 
 ### Day 3 - Crossed Wires
-This is awful. It works for part a but is really slow and inefficient, and isn't going to work for part b. I'll come back to this later and rework it
+Reworked this to use a map or Coords for each line instead of drawing each in a huge memory array /facepalm. Runs much faster now and doesn't use GBs of RAM to run.
 + [Day 3](src/day03/day03.go)
 
 ```
