@@ -39,7 +39,8 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 + [Day 3](src/day03/day03.go)
 
 ```
-./day03 -file input.txt
+./day03 -file input.txt -part a
+./day03 -file input.txt -part b
 ```
 
 ### Day 4 - Secure Container

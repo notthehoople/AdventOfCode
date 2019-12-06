@@ -17,7 +17,7 @@ type Coords struct {
 }
 
 // Prints the map list
-func printMapList(tempMapList map[Coords]bool) {
+func printMapList(tempMapList map[Coords]int) {
 	for key := range tempMapList {
 		fmt.Printf("x: %d y: %d\n", key.x, key.y)
 	}
@@ -34,14 +34,45 @@ func manhattanDistance2D(xCoord1 int, yCoord1 int, xCoord2 int, yCoord2 int) int
 	return int(distance)
 }
 
-// Range over the CoordsList of the first line. If a coord exists that's ALSO in the list for Line 2, we have an intersection
-func scanForClosestCross(CoordsList1 map[Coords]bool, CoordsList2 map[Coords]bool, debug bool) int {
+// Part b: Range over the CoordsList of the first line. If a coord exists that's ALSO in the list for Line 2, we have an intersection
+func scanForLowestLatencyCross(CoordsList1 map[Coords]int, CoordsList2 map[Coords]int, debug bool) int {
+	var shortestLatency, currentLatency int
+	var ok bool
+	var lineSteps1, lineSteps2 int
+
+	shortestLatency = 50000
+
+	for key := range CoordsList1 {
+		_, ok = CoordsList2[key]
+		if ok {
+			lineSteps1 = CoordsList1[key]
+			lineSteps2 = CoordsList2[key]
+
+			currentLatency = lineSteps1 + lineSteps2
+
+			if currentLatency < shortestLatency {
+				shortestLatency = currentLatency
+			}
+
+			if debug {
+				fmt.Printf("Found an intersection at x: %d y: %d with latency: %d\n", key.x, key.y, currentLatency)
+			}
+		}
+	}
+
+	return shortestLatency
+}
+
+// Part a: Range over the CoordsList of the first line. If a coord exists that's ALSO in the list for Line 2, we have an intersection
+func scanForClosestCross(CoordsList1 map[Coords]int, CoordsList2 map[Coords]int, debug bool) int {
 	var shortestDistance, currentDistance int
+	var ok bool
 
 	shortestDistance = 50000
 
 	for key := range CoordsList1 {
-		if CoordsList2[key] {
+		_, ok = CoordsList2[key]
+		if ok {
 			currentDistance = manhattanDistance2D(key.x, key.y, 0, 0)
 			if currentDistance < shortestDistance {
 				shortestDistance = currentDistance
@@ -57,11 +88,13 @@ func scanForClosestCross(CoordsList1 map[Coords]bool, CoordsList2 map[Coords]boo
 }
 
 // Processes the draw instructions and adds every coord that a line goes through to the CoordsList map
-func drawInstruction(lineRead []string, CoordsList map[Coords]bool, debug bool) {
-	var magnitude, currX, currY int
+func drawInstruction(lineRead []string, CoordsList map[Coords]int, debug bool) {
+	var magnitude, currX, currY, lineCount int
+	var ok bool
 
 	currX = 0
 	currY = 0
+	lineCount = 0
 
 	for _, currentInstruction := range lineRead {
 		magnitude, _ = strconv.Atoi(currentInstruction[1:])
@@ -69,22 +102,42 @@ func drawInstruction(lineRead []string, CoordsList map[Coords]bool, debug bool) 
 		switch currentInstruction[0] {
 		case 'R':
 			for i := currX + 1; i < currX+1+magnitude; i++ {
-				CoordsList[Coords{i, currY}] = true
+				lineCount++
+				// Only record the lineCount if this is the FIRST time a point has been crossed
+				_, ok = CoordsList[Coords{i, currY}]
+				if !ok {
+					CoordsList[Coords{i, currY}] = lineCount
+				}
 			}
 			currX += magnitude
 		case 'L':
 			for i := currX - 1; i > currX-1-magnitude; i-- {
-				CoordsList[Coords{i, currY}] = true
+				lineCount++
+				// Only record the lineCount if this is the FIRST time a point has been crossed
+				_, ok = CoordsList[Coords{i, currY}]
+				if !ok {
+					CoordsList[Coords{i, currY}] = lineCount
+				}
 			}
 			currX -= magnitude
 		case 'U':
 			for i := currY + 1; i < currY+1+magnitude; i++ {
-				CoordsList[Coords{currX, i}] = true
+				lineCount++
+				// Only record the lineCount if this is the FIRST time a point has been crossed
+				_, ok = CoordsList[Coords{currX, i}]
+				if !ok {
+					CoordsList[Coords{currX, i}] = lineCount
+				}
 			}
 			currY += magnitude
 		case 'D':
 			for i := currY - 1; i > currY-1-magnitude; i-- {
-				CoordsList[Coords{currX, i}] = true
+				lineCount++
+				// Only record the lineCount if this is the FIRST time a point has been crossed
+				_, ok = CoordsList[Coords{currX, i}]
+				if !ok {
+					CoordsList[Coords{currX, i}] = lineCount
+				}
 			}
 			currY -= magnitude
 		}
@@ -93,8 +146,8 @@ func drawInstruction(lineRead []string, CoordsList map[Coords]bool, debug bool) 
 
 // Returns: Manhattan Distance of closest intersection to start
 func closestIntersection(filename string, debug bool, part byte) int {
-	var CoordsList1 map[Coords]bool
-	var CoordsList2 map[Coords]bool
+	var CoordsList1 map[Coords]int
+	var CoordsList2 map[Coords]int
 
 	csvFile, _ := os.Open(filename)
 	reader := csv.NewReader(bufio.NewReader(csvFile))
@@ -102,17 +155,11 @@ func closestIntersection(filename string, debug bool, part byte) int {
 	// 2 lines to process
 	lineRead1, err1 := reader.Read()
 	if err1 == io.EOF {
-		if debug {
-			fmt.Println("End of file")
-		}
 		return 0
 	}
 
 	lineRead2, err2 := reader.Read()
 	if err2 == io.EOF {
-		if debug {
-			fmt.Println("End of file")
-		}
 		return 0
 	}
 	csvFile.Close()
@@ -123,8 +170,8 @@ func closestIntersection(filename string, debug bool, part byte) int {
 	//    co-ords we've reached in the key e.g. x=100,y=50
 	//    the number of
 
-	CoordsList1 = make(map[Coords]bool)
-	CoordsList2 = make(map[Coords]bool)
+	CoordsList1 = make(map[Coords]int)
+	CoordsList2 = make(map[Coords]int)
 
 	// Build a map list of all the coords that the lines go through
 	drawInstruction(lineRead1, CoordsList1, debug)
@@ -134,7 +181,11 @@ func closestIntersection(filename string, debug bool, part byte) int {
 		printMapList(CoordsList1)
 	}
 
-	return scanForClosestCross(CoordsList1, CoordsList2, debug)
+	if part == 'a' {
+		return scanForClosestCross(CoordsList1, CoordsList2, debug)
+	} else {
+		return scanForLowestLatencyCross(CoordsList1, CoordsList2, debug)
+	}
 }
 
 // Main routine
@@ -151,7 +202,7 @@ func main() {
 	case "a":
 		fmt.Println("Part a - Closest Intersection:", closestIntersection(*filenamePtr, debug, 'a'))
 	case "b":
-		fmt.Println("Part b - Not implemented yet")
+		fmt.Println("Part b - Lowest Latency:", closestIntersection(*filenamePtr, debug, 'b'))
 
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
