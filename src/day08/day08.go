@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Read the text file passed in by name into a array of strings
@@ -47,6 +48,8 @@ func splitSubN(s string, n int) []string {
 
 // Returns: Number of "1" digits multiplied by the number of "2" digits on the layer with the fewest "0" digits
 func processImage(filename string, width int, height int, debug bool, part byte) int {
+	var lowestZero, lowestOne, lowestTwo int = 50000, 50000, 50000
+	var currentZero int
 
 	// Read contents of file into a string array
 	fileContents, _ := readLines(filename)
@@ -54,10 +57,19 @@ func processImage(filename string, width int, height int, debug bool, part byte)
 	// The file should be a single line of image data. Break this into layers of width*height
 	imageLayers := splitSubN(fileContents[0], width*height)
 	for i, subString := range imageLayers {
-		fmt.Println(i, subString)
+		currentZero = strings.Count(subString, "0")
+		if currentZero < lowestZero {
+			lowestZero = currentZero
+			lowestOne = strings.Count(subString, "1")
+			lowestTwo = strings.Count(subString, "2")
+		}
+
+		if debug {
+			fmt.Printf("layer: %d number of 0: %d number of 1: %d number of 2: %d\n", i, strings.Count(subString, "0"), strings.Count(subString, "1"), strings.Count(subString, "2"))
+		}
 	}
 
-	return 0
+	return lowestOne * lowestTwo
 }
 
 // Main routine

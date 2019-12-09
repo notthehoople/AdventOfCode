@@ -51,3 +51,11 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 ./day04 -start 156218 -end 652527 -part a
 ./day04 -start 156218 -end 652527 -part b
 ```
+
+### Day 8 - Space Image Format
+
++ [Day 4](src/day08/day08.go)
+
+```
+./day04 -file input.txt -width 25 -height 6 -part a
+```
