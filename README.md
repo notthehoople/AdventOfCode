@@ -58,4 +58,5 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 
 ```
 ./day04 -file input.txt -width 25 -height 6 -part a
+./day04 -file input.txt -width 25 -height 6 -part b
 ```

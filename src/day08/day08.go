@@ -69,7 +69,47 @@ func processImage(filename string, width int, height int, debug bool, part byte)
 		}
 	}
 
-	return lowestOne * lowestTwo
+	if part == 'b' {
+		var decodedImage []byte
+
+		// decoded image = last layer
+		// while from the back to the front
+		//		loop through the pixels in the layer
+		//			switch pixel:
+		//				case 0: decoded image pixel = black
+		//				case 1: decoded image pixel = white
+		//				case 2: decoded image pixel = do nothing
+
+		decodedImage = []byte(imageLayers[len(imageLayers)-1])
+
+		for i := len(imageLayers) - 1; i >= 0; i-- {
+			for letterPos, letterValue := range imageLayers[i] {
+				switch letterValue {
+				case '0': // black
+					decodedImage[letterPos] = '0'
+				case '1': // white
+					decodedImage[letterPos] = '1'
+				case '2': // transparanet
+				default: // corrupt file
+				}
+			}
+		}
+		if debug {
+			fmt.Println("Decoded Image:", string(decodedImage))
+		}
+
+		displayMessage := splitSubN(string(decodedImage), width)
+		for _, subString := range displayMessage {
+			fmt.Println(subString)
+		}
+
+	}
+
+	if part == 'a' {
+		return lowestOne * lowestTwo
+	}
+
+	return 0
 }
 
 // Main routine
@@ -86,9 +126,9 @@ func main() {
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Closest Intersection:", processImage(*filenamePtr, *widthPtr, *heightPtr, debug, 'a'))
+		fmt.Println("Part a - 1 * 2 pixels on least currupt layer:", processImage(*filenamePtr, *widthPtr, *heightPtr, debug, 'a'))
 	case "b":
-		fmt.Println("Part b - Not implemented yet")
+		fmt.Println("Answer is in the above matrix", processImage(*filenamePtr, *widthPtr, *heightPtr, debug, 'b'))
 
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
