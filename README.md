@@ -52,6 +52,14 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 ./day04 -start 156218 -end 652527 -part b
 ```
 
+### Day 6 - Universal Orbit Map
+
++ [Day 6](src/day04/day06.go)
+
+```
+./day04 -file input.txt -part a
+```
+
 ### Day 8 - Space Image Format
 
 + [Day 4](src/day08/day08.go)
