@@ -54,17 +54,18 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 
 ### Day 6 - Universal Orbit Map
 
-+ [Day 6](src/day04/day06.go)
++ [Day 6](src/day06/day06.go)
 
 ```
-./day04 -file input.txt -part a
+./day06 -file input.txt -part a
+./day06 -file input.txt -part b
 ```
 
 ### Day 8 - Space Image Format
 
-+ [Day 4](src/day08/day08.go)
++ [Day 8](src/day08/day08.go)
 
 ```
-./day04 -file input.txt -width 25 -height 6 -part a
-./day04 -file input.txt -width 25 -height 6 -part b
+./day08 -file input.txt -width 25 -height 6 -part a
+./day08 -file input.txt -width 25 -height 6 -part b
 ```
