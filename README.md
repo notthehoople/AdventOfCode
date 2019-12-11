@@ -52,6 +52,14 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 ./day04 -start 156218 -end 652527 -part b
 ```
 
+### Day 5 - Sunny with a Chance of Asteroids
+
++ [Day 5](src/day05/day05.go)
+
+```
+./day05 -file input.txt -input 1 -part a
+```
+
 ### Day 6 - Universal Orbit Map
 
 + [Day 6](src/day06/day06.go)
