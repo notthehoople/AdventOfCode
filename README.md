@@ -58,6 +58,7 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 
 ```
 ./day05 -file input.txt -input 1 -part a
+./day05 -file input.txt -input 5 -part b
 ```
 
 ### Day 6 - Universal Orbit Map
