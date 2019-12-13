@@ -37,7 +37,8 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 	var firstValue, secondValue, thirdValue int
 	var diagnosticCode int
 
-	var inputInstruction = 1
+	// WHY IS THIS HERE?
+	var inputInstruction = 0
 
 	if debug {
 		fmt.Println(programArray)
@@ -58,7 +59,7 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 		thirdParamMode = programArray[currPos] / 10000 % 10
 
 		if debug {
-			fmt.Printf("opcode: %2d first: %d second: %d third: %d\n", opcode, firstParamMode, secondParamMode, thirdParamMode)
+			fmt.Printf("[START] opcode: %2d first: %d second: %d third: %d\n", opcode, firstParamMode, secondParamMode, thirdParamMode)
 		}
 
 		// TO DO: Move the position vs immediate stuff out here to make the opcode tasks clearer
@@ -87,7 +88,8 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			thirdValue = programArray[currPos+3]
 
 			if debug {
-				fmt.Printf("opcode %d: adding %d to %d and storing in position %d\n",
+				fmt.Println("[OP:01] programArray is:", programArray)
+				fmt.Printf("[OP:01] opcode %d: adding %d to %d and storing in position %d\n",
 					opcode,
 					programArray[firstValue],
 					programArray[secondValue],
@@ -98,7 +100,7 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			currPos += 4
 
 			if debug {
-				fmt.Println("After addition:", programArray)
+				fmt.Println("[OP:01] After addition:", programArray)
 			}
 
 		case 2: // Multiply
@@ -118,7 +120,8 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			thirdValue = programArray[currPos+3]
 
 			if debug {
-				fmt.Printf("opcode %d: multiplying %d to %d and storing in position %d\n",
+				fmt.Println("[OP:02] programArray is:", programArray)
+				fmt.Printf("[OP:02] opcode %d: multiplying %d to %d and storing in position %d\n",
 					opcode,
 					programArray[firstValue],
 					programArray[secondValue],
@@ -129,34 +132,52 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			currPos += 4
 
 			if debug {
-				fmt.Println("After multiply:", programArray)
+				fmt.Println("[OP:02] After multiply:", programArray)
 			}
 
 		case 3:
 			// Opcode 3 takes a single integer as input and saves it to the position given by its only parameter. For example,
 			// the instruction 3,50 would take an input value and store it at address 50.
 
-			// [TO DO] Not sure what we're doing here
+			// [TO DO] Should take an inputInstruction and store in the postition given. NOT WHAT I'M CURRENTLY DOING
 			//         Could we have an array that we're moving along as the program runs?
 			//		   e.g. we use inputArray[0] then set inputArray = inputArray[1:] ?
 
 			// Write to is never in immediate mode
+			if debug {
+				fmt.Println("[OP:03] programArray is:", programArray)
+				fmt.Printf("[OP:03] opcode %d: Takes input %d and stores in position %d\n", opcode, inputInstruction, programArray[firstValue])
+			}
 			programArray[programArray[currPos+1]] = inputInstruction
+			if debug {
+				fmt.Println("[OP:03] After input stored:", programArray)
+			}
 			currPos += 2
 
 		case 4:
 			// 4: outputs the value of its only parameter. For example, the instruction 4,50 would output the value at address 50.
+			if debug {
+				fmt.Println("[OP:04] programArray is:", programArray)
+			}
+
 			if firstParamMode == 0 {
-				fmt.Println("Output:", programArray[programArray[currPos+1]])
+				fmt.Println("[OP:04] Output:", programArray[programArray[currPos+1]])
 				diagnosticCode = programArray[programArray[currPos+1]]
 			} else {
-				fmt.Println("Output:", programArray[currPos+1])
+				fmt.Println("[OP:04] Output:", programArray[currPos+1])
 				diagnosticCode = programArray[currPos+1]
+			}
+			if debug {
+				fmt.Println("[OP:04] After output:", programArray)
 			}
 			currPos += 2
 
 		case 5:
 			// 5: jump-if-true: if first parameter is non-zero, it sets the instruction pointer to the value from the second parameter. Otherwise do nothing
+			if debug {
+				fmt.Println("[OP:05] Before jump if true:", programArray)
+				fmt.Println("[OP:05] currPos before jump:", currPos)
+			}
 			if firstParamMode == 0 {
 				firstValue = programArray[currPos+1]
 			} else {
@@ -166,15 +187,28 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 				// Set instruction pointer to the value from the second parameter
 				if secondParamMode == 0 {
 					currPos = programArray[programArray[currPos+2]]
+					if debug {
+						fmt.Println("[OP:05] currPos after jump:", currPos)
+					}
 				} else {
 					currPos = programArray[currPos+2]
+					if debug {
+						fmt.Println("[OP:05] currPos after jump:", currPos)
+					}
 				}
 			} else { // Do nothing
 				currPos += 3
+				if debug {
+					fmt.Println("[OP:05] currPos after DO NOTHING:", currPos)
+				}
 			}
 
 		case 6:
 			// 6: jump-if-false: if first parameter is zero, it sets instruction pointer to the value from second parameter. Otherwise, do nothing.
+			if debug {
+				fmt.Println("[OP:06] Before jump if true:", programArray)
+				fmt.Println("[OP:06] currPos before jump:", currPos)
+			}
 			if firstParamMode == 0 {
 				firstValue = programArray[currPos+1]
 			} else {
@@ -185,11 +219,20 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 				// Set instruction pointer to the value from the second parameter
 				if secondParamMode == 0 {
 					currPos = programArray[programArray[currPos+2]]
+					if debug {
+						fmt.Println("[OP:06] currPos after jump:", currPos)
+					}
 				} else {
 					currPos = programArray[currPos+2]
+					if debug {
+						fmt.Println("[OP:06] currPos after jump:", currPos)
+					}
 				}
 			} else { // Do nothing
 				currPos += 3
+				if debug {
+					fmt.Println("[OP:06] currPos after DO NOTHING:", currPos)
+				}
 			}
 
 		case 7:
@@ -208,12 +251,24 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			// Write destination is never in immediate mode
 			thirdValue = programArray[currPos+3]
 
+			if debug {
+				fmt.Println("[OP:07] programArray is:", programArray)
+				fmt.Printf("[OP:07] opcode %d: if %d is less than %d then store 1 in position %d\n",
+					opcode,
+					programArray[firstValue],
+					programArray[secondValue],
+					programArray[thirdValue])
+			}
+
 			if programArray[firstValue] < programArray[secondValue] {
 				programArray[thirdValue] = 1
 			} else {
 				programArray[thirdValue] = 0
 			}
 			currPos += 4
+			if debug {
+				fmt.Println("[OP:07] After less than:", programArray)
+			}
 
 		case 8:
 			// 8: is equals: if first parameter is equal to second parameter, it stores 1 in the position given by third parameter. Otherwise, stores 0.
@@ -231,12 +286,24 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 			// Write destination is never in immediate mode
 			thirdValue = programArray[currPos+3]
 
+			if debug {
+				fmt.Println("[OP:08] programArray is:", programArray)
+				fmt.Printf("[OP:08] opcode %d: if %d is equal to %d then store 1 in position %d\n",
+					opcode,
+					programArray[firstValue],
+					programArray[secondValue],
+					programArray[thirdValue])
+			}
+
 			if programArray[firstValue] == programArray[secondValue] {
 				programArray[thirdValue] = 1
 			} else {
 				programArray[thirdValue] = 0
 			}
 			currPos += 4
+			if debug {
+				fmt.Println("[OP:08] After equals:", programArray)
+			}
 
 		default: // This shouldn't happen
 			fmt.Printf("Code not implemented yet for instruction %d\n", programArray[currPos])
@@ -275,7 +342,7 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 	}
 
 	// Now process the phaseSequence and modify the programArray to use the appropriate phaseSequence and inputInstruction
-
+	// THIS ISN'T RIGHT. RE-READ THE TASK AND CHANGE WHAT I'M DOING HERE
 	programArray[1] = 4
 	programArray[3] = 0
 
@@ -284,6 +351,8 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 	outputSignal = intcodeComputer(programArray, debug, part)
 	fmt.Println(programArray)
 	fmt.Println("Output signal from Amp1 is:", outputSignal)
+
+	return 0 // REMOVE THIS
 
 	// Second AMP
 	programArray2 := make([]int, len(lineRead))
