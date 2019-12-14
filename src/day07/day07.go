@@ -9,6 +9,15 @@ import (
 	"strconv"
 )
 
+func processSequence(phase string) []int {
+	phaseSequence := make([]int, len(phase))
+
+	for i := 0; i < len(phase); i++ {
+		phaseSequence[i], _ = strconv.Atoi(string(phase[i]))
+	}
+	return phaseSequence
+}
+
 // Day05 extensions: Parameter Modes
 //    0: parameter is interpreteted as a position. if the parameter is 50, its value is the value stored at address 50 in memory.
 //		   Until now, ALL parameters have worked in POSITION mode
@@ -31,14 +40,11 @@ import (
 //   99: exit
 //  any: anything else means things have gone wrong
 
-func intcodeComputer(programArray []int, debug bool, part byte) int {
+func intcodeComputer(programArray []int, inputInstruction []int, debug bool, part byte) int {
 	var currPos int
 	var opcode, firstParamMode, secondParamMode, thirdParamMode int
 	var firstValue, secondValue, thirdValue int
 	var diagnosticCode int
-
-	// WHY IS THIS HERE?
-	var inputInstruction = 0
 
 	if debug {
 		fmt.Println(programArray)
@@ -148,7 +154,11 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 				fmt.Println("[OP:03] programArray is:", programArray)
 				fmt.Printf("[OP:03] opcode %d: Takes input %d and stores in position %d\n", opcode, inputInstruction, programArray[firstValue])
 			}
-			programArray[programArray[currPos+1]] = inputInstruction
+			programArray[programArray[currPos+1]] = inputInstruction[0]
+			fmt.Println("[OP:03] inputInstruction is:", inputInstruction[0])
+			inputInstruction = inputInstruction[1:]
+			fmt.Println("[OP:03] inputInstruction is:", inputInstruction[0])
+
 			if debug {
 				fmt.Println("[OP:03] After input stored:", programArray)
 			}
@@ -321,10 +331,8 @@ func intcodeComputer(programArray []int, debug bool, part byte) int {
 // - Start code for Amp B. Provide phase setting for B for input1. For input2, provide output from Amp A
 // - .....repeat.....
 // - Result is the output from Amp E
-//
-// I *think* that means we replace position 1 and 3....pos 1 is the phase setting to the amp, pos 3 is the output from the previous amp or 0 if it's amp 1
 
-func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, debug bool, part byte) int {
+func intcodeMaxThrusterSignal(filename string, input int, phase string, debug bool, part byte) int {
 	var outputSignal int
 
 	csvFile, _ := os.Open(filename)
@@ -335,24 +343,31 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 	// added explicit close in case we need to call the routine many times
 	csvFile.Close()
 
+	phaseSequence := processSequence(phase)
+
 	// Create an array the same size as the records we've read from the file, then assign corresponding entries to the array
 	programArray := make([]int, len(lineRead))
 	for i := 0; i < len(lineRead); i++ {
 		programArray[i], _ = strconv.Atoi(lineRead[i])
 	}
 
+	inputInstruction := make([]int, 5)
+
 	// Now process the phaseSequence and modify the programArray to use the appropriate phaseSequence and inputInstruction
 	// THIS ISN'T RIGHT. RE-READ THE TASK AND CHANGE WHAT I'M DOING HERE
-	programArray[1] = 4
-	programArray[3] = 0
+	inputInstruction[0] = phaseSequence[0] // Change 4 to being the phase sequence for the first amp
+	inputInstruction[1] = 0
 
 	// Do I pass the inputInstruction and phaseSequence in, or just modify the programArray and send that?
 	fmt.Println(programArray)
-	outputSignal = intcodeComputer(programArray, debug, part)
+	fmt.Println(inputInstruction)
+	outputSignal = intcodeComputer(programArray, inputInstruction, debug, part)
 	fmt.Println(programArray)
+	fmt.Println(inputInstruction)
+
 	fmt.Println("Output signal from Amp1 is:", outputSignal)
 
-	return 0 // REMOVE THIS
+	//return 0 // REMOVE THIS
 
 	// Second AMP
 	programArray2 := make([]int, len(lineRead))
@@ -360,11 +375,11 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 		programArray2[i], _ = strconv.Atoi(lineRead[i])
 	}
 
-	programArray2[1] = 3
-	programArray2[3] = outputSignal
+	inputInstruction[0] = phaseSequence[1] // Change 4 to being the phase sequence for the first amp
+	inputInstruction[1] = outputSignal
 
 	fmt.Println(programArray2)
-	outputSignal = intcodeComputer(programArray2, debug, part)
+	outputSignal = intcodeComputer(programArray2, inputInstruction, debug, part)
 	fmt.Println(programArray2)
 
 	fmt.Println("Output signal from Amp2 is:", outputSignal)
@@ -376,10 +391,10 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 		programArray3[i], _ = strconv.Atoi(lineRead[i])
 	}
 
-	programArray3[1] = 2
-	programArray3[3] = outputSignal
+	inputInstruction[0] = phaseSequence[2] // Change 4 to being the phase sequence for the first amp
+	inputInstruction[1] = outputSignal
 
-	outputSignal = intcodeComputer(programArray3, debug, part)
+	outputSignal = intcodeComputer(programArray3, inputInstruction, debug, part)
 	fmt.Println("Output signal from Amp3 is:", outputSignal)
 
 	// Fourth AMP
@@ -389,10 +404,10 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 		programArray4[i], _ = strconv.Atoi(lineRead[i])
 	}
 
-	programArray4[1] = 1
-	programArray4[3] = outputSignal
+	inputInstruction[0] = phaseSequence[3] // Change 4 to being the phase sequence for the first amp
+	inputInstruction[1] = outputSignal
 
-	outputSignal = intcodeComputer(programArray4, debug, part)
+	outputSignal = intcodeComputer(programArray4, inputInstruction, debug, part)
 	fmt.Println("Output signal from Amp4 is:", outputSignal)
 
 	// Fifth AMP
@@ -402,10 +417,10 @@ func intcodeMaxThrusterSignal(filename string, input int, phaseSequence int, deb
 		programArray5[i], _ = strconv.Atoi(lineRead[i])
 	}
 
-	programArray5[1] = 0
-	programArray5[3] = outputSignal
+	inputInstruction[0] = phaseSequence[4] // Change 4 to being the phase sequence for the first amp
+	inputInstruction[1] = outputSignal
 
-	outputSignal = intcodeComputer(programArray5, debug, part)
+	outputSignal = intcodeComputer(programArray5, inputInstruction, debug, part)
 	fmt.Println("Output signal from Amp5 is:", outputSignal)
 	return 0
 }
@@ -416,7 +431,7 @@ func main() {
 
 	filenamePtr := flag.String("file", "input.txt", "Filename containing the program to run")
 	execPartPtr := flag.String("part", "a", "Which part of day18 do you want to calc (a or b)")
-	phasePtr := flag.Int("phase", 43210, "Phase setting sequence")
+	phasePtr := flag.String("phase", "43210", "Phase setting sequence")
 	inputPtr := flag.Int("input", 1, "Input instruction for Amp 1 computer")
 	flag.BoolVar(&debug, "debug", false, "Turn debug on")
 
