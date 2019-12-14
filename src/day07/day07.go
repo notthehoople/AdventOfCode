@@ -326,6 +326,78 @@ func intcodeMaxThrusterSignal(filename string, phase string, debug bool, part by
 	return largestOutputSignal
 }
 
+// func intcodeMaxThrusterSignalFeedback
+// Day07 part b. Run the given program through the intcode computer using a feedback loop of amplifiers
+// Notes:
+// 		- phases are now 5 to 9
+//		- amp E's output is now connected to amp A's input
+//		- provide each amplifier its phase setting at its first input instruction. All further input/outputs are for signals
+//		- don't restart the software on the amplifiers during the process
+
+func intcodeMaxThrusterSignalFeedback(filename string, phase string, debug bool, part byte) int {
+	var outputSignal int
+	var largestOutputSignal int
+
+	baseProgram := readFileInput(filename)
+
+	phaseSequence := processSequence(phase)
+	outputSignal = 0
+	inputInstruction := make([]int, 5)
+
+	programArray := baseProgram
+
+	// Need to build a phaseSequence for each run through
+	// Each setting is a number from 0 to 4 which is used ONCE per test run
+	for a := 5; a < 10; a++ {
+		for b := 5; b < 10; b++ {
+			for c := 5; c < 10; c++ {
+				for d := 5; d < 10; d++ {
+					for e := 5; e < 10; e++ {
+						if a == b || a == c || a == d || a == e || b == c || b == d || b == e || c == d || c == e || d == e {
+							continue
+						}
+						phaseSequence[0] = a
+						phaseSequence[1] = b
+						phaseSequence[2] = c
+						phaseSequence[3] = d
+						phaseSequence[4] = e
+
+						//outputSignal = 0
+
+						fmt.Println("Phase Sequence:", phaseSequence)
+
+						for ampRun := 0; ampRun < 5; ampRun++ {
+							// Reset the program for the next Amp run
+							//programArray := baseProgram
+
+							inputInstruction[0] = phaseSequence[ampRun]
+							inputInstruction[1] = outputSignal
+
+							if debug {
+								fmt.Println("BEFORE Amp:Program", ampRun, programArray)
+								fmt.Println("BEFORE inputInstruction", inputInstruction)
+							}
+							outputSignal = intcodeComputer(programArray, inputInstruction, debug, part)
+							if debug {
+								fmt.Println("AFTER Amp:Program", ampRun, programArray)
+								fmt.Println("AFTER inputInstruction", inputInstruction)
+							}
+
+							fmt.Printf("Output signal from Amp%d is %d\n", ampRun, outputSignal)
+							if ampRun == 4 && outputSignal > largestOutputSignal {
+								fmt.Println("Found a larger output signal:", outputSignal, largestOutputSignal)
+								largestOutputSignal = outputSignal
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return largestOutputSignal
+}
+
 // Main routine
 func main() {
 	var debug bool
@@ -341,7 +413,7 @@ func main() {
 	case "a":
 		fmt.Println("Part a - Max thruster signal:", intcodeMaxThrusterSignal(*filenamePtr, *phasePtr, debug, 'a'))
 	case "b":
-		fmt.Println("Part b - Not implemented yet")
+		fmt.Println("Part b - Max thruster signal feedback loop:", intcodeMaxThrusterSignalFeedback(*filenamePtr, *phasePtr, debug, 'b'))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
