@@ -334,6 +334,7 @@ func intcodeComputer(programArray []int, inputInstruction []int, debug bool, par
 
 func intcodeMaxThrusterSignal(filename string, input int, phase string, debug bool, part byte) int {
 	var outputSignal int
+	var largestOutputSignal int
 
 	csvFile, _ := os.Open(filename)
 	reader := csv.NewReader(bufio.NewReader(csvFile))
@@ -343,86 +344,75 @@ func intcodeMaxThrusterSignal(filename string, input int, phase string, debug bo
 	// added explicit close in case we need to call the routine many times
 	csvFile.Close()
 
-	phaseSequence := processSequence(phase)
-
 	// Create an array the same size as the records we've read from the file, then assign corresponding entries to the array
-	programArray := make([]int, len(lineRead))
+	baseProgram := make([]int, len(lineRead))
 	for i := 0; i < len(lineRead); i++ {
-		programArray[i], _ = strconv.Atoi(lineRead[i])
+		baseProgram[i], _ = strconv.Atoi(lineRead[i])
 	}
 
+	phaseSequence := processSequence(phase)
+	outputSignal = 0
 	inputInstruction := make([]int, 5)
 
-	// Now process the phaseSequence and modify the programArray to use the appropriate phaseSequence and inputInstruction
-	// THIS ISN'T RIGHT. RE-READ THE TASK AND CHANGE WHAT I'M DOING HERE
-	inputInstruction[0] = phaseSequence[0] // Change 4 to being the phase sequence for the first amp
-	inputInstruction[1] = 0
+	// Need to build a phaseSequence for each run through
+	// Each setting is a number from 0 to 4 which is used ONCE per test run
+	for a := 0; a < 5; a++ {
+		for b := 0; b < 5; b++ {
+			for c := 0; c < 5; c++ {
+				for d := 0; d < 5; d++ {
+					for e := 0; e < 5; e++ {
+						if a == b || a == c || a == d || a == e {
+							continue
+						}
+						if b == c || b == d || b == e {
+							continue
+						}
+						if c == d || c == e {
+							continue
+						}
+						if d == e {
+							continue
+						}
+						phaseSequence[0] = a
+						phaseSequence[1] = b
+						phaseSequence[2] = c
+						phaseSequence[3] = d
+						phaseSequence[4] = e
 
-	// Do I pass the inputInstruction and phaseSequence in, or just modify the programArray and send that?
-	fmt.Println(programArray)
-	fmt.Println(inputInstruction)
-	outputSignal = intcodeComputer(programArray, inputInstruction, debug, part)
-	fmt.Println(programArray)
-	fmt.Println(inputInstruction)
+						outputSignal = 0
 
-	fmt.Println("Output signal from Amp1 is:", outputSignal)
+						fmt.Println("Phase Sequence:", phaseSequence)
 
-	//return 0 // REMOVE THIS
+						for ampRun := 0; ampRun < 5; ampRun++ {
+							// Reset the program for the next Amp run
+							programArray := baseProgram
 
-	// Second AMP
-	programArray2 := make([]int, len(lineRead))
-	for i := 0; i < len(lineRead); i++ {
-		programArray2[i], _ = strconv.Atoi(lineRead[i])
+							inputInstruction[0] = phaseSequence[ampRun]
+							inputInstruction[1] = outputSignal
+
+							if debug {
+								fmt.Println("BEFORE Amp:Program", ampRun, programArray)
+								fmt.Println("BEFORE inputInstruction", inputInstruction)
+							}
+							outputSignal = intcodeComputer(programArray, inputInstruction, debug, part)
+							if debug {
+								fmt.Println("AFTER Amp:Program", ampRun, programArray)
+								fmt.Println("AFTER inputInstruction", inputInstruction)
+							}
+
+							fmt.Printf("Output signal from Amp%d is %d\n", ampRun, outputSignal)
+							if ampRun == 4 && outputSignal > largestOutputSignal {
+								fmt.Println("Found a larger output signal:", outputSignal, largestOutputSignal)
+								largestOutputSignal = outputSignal
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
-	inputInstruction[0] = phaseSequence[1] // Change 4 to being the phase sequence for the first amp
-	inputInstruction[1] = outputSignal
-
-	fmt.Println(programArray2)
-	outputSignal = intcodeComputer(programArray2, inputInstruction, debug, part)
-	fmt.Println(programArray2)
-
-	fmt.Println("Output signal from Amp2 is:", outputSignal)
-
-	// Third AMP
-
-	programArray3 := make([]int, len(lineRead))
-	for i := 0; i < len(lineRead); i++ {
-		programArray3[i], _ = strconv.Atoi(lineRead[i])
-	}
-
-	inputInstruction[0] = phaseSequence[2] // Change 4 to being the phase sequence for the first amp
-	inputInstruction[1] = outputSignal
-
-	outputSignal = intcodeComputer(programArray3, inputInstruction, debug, part)
-	fmt.Println("Output signal from Amp3 is:", outputSignal)
-
-	// Fourth AMP
-
-	programArray4 := make([]int, len(lineRead))
-	for i := 0; i < len(lineRead); i++ {
-		programArray4[i], _ = strconv.Atoi(lineRead[i])
-	}
-
-	inputInstruction[0] = phaseSequence[3] // Change 4 to being the phase sequence for the first amp
-	inputInstruction[1] = outputSignal
-
-	outputSignal = intcodeComputer(programArray4, inputInstruction, debug, part)
-	fmt.Println("Output signal from Amp4 is:", outputSignal)
-
-	// Fifth AMP
-
-	programArray5 := make([]int, len(lineRead))
-	for i := 0; i < len(lineRead); i++ {
-		programArray5[i], _ = strconv.Atoi(lineRead[i])
-	}
-
-	inputInstruction[0] = phaseSequence[4] // Change 4 to being the phase sequence for the first amp
-	inputInstruction[1] = outputSignal
-
-	outputSignal = intcodeComputer(programArray5, inputInstruction, debug, part)
-	fmt.Println("Output signal from Amp5 is:", outputSignal)
-	return 0
+	return largestOutputSignal
 }
 
 // Main routine
