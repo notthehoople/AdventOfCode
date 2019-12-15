@@ -70,6 +70,14 @@ Reworked this to use a map or Coords for each line instead of drawing each in a 
 ./day06 -file input.txt -part b
 ```
 
+### Day 7 - Space Image Format
+
++ [Day 7](src/day07/day07.go)
+Running the test data isn't currently possible. Need to fix that
+```
+./day07 -file input.txt -part a
+```
+
 ### Day 8 - Space Image Format
 
 + [Day 8](src/day08/day08.go)
