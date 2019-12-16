@@ -1,0 +1,31 @@
+// Coords are X,Y. Top left is 0,0 and the space directly to the right is 1,0
+// A monitoring station can detect any asteroid to which it has direct line of sight - that is,
+// there cannot be another asteroid exactly between them 
+//
+// Looks like I need to detect (and discount) and asteroid that is on the exact same X, the same Y, and the same diagonal in any direction
+// From the examples it looks like everything else can be counted
+
+// Create map
+// Read the map from the file given
+// Loop through the whole map one space at a time
+//   Is there an asteroid? If no, continue loop
+//   For an asteroid, loop through the map
+//     Create a new map for counting
+//     For same X left, look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same X right, look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same Y up, look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same Y down, look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same X and Y northwest (X-1,Y-1), look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same X and Y northeast (X+1,Y-1), look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same X and Y southwest (X-1,Y+1), look for first asteroid. Then discount any asteroids beyond that one on X
+//     For same X and Y southeast (X+1,Y+1), look for first asteroid. Then discount any asteroids beyond that one on X
+//   EndLoop
+//
+//   Loop through the created map for the asteroid
+//     Count the number of visible asteroids
+//   EndLoop
+//
+//   If this is the best so far, take note of the asteroid position and the number of asteroids it can see
+// EndLoop
+//
+// Print out the best asteroid position and the number of asteroids it can see
