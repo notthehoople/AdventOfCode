@@ -29,7 +29,7 @@ func readLines(filename string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
+func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int, debug bool) int {
 	var angle float64
 	var angleMap map[float64]coords
 	var ok bool
@@ -44,18 +44,13 @@ func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
 	// Highlight the asteroid we're currently looking at so we don't count it
 	tempSpaceMap[yPos][xPos] = 'P'
 
-	fmt.Printf("Before processing X:%d y:%d\n", xPos, yPos)
-	print2DSlice(tempSpaceMap)
+	if debug {
+		fmt.Printf("Before processing X:%d y:%d\n", xPos, yPos)
+		print2DSlice(tempSpaceMap)
+	}
 
-	// Loop through the whole Map
-	// 		Work out the angle from our asteroid to others
-	// 		If another asteroid is on the same angle, only keep the closest asteroid for counting (manhattan distance)
-	// (Use a map to hold this, with the angle as the index and the co-ords as the value)
-	// Count the visible asteroids and return
-
+	// Use a map of angles to keep note of which asteroids block other ones
 	angleMap = make(map[float64]coords)
-
-	// Create a MAP here
 
 	for tempY := 0; tempY < len(tempSpaceMap); tempY++ {
 		for tempX := 0; tempX < len(tempSpaceMap[tempY]); tempX++ {
@@ -66,17 +61,13 @@ func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
 
 				_, ok = angleMap[angle]
 				if ok {
-					// Found another asteroid at this map
-					//		Get the co-ords of the existing asteroid
-					//		Work out manhattan distance between start point and existing asteroid
+					// We have found another asteroid at this map
+					//		Get the co-ords of the existing asteroid. Work out manhattan distance between start point and existing asteroid
 					//		Work out manhattan distance between start point and current asteroid
-					//		Which ever is shortest stays
-					//		Other one is set to '.'
-					//fmt.Println("Found another asteroid on angle", angle)
+					//		Which ever is shortest stays and other is set to '.' as is blocked from view
 
 					existingCoords := angleMap[angle]
 					existingDistance := manhattanDistance2D(xPos, yPos, existingCoords.x, existingCoords.y)
-					//fmt.Printf("Existing x: %d Existing y: %d Manhattan: %d\n", existingCoords.x, existingCoords.y, existingDistance)
 					currentDistance := manhattanDistance2D(xPos, yPos, tempX, tempY)
 
 					if existingDistance <= currentDistance {
@@ -87,16 +78,10 @@ func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
 					}
 
 				} else {
-					// First time this angle has been seen
-					//fmt.Println("First time we've seen angle", angle)
+					// First time this angle has been seen so record it in the angleMap
 
 					angleMap[angle] = coords{tempX, tempY}
 				}
-				// Work out the manhattan distance from starting point to this asteroid
-				// Look in temp map to see if this angle has been used before.
-				// 		If not, store co-ords against angle
-				//		If yes:
-
 			}
 		}
 	}
@@ -111,12 +96,12 @@ func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
 		}
 	}
 
-	fmt.Println("After Processing")
-	print2DSlice(tempSpaceMap)
-	fmt.Println("=================")
-	//   Loop through the created map for the asteroid
-	//     Count the number of visible asteroids
-	//   EndLoop
+	if debug {
+		fmt.Println("After Processing")
+		print2DSlice(tempSpaceMap)
+		fmt.Println("=================")
+	}
+
 	return visibleAsteroids
 }
 
@@ -141,7 +126,7 @@ func bestMonitoringAsteroid(filename string, debug bool, part byte) int {
 				// the same Y, and the same diagonal in any direction
 				// From the examples it looks like everything else can be counted
 
-				numberVisibleAsteroids := countVisibleAsteroids(baseSpaceMap, x, y)
+				numberVisibleAsteroids := countVisibleAsteroids(baseSpaceMap, x, y, debug)
 				//   If this is the best so far, take note of the asteroid position and the number of asteroids it can see
 				if numberVisibleAsteroids > bestVisible {
 					bestVisible = numberVisibleAsteroids
@@ -153,8 +138,6 @@ func bestMonitoringAsteroid(filename string, debug bool, part byte) int {
 			//fmt.Printf("X:%d Y:%d Char: %c\n", x, y, baseSpaceMap[y][x])
 		}
 	}
-
-	printMap(baseSpaceMap)
 
 	// Print out the best asteroid position and the number of asteroids it can see
 
