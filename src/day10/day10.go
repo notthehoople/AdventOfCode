@@ -7,23 +7,9 @@ import (
 	"os"
 )
 
-// func: readInitialState
-// takes an array of strings and breaks it into a 2D array of bytes
-func readInitialState(tempString []string, tempSlice [][]byte) {
-	for i := 0; i < len(tempString); i++ {
-		for j := 0; j < len(tempString[i]); j++ {
-			tempSlice[i][j] = tempString[i][j]
-		}
-	}
-}
-
-func print2DSlice(tempSlice [][]byte) {
-	for i := 0; i < len(tempSlice); i++ {
-		for j := 0; j < len(tempSlice[i]); j++ {
-			fmt.Printf("%c", tempSlice[i][j])
-		}
-		fmt.Printf("\n")
-	}
+type coords struct {
+	x int
+	y int
 }
 
 // Read the text file passed in by name into a array of strings
@@ -43,15 +29,11 @@ func readLines(filename string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-// Prints the map list
-func printMap(tempMap []string) {
-	for i := 0; i < len(tempMap); i++ {
-		fmt.Printf("%s\n", tempMap[i])
-	}
-}
-
 func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
-	var firstFound bool
+	var angle float64
+	var angleMap map[float64]coords
+	var ok bool
+
 	//   For an asteroid, create a new map and loop through it
 	tempSpaceMap := make([][]byte, len(baseSpaceMap))
 	for i := 0; i < len(baseSpaceMap); i++ {
@@ -59,70 +41,65 @@ func countVisibleAsteroids(baseSpaceMap []string, xPos int, yPos int) int {
 	}
 	readInitialState(baseSpaceMap, tempSpaceMap)
 
+	// Highlight the asteroid we're currently looking at so we don't count it
 	tempSpaceMap[yPos][xPos] = 'P'
 
 	fmt.Printf("Before processing X:%d y:%d\n", xPos, yPos)
 	print2DSlice(tempSpaceMap)
-	// Highly the asteroid we're currently looking at so we don't count it
 
-	// For same X left, look for first asteroid. Then discount any asteroids beyond that one on X
-	firstFound = false
-	for x := xPos - 1; x >= 0; x-- {
-		if x >= 0 {
-			if tempSpaceMap[yPos][x] == '#' {
-				if !firstFound {
-					firstFound = true
+	// Loop through the whole Map
+	// 		Work out the angle from our asteroid to others
+	// 		If another asteroid is on the same angle, only keep the closest asteroid for counting (manhattan distance)
+	// (Use a map to hold this, with the angle as the index and the co-ords as the value)
+	// Count the visible asteroids and return
+
+	angleMap = make(map[float64]coords)
+
+	// Create a MAP here
+
+	for tempY := 0; tempY < len(tempSpaceMap); tempY++ {
+		for tempX := 0; tempX < len(tempSpaceMap[tempY]); tempX++ {
+			if tempSpaceMap[tempY][tempX] == '#' {
+
+				// Work out the angle from our starting point to this asteroid
+				angle = getAngle(xPos, yPos, tempX, tempY)
+
+				_, ok = angleMap[angle]
+				if ok {
+					// Found another asteroid at this map
+					//		Get the co-ords of the existing asteroid
+					//		Work out manhattan distance between start point and existing asteroid
+					//		Work out manhattan distance between start point and current asteroid
+					//		Which ever is shortest stays
+					//		Other one is set to '.'
+					//fmt.Println("Found another asteroid on angle", angle)
+
+					existingCoords := angleMap[angle]
+					existingDistance := manhattanDistance2D(xPos, yPos, existingCoords.x, existingCoords.y)
+					//fmt.Printf("Existing x: %d Existing y: %d Manhattan: %d\n", existingCoords.x, existingCoords.y, existingDistance)
+					currentDistance := manhattanDistance2D(xPos, yPos, tempX, tempY)
+
+					if existingDistance <= currentDistance {
+						tempSpaceMap[tempY][tempX] = '.'
+					} else {
+						tempSpaceMap[existingCoords.y][existingCoords.x] = '.'
+						angleMap[angle] = coords{tempX, tempY}
+					}
+
 				} else {
-					tempSpaceMap[yPos][x] = '.'
+					// First time this angle has been seen
+					//fmt.Println("First time we've seen angle", angle)
+
+					angleMap[angle] = coords{tempX, tempY}
 				}
+				// Work out the manhattan distance from starting point to this asteroid
+				// Look in temp map to see if this angle has been used before.
+				// 		If not, store co-ords against angle
+				//		If yes:
+
 			}
 		}
 	}
-
-	// For same X right, look for first asteroid. Then discount any asteroids beyond that one on X
-	firstFound = false
-	for x := xPos + 1; x < len(tempSpaceMap[yPos]); x++ {
-		if tempSpaceMap[yPos][x] == '#' {
-			fmt.Println("Found an asteroid at:", x, yPos)
-			if !firstFound {
-				fmt.Println("This is the first one found")
-				firstFound = true
-			} else {
-				tempSpaceMap[yPos][x] = '.'
-			}
-		}
-	}
-
-	// For same Y up, look for first asteroid. Then discount any asteroids beyond that one on X
-	firstFound = false
-	for y := yPos - 1; y >= 0; y-- {
-		if y >= 0 {
-			if tempSpaceMap[y][xPos] == '#' {
-				if !firstFound {
-					firstFound = true
-				} else {
-					tempSpaceMap[y][xPos] = '.'
-				}
-			}
-		}
-	}
-
-	// For same Y down, look for first asteroid. Then discount any asteroids beyond that one on X
-	firstFound = false
-	for y := yPos + 1; y < len(tempSpaceMap); y++ {
-		if tempSpaceMap[y][xPos] == '#' {
-			if !firstFound {
-				firstFound = true
-			} else {
-				tempSpaceMap[y][xPos] = '.'
-			}
-		}
-	}
-
-	// For same X and Y northwest (X-1,Y-1), look for first asteroid. Then discount any asteroids beyond that one on X
-	// For same X and Y northeast (X+1,Y-1), look for first asteroid. Then discount any asteroids beyond that one on X
-	// For same X and Y southwest (X-1,Y+1), look for first asteroid. Then discount any asteroids beyond that one on X
-	// For same X and Y southeast (X+1,Y+1), look for first asteroid. Then discount any asteroids beyond that one on X
 
 	// Now let's count the number of visible asteroids
 	visibleAsteroids := 0
