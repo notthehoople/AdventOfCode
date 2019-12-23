@@ -113,8 +113,7 @@ func bestMonitoringAsteroid(filename string, debug bool, part byte) int {
 	baseSpaceMap, _ := readLines(filename)
 
 	// Coords are X,Y. Top left is 0,0 and the space directly to the right is 1,0
-	// A monitoring station can detect any asteroid to which it has direct line of sight - that is,
-	// there cannot be another asteroid exactly between them
+	// A monitoring station can detect any asteroid to which it has direct line of sight - that is, there cannot be another asteroid exactly between them
 
 	// Loop through the whole map one space at a time
 	for y := 0; y < len(baseSpaceMap); y++ {
@@ -122,25 +121,19 @@ func bestMonitoringAsteroid(filename string, debug bool, part byte) int {
 			//   Is there an asteroid? If no, continue loop
 			if baseSpaceMap[y][x] == '#' {
 				// We have an asteroid so we need to deal with it
-				// Looks like I need to detect (and discount) and asteroid that is on the exact same X,
-				// the same Y, and the same diagonal in any direction
-				// From the examples it looks like everything else can be counted
-
 				numberVisibleAsteroids := countVisibleAsteroids(baseSpaceMap, x, y, debug)
+
 				//   If this is the best so far, take note of the asteroid position and the number of asteroids it can see
 				if numberVisibleAsteroids > bestVisible {
 					bestVisible = numberVisibleAsteroids
 					bestXcoord = x
 					bestYcoord = y
 				}
-
 			}
-			//fmt.Printf("X:%d Y:%d Char: %c\n", x, y, baseSpaceMap[y][x])
 		}
 	}
 
 	// Print out the best asteroid position and the number of asteroids it can see
-
 	if part == 'a' {
 		fmt.Printf("Best Asteroid: X:%d Y:%d numVisible:%d\n", bestXcoord, bestYcoord, bestVisible)
 		return bestVisible
@@ -152,18 +145,21 @@ func bestMonitoringAsteroid(filename string, debug bool, part byte) int {
 // Main routine
 func main() {
 	var debug bool
+	var startXPos, startYPos int
 
 	filenamePtr := flag.String("file", "input.txt", "Filename containing the program to run")
 	execPartPtr := flag.String("part", "a", "Which part of day06 do you want to calc (a or b)")
+	flag.IntVar(&startXPos, "x", 19, "X Coord of the monitoring asteroid")
+	flag.IntVar(&startYPos, "y", 11, "Y Coord of the monitoring asteroid")
 	flag.BoolVar(&debug, "debug", false, "Turn debug on")
 
 	flag.Parse()
 
 	switch *execPartPtr {
 	case "a":
-		fmt.Println("Part a - Number of orbits:", bestMonitoringAsteroid(*filenamePtr, debug, 'a'))
+		fmt.Println("Part a - Number of visible asteroids:", bestMonitoringAsteroid(*filenamePtr, debug, 'a'))
 	case "b":
-		fmt.Println("Part b - Not implemented yet")
+		fmt.Println("Part b - 200th destroyed asteroid", destroyVisibleAsteroids(*filenamePtr, startXPos, startYPos, debug))
 
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
