@@ -5,6 +5,7 @@ import (
 	"math"
 )
 
+// Angle returned counts with vertically up from starting pos as 0 degrees. Vertical down is 180 degrees
 func getAngle(xPos int, yPos int, xxPos int, yyPos int) float64 {
 	var dx float64
 	var dy float64
@@ -15,6 +16,18 @@ func getAngle(xPos int, yPos int, xxPos int, yyPos int) float64 {
 
 	inRads := math.Atan2(dy, dx)
 	inDegrees = ((inRads / math.Pi) * 180) + 180
+
+	// Massage the results to get vertical as 0 degrees
+
+	inDegrees -= 270
+
+	if inDegrees < 0 {
+		inDegrees += 360
+	}
+
+	if inDegrees == 360 {
+		inDegrees = 0
+	}
 
 	return inDegrees
 }

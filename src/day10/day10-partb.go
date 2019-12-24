@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 // We are given our starting position from part A
@@ -15,9 +16,10 @@ import (
 // startXPos, startYPos - the position of the monitoring station asteroid
 func destroyVisibleAsteroids(filename string, startXPos int, startYPos int, debug bool) int {
 	var angle float64
-	var angleMap map[float64]coords
 	var ok bool
 	var keepLooping bool = true
+	var killCount int
+	var keepX, keepY int // Need to keep the coords of the 200th asteroid killed
 
 	baseSpaceMap, _ := readLines(filename)
 
@@ -30,11 +32,6 @@ func destroyVisibleAsteroids(filename string, startXPos int, startYPos int, debu
 
 	// Highlight the asteroid we're currently looking at so we don't count it
 	tempSpaceMap[startYPos][startXPos] = 'P'
-
-	if debug {
-		fmt.Printf("Before processing X:%d y:%d\n", startXPos, startYPos)
-		print2DSlice(tempSpaceMap)
-	}
 
 	// Go through the whole map
 	//   build the angleMap, keeping the CLOSEST to the monitoring asteroid this time
@@ -50,9 +47,10 @@ func destroyVisibleAsteroids(filename string, startXPos int, startYPos int, debu
 	// Need to loop while 'K' count > 0
 
 	// Use a map of angles to keep note of which asteroids block other ones
-	angleMap = make(map[float64]coords)
 
 	for keepLooping {
+		angleMap := make(map[float64]coords)
+
 		for tempY := 0; tempY < len(tempSpaceMap); tempY++ {
 			for tempX := 0; tempX < len(tempSpaceMap[tempY]); tempX++ {
 				if tempSpaceMap[tempY][tempX] == '#' {
@@ -88,43 +86,45 @@ func destroyVisibleAsteroids(filename string, startXPos int, startYPos int, debu
 			}
 		}
 
-		//   once the map is built, loop through the map
-		if debug {
-			fmt.Println("Starting List")
-			for angle, angleCoords := range angleMap {
-				fmt.Printf("Map angle: %f at x:%d y:%d\n", angle, angleCoords.x, angleCoords.y)
+		// sort the map of angles and points into a list with lowest angles first
+		keys := make([]float64, 0, len(angleMap))
+		for k := range angleMap {
+			keys = append(keys, k)
+		}
+		sort.Float64s(keys)
+
+		// destroy the asteroids in order, starting at 0 degrees (vertically up)
+		for _, k := range keys {
+			killCount++
+			tempSpaceMap[angleMap[k].y][angleMap[k].x] = '.'
+			if killCount == 200 {
+				keepX = angleMap[k].x
+				keepY = angleMap[k].y
 			}
-			fmt.Println("Finishing List")
-			fmt.Println("==============")
+			if debug {
+				fmt.Println("Kill:", killCount, "Key:", k, "Value:", angleMap[k])
+			}
 		}
 
-		//     sort the map into a list
-		//     destroy the asteroids in order:
-		//       270 degrees is straight up
-		//       360/0 is horiztonal EAST
-		//       90 is straight down
+		if debug {
+			fmt.Println("After Killing")
+			print2DSlice(tempSpaceMap)
+			fmt.Println("=================")
+		}
 
-		// Now let's count the number of asteroids to kill
-		killableAsteroids := 0
+		// Now let's count the number of asteroids left
+		remainingAsteroids := 0
 		for y := 0; y < len(tempSpaceMap); y++ {
 			for x := 0; x < len(tempSpaceMap[y]); x++ {
-				if tempSpaceMap[y][x] == 'K' {
-					killableAsteroids++
+				if tempSpaceMap[y][x] == '#' {
+					remainingAsteroids++
 				}
 			}
 		}
-		if killableAsteroids == 0 {
+		if remainingAsteroids == 0 {
 			keepLooping = false
 		}
 	}
 
-	if debug {
-		fmt.Println("After Processing")
-		print2DSlice(tempSpaceMap)
-		fmt.Println("=================")
-	}
-
-	//fmt.Printf("Best Asteroid: X:%d Y:%d numVisible:%d\n", bestXcoord, bestYcoord, bestVisible)
-
-	return 0
+	return keepX*100 + keepY
 }
