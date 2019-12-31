@@ -86,3 +86,20 @@ Running the test data isn't currently possible. Need to fix that
 ./day08 -file input.txt -width 25 -height 6 -part a
 ./day08 -file input.txt -width 25 -height 6 -part b
 ```
+
+### Day 10 - Monitoring Station
+
++ [Day 10](src/day10/day10.go)
+
+```
+./day10 -file input.txt -part a
+./day10 -file input.txt -x <x_from_part_a> -y <y_from_part_a> -part b
+```
+
+### Day 24 - Planet of Discord
+
++ [Day 24](src/day24/day24.go)
+
+```
+./day24 -file input.txt -part a
+```
