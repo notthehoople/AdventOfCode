@@ -96,6 +96,14 @@ Running the test data isn't currently possible. Need to fix that
 ./day10 -file input.txt -x <x_from_part_a> -y <y_from_part_a> -part b
 ```
 
+### Day 12 - The N-Body Problem
+
++ [Day 12](src/day12/day12.go)
+
+```
+./day12 -part a [-debug]
+```
+
 ### Day 24 - Planet of Discord
 
 + [Day 24](src/day24/day24.go)
