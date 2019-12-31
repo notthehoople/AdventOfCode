@@ -136,7 +136,8 @@ func main() {
 		fmt.Println("Part a - Total Energy (test 2):", findSystemEnergy("test-a2.txt", 100, debug, 'a'))
 		fmt.Println("Part a - Total Energy (full):", findSystemEnergy("input.txt", 1000, debug, 'a'))
 	case "b":
-		fmt.Println("Part b - Not implemented yet")
+		fmt.Println("Part b - First repeat (test 1):", findFirstRepeat("test-a1.txt", debug, 'b'))
+		fmt.Println("Part b - First repeat (test 2):", findFirstRepeat("test-a2.txt", debug, 'b'))
 
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")

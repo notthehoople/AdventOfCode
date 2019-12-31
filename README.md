@@ -99,7 +99,7 @@ Running the test data isn't currently possible. Need to fix that
 ### Day 12 - The N-Body Problem
 
 + [Day 12](src/day12/day12.go)
-
+Currently in a state of flux. Part b is the wrong approach completely. Some psuedo thoughts added to the partb file but that's all
 ```
 ./day12 -part a [-debug]
 ```
