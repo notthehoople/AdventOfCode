@@ -14,7 +14,7 @@ func absInt(x int) int {
 	return x
 }
 
-// greatest common divisor (GCD) via Euclidean algorithm
+//GCD greatest common divisor (GCD) via Euclidean algorithm
 func GCD(a, b int64) int64 {
 	for b != 0 {
 		t := b
@@ -24,7 +24,7 @@ func GCD(a, b int64) int64 {
 	return a
 }
 
-// find Least Common Multiple (LCM) via GCD
+//LCM find Least Common Multiple (LCM) via GCD
 func LCM(a, b int64, integers ...int64) int64 {
 	result := a * b / GCD(a, b)
 

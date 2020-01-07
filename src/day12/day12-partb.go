@@ -5,17 +5,7 @@ import (
 	"strconv"
 )
 
-//type moonType struct {
-//	posX int
-//	posY int
-//	posZ int
-//	velX int
-//	velY int
-//	velZ int
-//}
-
 func findFirstRepeat(filename string, debug bool, part byte) int64 {
-	//var potentialEnergy, kineticEnergy, totalEnergy int
 	var minuteCount int
 	var moonPositions map[string]int
 	var keepLooping, ok, firstXFound, firstYFound, firstZFound bool
@@ -39,19 +29,6 @@ func findFirstRepeat(filename string, debug bool, part byte) int64 {
 	firstYFound = false
 	firstZFound = false
 	for keepLooping {
-
-		// ==================================================
-		// Need to radically update this.
-		// Basically find the repeat loop for x, then for y, then for z
-		// they should loop back to the initial state at somepoint so use that
-		// We're looking for initial x and vel_x being 0
-		//
-		// Once we've got them all we need to find the point at which the x, y and z loops intersect
-		// e.g. using Lowest Common Multiply across the intervals of each of the dimensions
-		//      so if x loops every 5, y loops every 6 and z loops every 3, the LCM is 30
-		//      Look here for LCM calculations: https://www.calculatorsoup.com/calculators/math/lcm.php
-		//==================================================
-
 		// first update the velocity of every moon by applying gravity
 		for i := 0; i < len(moonObjects); i++ {
 			for j := 0; j < len(moonObjects); j++ {
@@ -70,7 +47,7 @@ func findFirstRepeat(filename string, debug bool, part byte) int64 {
 
 		// POSITION X
 		positionXKey := "X"
-		// now record the positions of the moons and their velocity
+		// now record the X positions of the moons and their X velocity
 		for i := 0; i < len(moonObjects); i++ {
 			positionXKey = positionXKey + "|" + strconv.Itoa(moonObjects[i].posX) + "|" + strconv.Itoa(moonObjects[i].velX)
 		}
@@ -134,7 +111,6 @@ func findFirstRepeat(filename string, debug bool, part byte) int64 {
 		// Have we found them all? If so let's quit the loop - we're done!
 		if firstXFound && firstYFound && firstZFound {
 			return (LCM(int64(firstXminute), int64(firstYminute), int64(firstZminute)))
-			//keepLooping = false
 		}
 
 		minuteCount++
