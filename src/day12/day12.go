@@ -138,6 +138,7 @@ func main() {
 	case "b":
 		fmt.Println("Part b - First repeat (test 1):", findFirstRepeat("test-a1.txt", debug, 'b'))
 		fmt.Println("Part b - First repeat (test 2):", findFirstRepeat("test-a2.txt", debug, 'b'))
+		fmt.Println("Part b - First repeat (test 2):", findFirstRepeat("input.txt", debug, 'b'))
 
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")

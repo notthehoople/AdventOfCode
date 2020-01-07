@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 //type moonType struct {
@@ -13,11 +14,12 @@ import (
 //	velZ int
 //}
 
-func findFirstRepeat(filename string, debug bool, part byte) int {
-	var potentialEnergy, kineticEnergy, totalEnergy int
+func findFirstRepeat(filename string, debug bool, part byte) int64 {
+	//var potentialEnergy, kineticEnergy, totalEnergy int
 	var minuteCount int
-	var energyMap map[int]int
-	var keepLooping, ok bool
+	var moonPositions map[string]int
+	var keepLooping, ok, firstXFound, firstYFound, firstZFound bool
+	var firstXminute, firstYminute, firstZminute int
 
 	// Read the map from the file given
 	baseMoonPositions, _ := readLines(filename)
@@ -25,7 +27,7 @@ func findFirstRepeat(filename string, debug bool, part byte) int {
 		printMap(baseMoonPositions)
 	}
 
-	energyMap = make(map[int]int)
+	moonPositions = make(map[string]int)
 
 	// Create an array of moons to track
 	moonObjects := make([]moonType, len(baseMoonPositions))
@@ -33,8 +35,10 @@ func findFirstRepeat(filename string, debug bool, part byte) int {
 
 	// Now simulate the moons in time steps using the following rules
 	keepLooping = true
+	firstXFound = false
+	firstYFound = false
+	firstZFound = false
 	for keepLooping {
-		//   - first update the velocity of every moon by applying gravity
 
 		// ==================================================
 		// Need to radically update this.
@@ -48,6 +52,7 @@ func findFirstRepeat(filename string, debug bool, part byte) int {
 		//      Look here for LCM calculations: https://www.calculatorsoup.com/calculators/math/lcm.php
 		//==================================================
 
+		// first update the velocity of every moon by applying gravity
 		for i := 0; i < len(moonObjects); i++ {
 			for j := 0; j < len(moonObjects); j++ {
 				if i != j {
@@ -56,33 +61,85 @@ func findFirstRepeat(filename string, debug bool, part byte) int {
 			}
 		}
 
-		minuteCount++
-
-		//   - then update the position of every moon by applying velocity
+		// then update the position of every moon by applying velocity
 		applyVelocity(moonObjects, debug)
 
 		if debug {
 			printMoonObjects(moonObjects, minuteCount)
 		}
 
-		totalEnergy = 0
+		// POSITION X
+		positionXKey := "X"
+		// now record the positions of the moons and their velocity
 		for i := 0; i < len(moonObjects); i++ {
-			//potentialEnergy = absInt(moonObjects[i].posX) + absInt(moonObjects[i].posY) + absInt(moonObjects[i].posZ)
-			//kineticEnergy = absInt(moonObjects[i].velX) + absInt(moonObjects[i].velY) + absInt(moonObjects[i].velZ)
-			potentialEnergy = moonObjects[i].posX + (moonObjects[i].posY + 100) + (moonObjects[i].posZ + 10000)
-			kineticEnergy = (moonObjects[i].velX + (moonObjects[i].velY + 100) + (moonObjects[i].velZ + 10000)) + 10000000
-			totalEnergy += potentialEnergy * kineticEnergy
+			positionXKey = positionXKey + "|" + strconv.Itoa(moonObjects[i].posX) + "|" + strconv.Itoa(moonObjects[i].velX)
 		}
 
-		//fmt.Printf("Minute; %d Kinetic Energy: %d\n", minuteCount, totalEnergy)
-		_, ok = energyMap[totalEnergy]
+		// compare with previous positions for each moon's posX and velX looking for a match
+		_, ok = moonPositions[positionXKey]
 		if ok {
-			fmt.Println("Found the duplicate at:", energyMap[totalEnergy])
-			return minuteCount
+			// Found a match!
+			if !firstXFound {
+				firstXminute = minuteCount
+				fmt.Printf("X Found %s at %d\n", positionXKey, firstXminute)
+				firstXFound = true
+			}
 		} else {
-			energyMap[totalEnergy] = minuteCount
+			// Not a repeat so record what we've seen
+			moonPositions[positionXKey] = minuteCount
 		}
+
+		// POSITION Y
+		positionYKey := "Y"
+		// now record the positions of the moons and their velocity
+		for i := 0; i < len(moonObjects); i++ {
+			positionYKey = positionYKey + "|" + strconv.Itoa(moonObjects[i].posY) + "|" + strconv.Itoa(moonObjects[i].velY)
+		}
+
+		// compare with previous positions for each moon's posX and velX looking for a match
+		_, ok = moonPositions[positionYKey]
+		if ok {
+			// Found a match!
+			if !firstYFound {
+				firstYminute = minuteCount
+				fmt.Printf("Y Found %s at %d\n", positionYKey, firstYminute)
+				firstYFound = true
+			}
+		} else {
+			// Not a repeat so record what we've seen
+			moonPositions[positionYKey] = minuteCount
+		}
+
+		// POSITION Z
+		positionZKey := "Z"
+		// now record the positions of the moons and their velocity
+		for i := 0; i < len(moonObjects); i++ {
+			positionZKey = positionZKey + "|" + strconv.Itoa(moonObjects[i].posZ) + "|" + strconv.Itoa(moonObjects[i].velZ)
+		}
+
+		// compare with previous positions for each moon's posX and velX looking for a match
+		_, ok = moonPositions[positionZKey]
+		if ok {
+			// Found a match!
+			if !firstZFound {
+				firstZminute = minuteCount
+				fmt.Printf("Z Found %s at %d\n", positionZKey, firstZminute)
+				firstZFound = true
+			}
+		} else {
+			// Not a repeat so record what we've seen
+			moonPositions[positionZKey] = minuteCount
+		}
+
+		// Have we found them all? If so let's quit the loop - we're done!
+		if firstXFound && firstYFound && firstZFound {
+			return (LCM(int64(firstXminute), int64(firstYminute), int64(firstZminute)))
+			//keepLooping = false
+		}
+
+		minuteCount++
+
 	}
 
-	return totalEnergy
+	return 0
 }

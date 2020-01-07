@@ -102,6 +102,7 @@ Running the test data isn't currently possible. Need to fix that
 Currently in a state of flux. Part b is the wrong approach completely. Some psuedo thoughts added to the partb file but that's all
 ```
 ./day12 -part a [-debug]
+./day12 -part b [-debug]
 ```
 
 ### Day 24 - Planet of Discord
