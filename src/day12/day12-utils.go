@@ -15,6 +15,7 @@ func absInt(x int) int {
 }
 
 //GCD greatest common divisor (GCD) via Euclidean algorithm
+// Code lifted from Go Playground: https://play.golang.org/p/SmzvkDjYlb
 func GCD(a, b int64) int64 {
 	for b != 0 {
 		t := b
@@ -25,6 +26,7 @@ func GCD(a, b int64) int64 {
 }
 
 //LCM find Least Common Multiple (LCM) via GCD
+// Code lifted from Go Playground: https://play.golang.org/p/SmzvkDjYlb
 func LCM(a, b int64, integers ...int64) int64 {
 	result := a * b / GCD(a, b)
 
