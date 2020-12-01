@@ -14,14 +14,14 @@ go build
 
 ## Days of Advent
 
-### Day 1 - <Name of the day>
+### Day 1 - Report Repair
 
-+ [Day 1a](cmd/day01/day01a.go)
-+ [Day 1b](cmd/day01/day01b.go)
++ [Day 1a](cmd/day01/day01.go)
++ [Day 1b](cmd/day01/day01.go)
 
 <Any special instructions go here>
 ```
-./day01a
-./day01b
+./day01 -part a -file puzzleInput.txt
+./day01 -part b -file puzzleInput.txt
 ```
 
