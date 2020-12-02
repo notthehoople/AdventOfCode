@@ -25,3 +25,13 @@ go build
 ./day01 -part b -file puzzleInput.txt
 ```
 
+### Day 2 - Password Philosophy
+
++ [Day 2a](cmd/day02/day02.go)
++ [Day 2b](cmd/day02/day02.go)
+
+```
+./day02 -part a -file puzzleInput.txt
+./day02 -part b -file puzzleInput.txt
+```
+
