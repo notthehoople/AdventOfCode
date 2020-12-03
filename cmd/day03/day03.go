@@ -37,7 +37,9 @@ func howManyTrees(filename string, part byte, debug bool, slopeX int, slopeY int
 	maxX := len(puzzleInput[0])
 	maxY := len(puzzleInput)
 
-	fmt.Printf("Puzzle Side is X:%d Y:%d\n", maxX, maxY)
+	if debug {
+		fmt.Printf("Puzzle Side is X:%d Y:%d\n", maxX, maxY)
+	}
 
 	currentXPos = slopeX
 	currentYPos = slopeY
@@ -45,7 +47,7 @@ func howManyTrees(filename string, part byte, debug bool, slopeX int, slopeY int
 	for ok := true; ok; ok = (currentYPos < maxY) {
 
 		if puzzleInput[currentYPos][currentXPos] == '#' {
-			fmt.Println("Found a tree")
+			//fmt.Println("Found a tree")
 			treeCount++
 		}
 
@@ -55,7 +57,6 @@ func howManyTrees(filename string, part byte, debug bool, slopeX int, slopeY int
 
 		currentXPos = (currentXPos + slopeX) % maxX
 		currentYPos = currentYPos + slopeY
-
 	}
 
 	return treeCount
@@ -67,6 +68,15 @@ func main() {
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else {
-		fmt.Printf("Result is: %d\n", howManyTrees(filenamePtr, execPart, debug, slopeX, slopeY))
+		if execPart == 'a' {
+			fmt.Println("Number of trees: ", howManyTrees(filenamePtr, execPart, debug, slopeX, slopeY))
+		} else {
+			result := howManyTrees(filenamePtr, execPart, debug, 1, 1)
+			result *= howManyTrees(filenamePtr, execPart, debug, 3, 1)
+			result *= howManyTrees(filenamePtr, execPart, debug, 5, 1)
+			result *= howManyTrees(filenamePtr, execPart, debug, 7, 1)
+			result *= howManyTrees(filenamePtr, execPart, debug, 1, 2)
+			fmt.Println("Result is: ", result)
+		}
 	}
 }

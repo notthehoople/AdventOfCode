@@ -19,7 +19,6 @@ go build
 + [Day 1a](cmd/day01/day01.go)
 + [Day 1b](cmd/day01/day01.go)
 
-<Any special instructions go here>
 ```
 ./day01 -part a -file puzzleInput.txt
 ./day01 -part b -file puzzleInput.txt
@@ -35,3 +34,12 @@ go build
 ./day02 -part b -file puzzleInput.txt
 ```
 
+### Day 3 - Toboggan Trajectory
+
++ [Day 3a](cmd/day03/day03.go)
++ [Day 3b](cmd/day03/day03.go)
+
+```
+./day03 -part a -file puzzleInput.txt [-debug] [-slopex X] [-slopey Y]
+./day03 -part b -file puzzleInput.txt [-debug]
+```
