@@ -3,17 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strings"
 )
 
 type PassportStruct struct {
-	byr int    // Birth Year
-	iyr int    // Issue Year
-	eyr int    // Expiration Year
+	byr string // Birth Year
+	iyr string // Issue Year
+	eyr string // Expiration Year
 	hgt string // Height (can include 'cm' or 'in')
 	hcl string // Hair Colour
 	ecl string // Eye Colour
-	pid int    // Passport ID
-	cid int    // Country ID
+	pid string // Passport ID
+	cid string // Country ID
 }
 
 func catchUserInput() (string, byte, bool) {
@@ -36,28 +37,77 @@ func catchUserInput() (string, byte, bool) {
 	}
 }
 
+func countValidPassports(passportList [1000]PassportStruct) int {
+	var validPassports int = 0
+
+	for _, passport := range passportList {
+		var numberGoodFields int = 0
+		if passport.byr != "" {
+			numberGoodFields++
+		}
+		if passport.iyr != "" {
+			numberGoodFields++
+		}
+		if passport.eyr != "" {
+			numberGoodFields++
+		}
+		if passport.pid != "" {
+			numberGoodFields++
+		}
+		//we don't need to check cid
+		//if passport.cid != 0 { numberGoodFields++ }
+		if passport.hgt != "" {
+			numberGoodFields++
+		}
+		if passport.hcl != "" {
+			numberGoodFields++
+		}
+		if passport.ecl != "" {
+			numberGoodFields++
+		}
+
+		if numberGoodFields == 7 {
+			validPassports++
+		}
+	}
+
+	return validPassports
+}
+
 func validatePassports(filename string, part byte, debug bool) int {
-	var numValidPassports int = 0
 	var processingPassport int = 0
-	var passportList [10]PassportStruct
+	var passportList [1000]PassportStruct
 
 	puzzleInput, _ := readFile(filename)
 
-	// When we start processing it's the first passport
-	// We'll finish processing the last passport and not see a finish break
 	for _, passportLine := range puzzleInput {
 		if len(passportLine) == 0 {
 			processingPassport++
 		} else {
 			// Do something with the passport line we've found
-			fmt.Sscanf(passportLine, "eyr:%d", passportList[processingPassport].eyr)
-		}
-		//fmt.Sscanf(passwordLine, "%d-%d %c: %s", &minNumber, &maxNumber, &passwordChar, &password)
 
+			for _, item := range strings.Split(passportLine, " ") {
+				if debug {
+					fmt.Println("Item: ", item)
+				}
+				fmt.Sscanf(item, "byr:%s", &passportList[processingPassport].byr)
+				fmt.Sscanf(item, "iyr:%s", &passportList[processingPassport].iyr)
+				fmt.Sscanf(item, "eyr:%s", &passportList[processingPassport].eyr)
+				fmt.Sscanf(item, "pid:%s", &passportList[processingPassport].pid)
+				fmt.Sscanf(item, "cid:%s", &passportList[processingPassport].cid)
+				fmt.Sscanf(item, "hgt:%s", &passportList[processingPassport].hgt)
+				fmt.Sscanf(item, "hcl:%s", &passportList[processingPassport].hcl)
+				fmt.Sscanf(item, "ecl:%s", &passportList[processingPassport].ecl)
+			}
+
+		}
 	}
 
-	fmt.Println(passportList)
-	return numValidPassports
+	if debug {
+		fmt.Println(passportList)
+	}
+
+	return countValidPassports(passportList)
 }
 
 // Main routine
