@@ -43,3 +43,14 @@ go build
 ./day03 -part a -file puzzleInput.txt [-debug] [-slopex X] [-slopey Y]
 ./day03 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 4 - Passport Processing
+
++ [Day 4](cmd/day03/day04.go)
+
+This code is nasty. Hardcoded array of structs, long winded validations. Needs to be reworked!
+
+```
+./day04 -part a -file puzzleInput.txt [-debug]
+./day04 -part b -file puzzleInput.txt [-debug]
+```
