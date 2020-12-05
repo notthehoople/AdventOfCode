@@ -83,17 +83,41 @@ func decodeSinglePass(boardingPass string, part byte, debug bool) int {
 func decodeBoardingPasses(filename string, part byte, debug bool) int {
 	var highestSeatID int = 0
 	var currentSeatID int
+	var seatPlan [1000]bool
 
 	puzzleInput, _ := readFile(filename)
 
 	for _, boardingPass := range puzzleInput {
 		currentSeatID = decodeSinglePass(boardingPass, part, debug)
-		if currentSeatID > highestSeatID {
-			highestSeatID = currentSeatID
+		if part == 'a' {
+			if currentSeatID > highestSeatID {
+				highestSeatID = currentSeatID
+			}
+		} else {
+			seatPlan[currentSeatID] = true
 		}
 	}
 
-	return highestSeatID
+	if part == 'a' {
+		return highestSeatID
+	}
+
+	// part b so return the empty seat not next to others, which should be ours
+
+	for i := 0; i < 1000; i++ {
+		if !seatPlan[i] {
+			if debug {
+				fmt.Printf("Seat %d is available\n", i)
+			}
+			if i > 0 {
+				if seatPlan[i-1] && seatPlan[i+1] {
+					// Found a seat on its own. Must be ours
+					return i
+				}
+			}
+		}
+	}
+	return 0
 }
 
 // Main routine
@@ -101,13 +125,17 @@ func main() {
 	filenamePtr, execPart, debug := catchUserInput()
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
-	} else {
+	} else if execPart == 'a' {
 		fmt.Println("Highest Seat Number: ", decodeBoardingPasses(filenamePtr, execPart, debug))
+	} else {
+		fmt.Println("Our Seat Number: ", decodeBoardingPasses(filenamePtr, execPart, debug))
 	}
 
-	fmt.Printf("Boarding Card: %s Seat Number: %d\n", "FBFBBFFRLR", decodeSinglePass("FBFBBFFRLR", execPart, debug))
-	fmt.Printf("Boarding Card: %s Seat Number: %d\n", "BFFFBBFRRR", decodeSinglePass("BFFFBBFRRR", execPart, debug))
-	fmt.Printf("Boarding Card: %s Seat Number: %d\n", "FFFBBBFRRR", decodeSinglePass("FFFBBBFRRR", execPart, debug))
-	fmt.Printf("Boarding Card: %s Seat Number: %d\n", "BBFFBBFRLL", decodeSinglePass("BBFFBBFRLL", execPart, debug))
+	if debug {
+		fmt.Printf("Boarding Card: %s Seat Number: %d\n", "FBFBBFFRLR", decodeSinglePass("FBFBBFFRLR", execPart, debug))
+		fmt.Printf("Boarding Card: %s Seat Number: %d\n", "BFFFBBFRRR", decodeSinglePass("BFFFBBFRRR", execPart, debug))
+		fmt.Printf("Boarding Card: %s Seat Number: %d\n", "FFFBBBFRRR", decodeSinglePass("FFFBBBFRRR", execPart, debug))
+		fmt.Printf("Boarding Card: %s Seat Number: %d\n", "BBFFBBFRLL", decodeSinglePass("BBFFBBFRLL", execPart, debug))
+	}
 
 }
