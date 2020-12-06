@@ -63,3 +63,11 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ./day05 -part a -file puzzleInput.txt [-debug]
 ./day05 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 6 - Custom Customs
+
++ [Day 6](cmd/day06/day06.go)
+
+```
+./day06 -part a -file puzzleInput.txt [-debug]
+```
