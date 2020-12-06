@@ -80,14 +80,11 @@ func decodeSinglePass(boardingPass string, part byte, debug bool) int {
 	return (rowNumber * 8) + columnNumber
 }
 
-func processSinglePersonAnswers(answers string, answersStore map[byte]bool, part byte, debug bool) {
-	// Not sure if this is the right thing to do
+func processSinglePersonAnswers(answers string, answersStore map[byte]int, part byte, debug bool) {
 	// Build a map of the questions
-	// Record the yes answers in the map
-	// return when done
 
 	for _, answer := range answers {
-		answersStore[byte(answer)] = true
+		answersStore[byte(answer)]++
 	}
 }
 
@@ -95,18 +92,7 @@ func countAllAnswers(answersStore map[byte]int, numOfPeople int) int {
 	var groupCount = 0
 
 	for _, value := range answersStore {
-		if value == numOfPeople {
-			groupCount++
-		}
-	}
-	return groupCount
-}
-
-func countAnyAnswers(answersStore map[byte]bool) int {
-	var groupCount = 0
-
-	for _, value := range answersStore {
-		if value {
+		if value >= numOfPeople {
 			groupCount++
 		}
 	}
@@ -114,10 +100,11 @@ func countAnyAnswers(answersStore map[byte]bool) int {
 }
 
 func processGroupAnswers(filename string, part byte, debug bool) int {
-	var answersStore map[byte]bool
+	var answersStore map[byte]int
 	var sumOfCounts int = 0
+	var numberOfPeople int = 0
 
-	answersStore = make(map[byte]bool)
+	answersStore = make(map[byte]int)
 
 	puzzleInput, _ := readFile(filename)
 
@@ -133,16 +120,27 @@ func processGroupAnswers(filename string, part byte, debug bool) int {
 				fmt.Println(answersStore)
 			}
 
-			sumOfCounts += countAnyAnswers(answersStore)
+			if part == 'a' {
+				sumOfCounts += countAllAnswers(answersStore, 1)
+			} else {
+				sumOfCounts += countAllAnswers(answersStore, numberOfPeople)
+			}
 			// Clear the answers store and start again
-			answersStore = make(map[byte]bool)
+			answersStore = make(map[byte]int)
+			numberOfPeople = 0
+		} else {
+			numberOfPeople++
 		}
 
 		processSinglePersonAnswers(singlePersonAnswers, answersStore, part, debug)
 	}
 
 	// count the last entry in case there wasn't a blank line before EOF
-	sumOfCounts += countAnyAnswers(answersStore)
+	if part == 'a' {
+		sumOfCounts += countAllAnswers(answersStore, 1)
+	} else {
+		sumOfCounts += countAllAnswers(answersStore, numberOfPeople)
+	}
 
 	return sumOfCounts
 }
@@ -153,17 +151,8 @@ func main() {
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else if execPart == 'a' {
-		fmt.Println("Sum of answer counts:", processGroupAnswers(filenamePtr, execPart, debug))
+		fmt.Println("Sum of anyone answers:", processGroupAnswers(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("Not implemented yet")
+		fmt.Println("Sum of everyone answers:", processGroupAnswers(filenamePtr, execPart, debug))
 	}
-
-	if debug {
-		var answersStore map[byte]bool
-		answersStore = make(map[byte]bool)
-		fmt.Printf("Answers: %s \n", "wzaopvscxknyjtiul")
-		processSinglePersonAnswers("wzaopvscxknyjtiul", answersStore, execPart, debug)
-		fmt.Println(answersStore)
-	}
-
 }
