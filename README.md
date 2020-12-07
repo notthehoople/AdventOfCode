@@ -75,8 +75,10 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 
 ### Day 7 - Handy Haversacks
 
-+ [Day 7](cmd/day07/day07.go)
++ [Day 7a](cmd/day07/day07.go)
++ [Day 7b](cmd/day07/day07b.go)
 
 ```
 ./day07 -part a -file puzzleInput.txt [-debug]
+./day07 -part b -file puzzleInput.txt [-debug]
 ```

@@ -24,23 +24,25 @@ func readFile(filename string) ([]string, error) {
 	return lines, scanner.Err()
 }
 
-func catchUserInput() (string, byte, bool) {
+func catchUserInput() (string, byte, bool, bool) {
 	var debug bool
+	var test bool
 
 	filenamePtr := flag.String("file", "testInput.txt", "Filename containing the program to run")
 	execPartPtr := flag.String("part", "a", "Which part of the puzzle do you want to calc (a or b)")
 	flag.BoolVar(&debug, "debug", false, "Turn debug on")
+	flag.BoolVar(&test, "test", false, "Run tests only")
 
 	flag.Parse()
 
 	switch *execPartPtr {
 	case "a":
-		return *filenamePtr, 'a', debug
+		return *filenamePtr, 'a', debug, test
 	case "b":
-		return *filenamePtr, 'b', debug
+		return *filenamePtr, 'b', debug, test
 
 	default:
-		return *filenamePtr, 'z', debug
+		return *filenamePtr, 'z', debug, test
 	}
 }
 

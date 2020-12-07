@@ -94,25 +94,26 @@ func processAllBagRules(filename string, bagToSearch string, part byte, debug bo
 		fmt.Println("Bag Rules:", bagRules)
 	}
 
-	return searchBags(bagRules, bagToSearch)
+	if part == 'a' {
+		return searchBags(bagRules, bagToSearch)
+	}
+
+	return countNeededBags(bagRules, bagToSearch)
 }
 
 // Main routine
 func main() {
-	filenamePtr, execPart, debug := catchUserInput()
+	filenamePtr, execPart, debug, test := catchUserInput()
+
+	if test {
+
+	}
+
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else if execPart == 'a' {
 		fmt.Println("Bag Varieties:", processAllBagRules(filenamePtr, "shiny gold bag", execPart, debug))
 	} else {
-		fmt.Println("Not implemented yet")
-		fmt.Println(filenamePtr, execPart, debug)
-	}
-
-	if debug {
-		//readSingleRule("light salmon bags contain 5 dark brown bags, 21 dotted coral bags, 5 mirrored turquoise bags.", 'a', true)
-		//readSingleRule("drab magenta bags contain 1 vibrant purple bag, 5 dark lime bags, 2 clear silver bags.", 'a', true)
-		//readSingleRule("wavy magenta bags contain 1 dotted crimson bag.", 'a', true)
-		//readSingleRule("light gold bags contain no other bags.", 'a', true)
+		fmt.Println("Number of Bags:", processAllBagRules(filenamePtr, "shiny gold bag", execPart, debug))
 	}
 }
