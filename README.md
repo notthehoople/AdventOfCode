@@ -82,3 +82,11 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ./day07 -part a -file puzzleInput.txt [-debug]
 ./day07 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 8 - Handheld Halting
+
++ [Day 8a](cmd/day08/day08.go)
+
+```
+./day08 -part a -file puzzleInput.txt [-debug]
+```
