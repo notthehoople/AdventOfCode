@@ -86,7 +86,9 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ### Day 8 - Handheld Halting
 
 + [Day 8a](cmd/day08/day08.go)
++ [Day 8b](cmd/day08/day08b.go)
 
 ```
 ./day08 -part a -file puzzleInput.txt [-debug]
+./day08 -part b -file puzzleInput.txt [-debug]
 ```

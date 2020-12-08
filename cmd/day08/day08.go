@@ -77,6 +77,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Accumulator:", runAllBootCode(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("Number of Bags:", runAllBootCode(filenamePtr, execPart, debug))
+		fmt.Println("Accumulator on working code:", runAllBootCodePartB(filenamePtr, execPart, debug))
 	}
 }
