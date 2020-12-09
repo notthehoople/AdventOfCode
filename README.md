@@ -92,3 +92,15 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ./day08 -part a -file puzzleInput.txt [-debug]
 ./day08 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 9 - Encoding Error
+
++ [Day 9a](cmd/day09/day09.go)
++ [Day 9b](cmd/day09/day09.go)
+
+```
+./day09 -part a -pre 5 -file testInput.txt [-debug]
+./day09 -part a -pre 25 -file puzzleInput.txt [-debug]
+./day09 -part b -pre 5 -file testInput.txt [-debug]
+./day09 -part b -pre 25 -file puzzleInput.txt [-debug]
+```
