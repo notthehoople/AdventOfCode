@@ -108,7 +108,9 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ### Day 10 - Adapter Array
 
 + [Day 10a](cmd/day10/day10.go)
++ [Day 10b](cmd/day10/day10b.go)
 
 ```
 ./day10 -part a -file puzzleInput.txt [-debug]
+./day10 -part b -file puzzleInput.txt [-debug]
 ```

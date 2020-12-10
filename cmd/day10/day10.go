@@ -59,6 +59,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("number of jolt differences:", calcJoltDifferences(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("failed number items:", calcJoltDifferences(filenamePtr, execPart, debug))
+		fmt.Println("number of arrangements:", calcNumberJoltArrangements(filenamePtr, execPart, debug))
 	}
 }
