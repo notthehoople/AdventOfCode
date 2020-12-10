@@ -104,3 +104,11 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ./day09 -part b -pre 5 -file testInput.txt [-debug]
 ./day09 -part b -pre 25 -file puzzleInput.txt [-debug]
 ```
+
+### Day 10 - Adapter Array
+
++ [Day 10a](cmd/day10/day10.go)
+
+```
+./day10 -part a -file puzzleInput.txt [-debug]
+```
