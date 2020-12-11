@@ -118,7 +118,11 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ### Day 11 - Seating System
 
 + [Day 11a](cmd/day11/day11.go)
++ [Day 11b](cmd/day11/day11b.go)
+
+Unneccessarily verbose and plenty of duplicated code between part a and b that could be simplified. At least it works!
 
 ```
 ./day11 -part a -file puzzleInput.txt [-debug]
+./day11 -part b -file puzzleInput.txt [-debug]
 ```

@@ -166,6 +166,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("occupied seats:", howManyFilledSeats(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("not implemented yet")
+		fmt.Println("occupied seats:", howManyFilledSeatsB(filenamePtr, execPart, debug))
 	}
 }
