@@ -114,3 +114,11 @@ This code is nasty. Hardcoded array of structs, long winded validations. Needs t
 ./day10 -part a -file puzzleInput.txt [-debug]
 ./day10 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 11 - Seating System
+
++ [Day 11a](cmd/day11/day11.go)
+
+```
+./day11 -part a -file puzzleInput.txt [-debug]
+```
