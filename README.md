@@ -126,3 +126,11 @@ Unneccessarily verbose and plenty of duplicated code between part a and b that c
 ./day11 -part a -file puzzleInput.txt [-debug]
 ./day11 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 12 - Rain Risk
+
++ [Day 12a](cmd/day12/day12.go)
+
+```
+./day12 -part a -file puzzleInput.txt [-debug]
+```
