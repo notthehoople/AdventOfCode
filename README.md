@@ -130,7 +130,11 @@ Unneccessarily verbose and plenty of duplicated code between part a and b that c
 ### Day 12 - Rain Risk
 
 + [Day 12a](cmd/day12/day12.go)
++ [Day 12b](cmd/day12/day12b.go)
+
+Took ages to get my head around the rotations in part b!
 
 ```
 ./day12 -part a -file puzzleInput.txt [-debug]
+./day12 -part b -file puzzleInput.txt [-debug]
 ```

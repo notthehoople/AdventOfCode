@@ -69,8 +69,6 @@ func calcShipMovement(filename string, part byte, debug bool) int {
 
 	for _, line := range puzzleInput {
 		fmt.Sscanf(line, "%c%d", &command, &amount)
-		fmt.Printf("%c%d\n", command, amount)
-
 		currDirection, currX, currY = doSingleMove(command, amount, currDirection, currX, currY)
 	}
 
@@ -91,5 +89,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Ship changed distance:", calcShipMovement(filenamePtr, execPart, debug))
 	} else {
+		fmt.Println("Ship changed distance:", calcShipMovementB(filenamePtr, execPart, debug))
 	}
 }
