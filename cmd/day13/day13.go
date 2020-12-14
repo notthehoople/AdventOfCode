@@ -55,6 +55,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Part a answer:", calcBusSchedules(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("Part b answer:", calcBusSchedules(filenamePtr, execPart, debug))
+		fmt.Println("Part b answer:", calcBusCompetition(filenamePtr, execPart, debug))
 	}
 }

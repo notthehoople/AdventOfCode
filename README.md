@@ -143,6 +143,8 @@ Took ages to get my head around the rotations in part b!
 
 + [Day 13a](cmd/day13/day13.go)
 
+No idea what I'm doing with part b yet
+
 ```
 ./day13 -part a -file puzzleInput.txt [-debug]
 ```
