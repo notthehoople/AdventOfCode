@@ -55,6 +55,12 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Part a answer:", calcBusSchedules(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("Part b answer:", calcBusCompetition(filenamePtr, execPart, debug))
+		fmt.Println("7,13,x,x,59,x,31,19 Result is:", checkBusTimesSimple("7,13,x,x,59,x,31,19", false))
+		fmt.Println("17,x,13,19 Result is:", checkBusTimesSimple("17,x,13,19", false))
+		fmt.Println("67,7,59,61 Result is:", checkBusTimesSimple("67,7,59,61", false))
+		fmt.Println("67,x,7,59,61 Result is:", checkBusTimesSimple("67,x,7,59,61", false))
+		fmt.Println("67,7,x,59,61 Result is:", checkBusTimesSimple("67,7,x,59,61", false))
+		fmt.Println("1789,37,47,1889 Result is:", checkBusTimesSimple("1789,37,47,1889", false))
+		fmt.Println("Real Result is:", checkBusTimesSimple("29,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,37,x,x,x,x,x,433,x,x,x,x,x,x,x,x,x,x,x,x,13,17,x,x,x,x,19,x,x,x,23,x,x,x,x,x,x,x,977,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,41", false))
 	}
 }

@@ -142,9 +142,12 @@ Took ages to get my head around the rotations in part b!
 ### Day 13 - Shuttle Search
 
 + [Day 13a](cmd/day13/day13.go)
++ [Day 13b](cmd/day13/day13b.go)
 
-No idea what I'm doing with part b yet
+That took ages to make part b work quickly enough. Got there in the end.
+Note that part b has my puzzle input hard coded into main(). Change it here for your own puzzle input if you need
 
 ```
 ./day13 -part a -file puzzleInput.txt [-debug]
+./day13 -part b
 ```

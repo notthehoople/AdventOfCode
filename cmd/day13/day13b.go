@@ -1,61 +1,85 @@
 package main
 
 import (
-	"fmt"
 	"strconv"
 	"strings"
 )
 
-func calcBusSequences(busRequirements string, debug bool) int {
-	var earliestTimeStamp int
-	var busToTakeID, minutesWaiting int = 0, 999999
-	var runningBus []int
+func checkPotential(checkNumber int, firstBus int, secondBus int, position int) bool {
 
-	busSchedule := strings.Split(busRequirements, ",")
-
-	runningBus = make([]int, len(busSchedule))
-
-	var busCounter int = 0
-	for _, bus := range busSchedule {
-		if bus != "x" {
-			runningBus[busCounter], _ = strconv.Atoi(bus)
-		}
-		// If bus is "x" then leave entry as 0
-		busCounter++
+	if (checkNumber+position)%secondBus == 0 {
+		return true
 	}
-	/*
-		var busArrivalTime int
-		for _, bus := range runningBus {
-			if bus != 0 {
-				// Working with ints so division will remove remainder and give whole numbers
-				busArrivalTime = (earliestTime/bus)*bus + bus
-				fmt.Printf("Bus: %d Bus Time: %d\n", bus, busArrivalTime)
-				if busArrivalTime-earliestTime < minutesWaiting {
-					busToTakeID = bus
-					minutesWaiting = busArrivalTime - earliestTime
-				}
-			}
-		}
-	*/
-	return earliestTimeStamp
+
+	return false
 }
 
-func calcBusCompetition(filename string, part byte, debug bool) int {
+func checkBusTimesSimple(busScheduleRaw string, useHint bool) int {
 
-	// Test cases
-	//fmt.Println("7,13,x,x,59,x,31,19:", calcBusSequences("7,13,x,x,59,x,31,19", debug))
-	fmt.Println("17,x,13,19:", calcBusSequences("17,x,13,19", debug))
-	/*
-		calcBusSequences("67,7,59,61", debug)
-		calcBusSequences("67,x,7,59,61", debug)
-		calcBusSequences("67,7,x,59,61", debug)
-		calcBusSequences("1789,37,47,1889", debug)
-	*/
-	// Do it for real
+	var busSchedule []int
+	var n int = 1
+	var keepLooping bool = true
+	var testNumber int
+	var lookingGood bool
 
-	/*
-		puzzleInput, _ := readFile(filename)
-		return calcBusSequences(puzzleInput[1], debug)
-	*/
+	// Build the bus schedule
+	puzzleInput := strings.Split(busScheduleRaw, ",")
+	busSchedule = make([]int, len(puzzleInput))
+	var j int = 0
+	for _, busID := range puzzleInput {
+		if busID == "x" {
+			busSchedule[j] = 0
+		} else {
+			busSchedule[j], _ = strconv.Atoi(busID)
+		}
+		j++
+	}
+
+	firstBus := busSchedule[0]
+	lastPosition := len(busSchedule) - 1
+	lastBus := busSchedule[lastPosition]
+
+	n = 1
+
+	var skipAhead int = 0
+
+	for keepLooping {
+		if skipAhead > 0 {
+			testNumber += skipAhead
+			n = testNumber / firstBus
+			skipAhead = 0
+		} else {
+			testNumber = firstBus * n
+		}
+
+		if (testNumber+lastPosition)%lastBus == 0 {
+			// found one matching bus. let's check the others
+			// since we know these match and the buses are prime numbers, we can skip ahead by busID1 * busID2 to
+			//   find the next potential match
+
+			skipAhead = firstBus * lastBus
+
+			lookingGood = true
+			for checkPos, checkBus := range busSchedule {
+				if checkPos != 0 && checkBus != 0 {
+					lookingGood = checkPotential(testNumber, firstBus, checkBus, checkPos)
+					if !lookingGood {
+						// not a match so we give up checking here
+						break
+					} else {
+						// another match! If nothing else we've got more things to skip on next try
+						skipAhead = skipAhead * checkBus
+					}
+				}
+			}
+			if lookingGood {
+				return testNumber
+			}
+
+		}
+		if skipAhead == 0 {
+			n++
+		}
+	}
 	return 0
 }
