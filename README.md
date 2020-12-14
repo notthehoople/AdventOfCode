@@ -138,3 +138,11 @@ Took ages to get my head around the rotations in part b!
 ./day12 -part a -file puzzleInput.txt [-debug]
 ./day12 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 13 - Shuttle Search
+
++ [Day 13a](cmd/day13/day13.go)
+
+```
+./day13 -part a -file puzzleInput.txt [-debug]
+```
