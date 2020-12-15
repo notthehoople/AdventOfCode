@@ -100,6 +100,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Part a answer:", calcMemoryAddresses(filenamePtr, execPart, debug))
 	} else {
-		fmt.Println("Not implemented yet")
+		fmt.Println("Part b answer:", calcMemoryAddressesB(filenamePtr, execPart, debug))
 	}
 }

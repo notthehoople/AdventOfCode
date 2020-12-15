@@ -155,7 +155,11 @@ Note that part b has my puzzle input hard coded into main(). Change it here for 
 ### Day 14 - Docking Data
 
 + [Day 14a](cmd/day14/day14.go)
++ [Day 14b](cmd/day14/day14b.go)
+
+That was horrible. Got all twisted up with building lists in the wrong way. Ended up with a nasty hardcoded array of strings in the middle of a function as I was fed up with it!
 
 ```
 ./day14 -part a -file puzzleInput.txt [-debug]
+./day14 -part b -file puzzleInput.txt [-debug]
 ```
