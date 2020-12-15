@@ -151,3 +151,11 @@ Note that part b has my puzzle input hard coded into main(). Change it here for 
 ./day13 -part a -file puzzleInput.txt [-debug]
 ./day13 -part b
 ```
+
+### Day 14 - Docking Data
+
++ [Day 14a](cmd/day14/day14.go)
+
+```
+./day14 -part a -file puzzleInput.txt [-debug]
+```
