@@ -2,38 +2,54 @@ package main
 
 import (
 	"fmt"
-	//"strconv"
+	"strconv"
 	//"strings"
 )
 
-func convertStringToMask(rawmask string) int {
-	var maskValue int = 0
-	var placeValue int = 1
+func convertNumberToBinaryString(number int) []byte {
+	builtString := []byte("000000000000000000000000000000000000")
 
-	for i := len(rawmask) - 1; i >= 0; i-- {
-		fmt.Printf("Mask digit: %c\n", rawmask[i])
-		switch rawmask[i] {
+	binaryString := strconv.FormatInt(int64(number), 2)
+	copyPlace := len(binaryString) - 1
+	for i := 35; i >= 0 && copyPlace >= 0; i-- {
+		builtString[i] = binaryString[copyPlace]
+		copyPlace--
+	}
+
+	return builtString
+}
+
+func convertBinaryStringToNumber(binaryNumber string) int {
+	number, _ := strconv.ParseInt(binaryNumber, 2, 64)
+	return int(number)
+}
+
+func applyMaskToNumber(mask string, number int) int {
+
+	binaryString := convertNumberToBinaryString(number)
+
+	for i := len(mask) - 1; i >= 0; i-- {
+		switch mask[i] {
 		case 'X':
 			break
 		case '1':
-			maskValue += placeValue
+			binaryString[i] = '1'
 			break
 		case '0':
+			binaryString[i] = '0'
 			break
 		default:
 			panic("Corrupt mask in input")
 		}
-
-		placeValue *= 2
 	}
 
-	return maskValue
+	return convertBinaryStringToNumber(string(binaryString))
 }
 
 func calcMemoryAddresses(filename string, part byte, debug bool) int {
 	var memory map[int]int
 	var rawmask string
-	var matchedMask, usableMask int
+	var matchedMask int
 	var matchedMemAddress, memoryAddress, memoryValue int
 
 	puzzleInput, _ := readFile(filename)
@@ -41,24 +57,34 @@ func calcMemoryAddresses(filename string, part byte, debug bool) int {
 	memory = make(map[int]int, len(puzzleInput))
 
 	for _, line := range puzzleInput {
+
 		matchedMask, _ = fmt.Sscanf(line, "mask = %s", &rawmask)
 		if matchedMask > 0 {
 			// Found a mask
-			usableMask = convertStringToMask(rawmask)
-			fmt.Printf("Found mask %s converted %d\n", rawmask, usableMask)
-
-			// Delete when function built
 			if debug {
-				fmt.Println(memory[4], matchedMemAddress)
+				fmt.Printf("Mask: %s\n", rawmask)
 			}
 		} else {
 			// Must be a memory address
 			matchedMemAddress, _ = fmt.Sscanf(line, "mem[%d] = %d", &memoryAddress, &memoryValue)
-			fmt.Printf("Found mem address %d to be set to value %d\n", memoryAddress, memoryValue)
+			if matchedMemAddress < 1 {
+				panic("Duff content in input file")
+			} else {
+				memory[memoryAddress] = applyMaskToNumber(rawmask, memoryValue)
+				if debug {
+					fmt.Printf("Found mem address %d to be set to value %d\n", memoryAddress, memoryValue)
+					fmt.Printf("Memory address: %d now %d\n", memoryAddress, memory[memoryAddress])
+				}
+			}
 		}
 	}
 
-	return 0
+	var totalMemory int = 0
+	for _, value := range memory {
+		totalMemory += value
+	}
+
+	return totalMemory
 }
 
 // Main routine
