@@ -179,8 +179,9 @@ Surprised that part a was efficient enough that part b was just "add the input a
 ### Day 16 - Ticket Translation
 
 + [Day 16a](cmd/day16/day16.go)
++ [Day 16b](cmd/day16/day16b.go)
 
-I need to learn how to dynamically create 2 dimensional arrays. Yet again I've had to hardcode something nastily
+I need to learn how to dynamically create 2 dimensional arrays. Yet again I've had to hardcode something nastily. Given up on part b as I just don't care enough. I need to rewrite part a properly before doing part b
 
 ```
 ./day16 -part a -file puzzleInput.txt [-debug]

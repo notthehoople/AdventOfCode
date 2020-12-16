@@ -20,13 +20,13 @@ func validValueInRuleSet(value int, ruleSet []rule) bool {
 	for rulePos := 0; rulePos < len(ruleSet); rulePos++ {
 		if ruleSet[rulePos].lowerLimit1 == 0 && ruleSet[rulePos].upperLimit1 == 0 {
 			// Stop if we reach the end of the rules
-
 			return isValid
 		}
 
 		if (value >= ruleSet[rulePos].lowerLimit1 && value <= ruleSet[rulePos].upperLimit1) ||
 			(value >= ruleSet[rulePos].lowerLimit2 && value <= ruleSet[rulePos].upperLimit2) {
 			// value is fine by this rule
+			fmt.Printf("%d is valid\n", value)
 			return true
 		}
 	}
@@ -130,7 +130,11 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 		}
 	}
 
-	return validateTickets(ruleSet, nearbyTickets)
+	if part == 'a' {
+		return validateTickets(ruleSet, nearbyTickets)
+	} else {
+		return decodeMyTicket(ruleSet, nearbyTickets, myTicket)
+	}
 }
 
 // Main routine
@@ -146,5 +150,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("Part a answer:", calcScanningErrorRate(filenamePtr, execPart, debug))
 	} else {
+		fmt.Println("Part b answer:", calcScanningErrorRate(filenamePtr, execPart, debug))
 	}
 }
