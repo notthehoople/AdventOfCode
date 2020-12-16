@@ -163,3 +163,11 @@ That was horrible. Got all twisted up with building lists in the wrong way. Ende
 ./day14 -part a -file puzzleInput.txt [-debug]
 ./day14 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 15 - Rambunctious Recitation
+
++ [Day 15a](cmd/day15/day15.go)
+
+```
+./day15 -part a [-debug]
+```
