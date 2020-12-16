@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func playNumberGame(puzzleInput string, part byte, debug bool) int {
+func playNumberGame(puzzleInput string, lastRound int, part byte, debug bool) int {
 	var numberSpoken int
 	var keepLooping bool
 	var turnNumber int = 1
@@ -74,7 +74,7 @@ func playNumberGame(puzzleInput string, part byte, debug bool) int {
 			fmt.Println(memory)
 		}
 
-		if turnNumber == 2020 {
+		if turnNumber == lastRound {
 			break
 		}
 	}
@@ -84,7 +84,7 @@ func playNumberGame(puzzleInput string, part byte, debug bool) int {
 
 // Main routine
 func main() {
-	filenamePtr, execPart, debug, test := catchUserInput()
+	_, execPart, debug, test := catchUserInput()
 
 	if test {
 		return
@@ -93,15 +93,22 @@ func main() {
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else if execPart == 'a' {
-		fmt.Println("2020th number spoken for [0,3,6]:", playNumberGame("0,3,6", execPart, debug))
-		fmt.Println("2020th number spoken for [1,3,2]:", playNumberGame("1,3,2", execPart, debug))
-		fmt.Println("2020th number spoken for [2,1,3]:", playNumberGame("2,1,3", execPart, debug))
-		fmt.Println("2020th number spoken for [1,2,3]:", playNumberGame("1,2,3", execPart, debug))
-		fmt.Println("2020th number spoken for [2,3,1]:", playNumberGame("2,3,1", execPart, debug))
-		fmt.Println("2020th number spoken for [3,2,1]:", playNumberGame("3,2,1", execPart, debug))
-		fmt.Println("2020th number spoken for [3,1,2]:", playNumberGame("3,1,2", execPart, debug))
-		fmt.Println("2020th number spoken for [1,0,15,2,10,13]:", playNumberGame("1,0,15,2,10,13", execPart, debug))
+		fmt.Println("2020th number spoken for [0,3,6]:", playNumberGame("0,3,6", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [1,3,2]:", playNumberGame("1,3,2", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [2,1,3]:", playNumberGame("2,1,3", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [1,2,3]:", playNumberGame("1,2,3", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [2,3,1]:", playNumberGame("2,3,1", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [3,2,1]:", playNumberGame("3,2,1", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [3,1,2]:", playNumberGame("3,1,2", 2020, execPart, debug))
+		fmt.Println("2020th number spoken for [1,0,15,2,10,13]:", playNumberGame("1,0,15,2,10,13", 2020, execPart, debug))
 	} else {
-		fmt.Println(filenamePtr)
+		fmt.Println("30000000th number spoken for [0,3,6]:", playNumberGame("0,3,6", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [1,3,2]:", playNumberGame("1,3,2", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [2,1,3]:", playNumberGame("2,1,3", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [1,2,3]:", playNumberGame("1,2,3", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [2,3,1]:", playNumberGame("2,3,1", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [3,2,1]:", playNumberGame("3,2,1", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [3,1,2]:", playNumberGame("3,1,2", 30000000, execPart, debug))
+		fmt.Println("30000000th number spoken for [1,0,15,2,10,13]:", playNumberGame("1,0,15,2,10,13", 30000000, execPart, debug))
 	}
 }

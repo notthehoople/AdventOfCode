@@ -167,7 +167,11 @@ That was horrible. Got all twisted up with building lists in the wrong way. Ende
 ### Day 15 - Rambunctious Recitation
 
 + [Day 15a](cmd/day15/day15.go)
++ [Day 15b](cmd/day15/day15.go)
+
+Surprised that part a was efficient enough that part b was just "add the input and run it"!
 
 ```
 ./day15 -part a [-debug]
+./day15 -part b [-debug]
 ```
