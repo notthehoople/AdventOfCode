@@ -175,3 +175,13 @@ Surprised that part a was efficient enough that part b was just "add the input a
 ./day15 -part a [-debug]
 ./day15 -part b [-debug]
 ```
+
+### Day 16 - Ticket Translation
+
++ [Day 16a](cmd/day16/day16.go)
+
+I need to learn how to dynamically create 2 dimensional arrays. Yet again I've had to hardcode something nastily
+
+```
+./day16 -part a -file puzzleInput.txt [-debug]
+```
