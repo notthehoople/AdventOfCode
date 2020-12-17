@@ -181,8 +181,9 @@ Surprised that part a was efficient enough that part b was just "add the input a
 + [Day 16a](cmd/day16/day16.go)
 + [Day 16b](cmd/day16/day16b.go)
 
-I need to learn how to dynamically create 2 dimensional arrays. Yet again I've had to hardcode something nastily. Given up on part b as I just don't care enough. I need to rewrite part a properly before doing part b
+Part b doesn't work. It *does* print out enough to be able to work out the answer by hand (yes, really), but needs to be finished to complete automatically. For now, I have my star so I don't care
 
 ```
 ./day16 -part a -file puzzleInput.txt [-debug]
+./day16 -part b -file puzzleInput.txt [-debug]
 ```

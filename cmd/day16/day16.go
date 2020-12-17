@@ -26,7 +26,6 @@ func validValueInRuleSet(value int, ruleSet []rule) bool {
 		if (value >= ruleSet[rulePos].lowerLimit1 && value <= ruleSet[rulePos].upperLimit1) ||
 			(value >= ruleSet[rulePos].lowerLimit2 && value <= ruleSet[rulePos].upperLimit2) {
 			// value is fine by this rule
-			fmt.Printf("%d is valid\n", value)
 			return true
 		}
 	}
@@ -59,7 +58,6 @@ func validateTickets(ruleSet []rule, nearbyTickets []string) int {
 
 func calcScanningErrorRate(filename string, part byte, debug bool) int {
 	var ruleSet []rule
-	var ruleNumber int
 	var myTicket string
 	var processSection int = 0
 	var rawNearbyTickets []string
@@ -69,7 +67,6 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := readFile(filename)
 	// NEED TO GET THE RULE SET CREATED CORRECTLY
-	ruleSet = make([]rule, 30)
 
 	for inputCounter, inputLine := range puzzleInput {
 
@@ -92,14 +89,13 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 
 			fmt.Sscanf(grabFields[1], " %d-%d or %d-%d", &grabFirstLow, &grabFirstHigh, &grabSecondLow, &grabSecondHigh)
 
-			ruleSet[ruleNumber].ruleName = grabField
-			ruleSet[ruleNumber].lowerLimit1 = grabFirstLow
-			ruleSet[ruleNumber].upperLimit1 = grabFirstHigh
-			ruleSet[ruleNumber].lowerLimit2 = grabSecondLow
-			ruleSet[ruleNumber].upperLimit2 = grabSecondHigh
-
-			ruleNumber++
+			ruleSet = append(ruleSet, rule{ruleName: grabField, lowerLimit1: grabFirstLow, upperLimit1: grabFirstHigh, lowerLimit2: grabSecondLow, upperLimit2: grabSecondHigh})
 			// process rule sets and store in ruleSet map
+
+			if debug {
+				fmt.Println("------")
+				fmt.Println(ruleSet)
+			}
 		}
 
 		// [section 1]  - text "your ticket:"
@@ -115,8 +111,7 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 	if part == 'a' {
 		return validateTickets(ruleSet, rawNearbyTickets)
 	} else {
-		//return decodeMyTicket(ruleSet, nearbyTickets, myTicket)
-		return 0
+		return decodeMyTicket(ruleSet, rawNearbyTickets, myTicket)
 	}
 }
 
