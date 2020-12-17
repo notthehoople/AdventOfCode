@@ -34,18 +34,24 @@ func validValueInRuleSet(value int, ruleSet []rule) bool {
 	return false
 }
 
-func validateTickets(ruleSet []rule, nearbyTickets [250][40]int) int {
+func validateTickets(ruleSet []rule, nearbyTickets []string) int {
 	var errorRate int = 0
+	var checkValue int = 0
 
 	// Compare all the values in a ticket to the RuleSet
 	// Each value that fails ALL rules is added to the error rate
 
-	for ticket := 0; ticket < len(nearbyTickets); ticket++ {
-		for valueInTicket := 0; valueInTicket < len(nearbyTickets[ticket])-1; valueInTicket++ {
-			if !validValueInRuleSet(nearbyTickets[ticket][valueInTicket], ruleSet) {
-				errorRate += nearbyTickets[ticket][valueInTicket]
+	for _, inputLine := range nearbyTickets {
+		ticketValues := strings.Split(inputLine, ",")
+
+		for _, value := range ticketValues {
+			checkValue, _ = strconv.Atoi(value)
+
+			if !validValueInRuleSet(checkValue, ruleSet) {
+				errorRate += checkValue
 			}
 		}
+
 	}
 
 	return errorRate
@@ -54,18 +60,18 @@ func validateTickets(ruleSet []rule, nearbyTickets [250][40]int) int {
 func calcScanningErrorRate(filename string, part byte, debug bool) int {
 	var ruleSet []rule
 	var ruleNumber int
-	var myTicket []int
-	var nearbyTickets [250][40]int
+	var myTicket string
 	var processSection int = 0
-	var nearbyCounter int
+	var rawNearbyTickets []string
 
 	var grabField string
 	var grabFirstLow, grabFirstHigh, grabSecondLow, grabSecondHigh int
 
 	puzzleInput, _ := readFile(filename)
+	// NEED TO GET THE RULE SET CREATED CORRECTLY
 	ruleSet = make([]rule, 30)
 
-	for _, inputLine := range puzzleInput {
+	for inputCounter, inputLine := range puzzleInput {
 
 		if inputLine == "your ticket:" {
 			processSection = 1
@@ -73,9 +79,9 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 		}
 
 		if inputLine == "nearby tickets:" {
-			processSection = 2
-			nearbyCounter = 0
-			continue
+			// The rest of the file is nearby tickets. Grab them then exit the input processing loop
+			rawNearbyTickets = puzzleInput[inputCounter+1:]
+			break
 		}
 
 		// [section 0]  - some rules of format "<strings>: <lower>-<upper> or <lower>-<upper>"
@@ -99,41 +105,18 @@ func calcScanningErrorRate(filename string, part byte, debug bool) int {
 		// [section 1]  - text "your ticket:"
 
 		if processSection == 1 && inputLine != "" {
-			ticketValues := strings.Split(inputLine, ",")
-
-			myTicket = make([]int, len(ticketValues))
-
-			var ticketCounter int = 0
-			for _, value := range ticketValues {
-				myTicket[ticketCounter], _ = strconv.Atoi(value)
-				ticketCounter++
-
+			myTicket = inputLine
+			if debug {
+				fmt.Println("My Ticket:", myTicket)
 			}
-		}
-
-		// [section 2]  - text "nearby tickets:"
-
-		//   - a series of lines with comma separated numbers
-
-		if processSection == 2 {
-			ticketValues := strings.Split(inputLine, ",")
-
-			//nearbyTickets[nearbyCounter] = make([]int, len(ticketValues))
-
-			var oneTicketCounter int = 0
-			for _, value := range ticketValues {
-				nearbyTickets[nearbyCounter][oneTicketCounter], _ = strconv.Atoi(value)
-				oneTicketCounter++
-			}
-
-			nearbyCounter++
 		}
 	}
 
 	if part == 'a' {
-		return validateTickets(ruleSet, nearbyTickets)
+		return validateTickets(ruleSet, rawNearbyTickets)
 	} else {
-		return decodeMyTicket(ruleSet, nearbyTickets, myTicket)
+		//return decodeMyTicket(ruleSet, nearbyTickets, myTicket)
+		return 0
 	}
 }
 
