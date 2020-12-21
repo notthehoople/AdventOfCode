@@ -187,3 +187,13 @@ Part b doesn't work. It *does* print out enough to be able to work out the answe
 ./day16 -part a -file puzzleInput.txt [-debug]
 ./day16 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 20 - Jurassic Jigsaw
+
++ [Day 20a](cmd/day20/day20.go)
+
+Feels like I've gone wrong with the way I've approached Day 20 part a. It gives the correct answer but I'm matching double the number of sides that I should be doing
+
+```
+./day16 -part a -file puzzleInput.txt [-debug]
+```
