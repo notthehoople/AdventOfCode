@@ -209,3 +209,11 @@ Very wordy code but it works quickly so it'll do
 ./day21 -part a -file puzzleInput.txt [-debug]
 ./day21 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 22 - Crab Combat
+
++ [Day 22a](cmd/day22/day22.go)
+
+```
+./day22 -part a -file puzzleInput.txt [-debug]
+```
