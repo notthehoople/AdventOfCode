@@ -195,5 +195,17 @@ Part b doesn't work. It *does* print out enough to be able to work out the answe
 Feels like I've gone wrong with the way I've approached Day 20 part a. It gives the correct answer but I'm matching double the number of sides that I should be doing
 
 ```
-./day16 -part a -file puzzleInput.txt [-debug]
+./day20 -part a -file puzzleInput.txt [-debug]
+```
+
+### Day 21 - Allergen Assessment
+
++ [Day 21a](cmd/day21/day21.go)
++ [Day 21b](cmd/day21/day21.go)
+
+Very wordy code but it works quickly so it'll do
+
+```
+./day21 -part a -file puzzleInput.txt [-debug]
+./day21 -part b -file puzzleInput.txt [-debug]
 ```
