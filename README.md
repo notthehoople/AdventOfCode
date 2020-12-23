@@ -221,9 +221,11 @@ Very wordy code but it works quickly so it'll do
 ### Day 23 - Crab Cups
 
 + [Day 23a](cmd/day23/day23.go)
++ [Day 23b](cmd/day23/day23.go)
 
-First time using container/ring. Got it working, but there must be a nicer way of positioning yourself in the ring than looping through it each time looking for where you were.
+First time using container/ring. Got it working but had to rework the ring for part b. Went from looping through the ring looking for the destination, to using a map of rings as an index so I could jump around the ring easily
 
 ```
 ./day23 -part a [-debug]
+./day23 -part b [-debug]
 ```

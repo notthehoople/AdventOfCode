@@ -5,17 +5,19 @@ import (
 	"fmt"
 )
 
-func playCrabCups(cupsRing *ring.Ring, moves int, debug bool) *ring.Ring {
+func playCrabCups(cupsRing *ring.Ring, moves int, debug bool) (*ring.Ring, int, int) {
 	var maxCupLabel int
 	var ringLength int
 
 	ringLength = cupsRing.Len()
+	ringIndex := make(map[int]*ring.Ring, ringLength)
 
 	// loop through the whole ring and grab the maximum cup value from the list
 	for i := 1; i <= ringLength; i++ {
 		if cupsRing.Value.(int) > maxCupLabel {
 			maxCupLabel = cupsRing.Value.(int)
 		}
+		ringIndex[cupsRing.Value.(int)] = cupsRing
 		cupsRing = cupsRing.Next()
 	}
 
@@ -24,12 +26,15 @@ func playCrabCups(cupsRing *ring.Ring, moves int, debug bool) *ring.Ring {
 	for turn := 1; turn <= moves; turn++ {
 		if debug {
 			fmt.Printf("\n-- move %d --\n", turn)
-			fmt.Printf("cups: ")
-			for i := 1; i <= ringLength; i++ {
-				fmt.Printf("%d ", cupsRing.Value)
-				cupsRing = cupsRing.Next()
+			// Only print out the ring if we're not doing the huge ring size
+			if ringLength < 100 {
+				fmt.Printf("cups: ")
+				for i := 1; i <= ringLength; i++ {
+					fmt.Printf("%d ", cupsRing.Value)
+					cupsRing = cupsRing.Next()
+				}
+				fmt.Printf("\n")
 			}
-			fmt.Printf("\n")
 			fmt.Println("current cup:", cupsRing.Value)
 		}
 
@@ -57,33 +62,13 @@ func playCrabCups(cupsRing *ring.Ring, moves int, debug bool) *ring.Ring {
 			fmt.Printf("destination: %d\n", destinationCup)
 		}
 
-		// Place the removed items at the destination
-		var currentCup int
-		currentCup = cupsRing.Value.(int)
-
-		for i := 1; i < ringLength; i++ {
-			if cupsRing.Value.(int) == destinationCup {
-				cupsRing = cupsRing.Link(pickedCups)
-				break
-			}
-			cupsRing = cupsRing.Next()
-		}
-
-		// Must be a better way of doing this.
-		// After adding to the ring, search through the ring looking for where we were
-		for i := 1; i < ringLength; i++ {
-			if cupsRing.Value.(int) == currentCup {
-				break
-			}
-			cupsRing = cupsRing.Next()
-		}
-		//fmt.Printf("After adding current cup is %d and should be %d\n", cupsRing.Value, currentCup)
+		ringIndex[destinationCup].Link(pickedCups)
 
 		// move clockwise in the ring
 		cupsRing = cupsRing.Next()
 	}
 
-	if debug {
+	if debug && ringLength < 100 {
 		fmt.Printf("\n-- final --\n")
 		fmt.Printf("cups: ")
 		for i := 1; i <= ringLength; i++ {
@@ -93,7 +78,31 @@ func playCrabCups(cupsRing *ring.Ring, moves int, debug bool) *ring.Ring {
 		fmt.Printf("\n")
 	}
 
-	return cupsRing
+	return cupsRing, ringIndex[1].Next().Value.(int), ringIndex[1].Next().Next().Value.(int)
+}
+
+func crabGamePartB(puzzleInput string, moves int, debug bool) int {
+	var maxPuzzleInput int
+	var oneRight, twoRight int
+
+	// Crab has many cups. 1 million. On a raft
+	cupsRing := ring.New(1000000)
+	for i := 0; i < len(puzzleInput); i++ {
+		cupsRing.Value = int(puzzleInput[i] - '0')
+		if cupsRing.Value.(int) > maxPuzzleInput {
+			maxPuzzleInput = cupsRing.Value.(int)
+		}
+		cupsRing = cupsRing.Next()
+	}
+
+	for i := maxPuzzleInput + 1; i <= 1000000; i++ {
+		cupsRing.Value = i
+		cupsRing = cupsRing.Next()
+	}
+
+	_, oneRight, twoRight = playCrabCups(cupsRing, moves, debug)
+
+	return oneRight * twoRight
 }
 
 func crabGamePartA(puzzleInput string, moves int, debug bool) string {
@@ -106,7 +115,7 @@ func crabGamePartA(puzzleInput string, moves int, debug bool) string {
 		cupsRing = cupsRing.Next()
 	}
 
-	cupsRing = playCrabCups(cupsRing, moves, debug)
+	cupsRing, _, _ = playCrabCups(cupsRing, moves, debug)
 
 	// Position ourselves in the ring after the label '1'
 	for {
@@ -145,5 +154,10 @@ func main() {
 
 		fmt.Println("Part a real:", crabGamePartA("716892543", 100, debug))
 	} else {
+		fmt.Println("Part b test:", crabGamePartB("389125467", 10, debug))
+		fmt.Println("Part b test:", crabGamePartB("389125467", 10000000, debug))
+
+		fmt.Println("Part b real:", crabGamePartB("716892543", 10000000, debug))
+
 	}
 }
