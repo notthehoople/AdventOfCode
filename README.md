@@ -217,3 +217,13 @@ Very wordy code but it works quickly so it'll do
 ```
 ./day22 -part a -file puzzleInput.txt [-debug]
 ```
+
+### Day 23 - Crab Cups
+
++ [Day 23a](cmd/day23/day23.go)
+
+First time using container/ring. Got it working, but there must be a nicer way of positioning yourself in the ring than looping through it each time looking for where you were.
+
+```
+./day23 -part a [-debug]
+```
