@@ -232,10 +232,12 @@ First time using container/ring. Got it working but had to rework the ring for p
 
 ### Day 24 - Lobby Layout
 
-+ [Day 24](cmd/day24/day24.go)
++ [Day 24a](cmd/day24/day24.go)
++ [Day 24b](cmd/day24/day24b.go)
 
 Getting a good coordinate system is a huge help here. I've used Axial Coordinates as described here https://www.redblobgames.com/grids/hexagons/
 
 ```
-./day24 -part a [-debug]
+./day24 -part a -file puzzleInput.txt [-debug]
+./day24 -part b -file puzzleInput.txt [-debug]
 ```

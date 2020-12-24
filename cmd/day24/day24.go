@@ -113,6 +113,6 @@ func main() {
 		fmt.Println("Flipped black tiles:", countFlippedTiles(filenamePtr, execPart, debug))
 
 	} else {
-		fmt.Println(filenamePtr, execPart, debug)
+		fmt.Println("Flipped black tiles:", countLivingDisplay(filenamePtr, 100, execPart, debug))
 	}
 }
