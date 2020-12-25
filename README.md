@@ -241,3 +241,11 @@ Getting a good coordinate system is a huge help here. I've used Axial Coordinate
 ./day24 -part a -file puzzleInput.txt [-debug]
 ./day24 -part b -file puzzleInput.txt [-debug]
 ```
+
+### Day 25 - Combo Breaker
+
++ [Day 25](cmd/day25/day25.go)
+
+```
+./day25 [-debug]
+```
