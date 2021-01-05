@@ -3,6 +3,16 @@
 # advent2020
 Advent of Code 2020
 
+## Progress
+| Year  | Stars by 25th | Overall |
+| :---: | :-----------: | :-----: |
+| 2020 | 41 | 42 |
+| 2019 | 17 | 21 |
+| 2018 | 24 | 39 |
+| 2017 | 0  | 2  |
+| 2016 | 0  | 0  |
+| 2015 | 0  | 0  |
+
 ## Instructions
 
 ### Compiling the code
@@ -186,6 +196,14 @@ Part b doesn't work. It *does* print out enough to be able to work out the answe
 ```
 ./day16 -part a -file puzzleInput.txt [-debug]
 ./day16 -part b -file puzzleInput.txt [-debug]
+```
+
+### Day 17 - Conway Cubes
+
++ [Day 17a](cmd/day17/day17.go)
+
+```
+./day17 -part a -file puzzleInput.txt [-debug]
 ```
 
 ### Day 20 - Jurassic Jigsaw
