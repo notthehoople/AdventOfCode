@@ -201,9 +201,11 @@ Part b doesn't work. It *does* print out enough to be able to work out the answe
 ### Day 17 - Conway Cubes
 
 + [Day 17a](cmd/day17/day17.go)
++ [Day 17b](cmd/day17/day17b.go)
 
 ```
 ./day17 -part a -file puzzleInput.txt [-debug]
+./day17 -part b -file puzzleInput.txt [-debug]
 ```
 
 ### Day 20 - Jurassic Jigsaw

@@ -133,6 +133,6 @@ func main() {
 	} else if execPart == 'a' {
 		fmt.Println("active cubes:", howManyActiveCubes(filenamePtr, execPart, debug))
 	} else {
-		//fmt.Println("occupied seats:", howManyFilledSeatsB(filenamePtr, execPart, debug))
+		fmt.Println("active cubes:", howManyActiveCubesPartB(filenamePtr, execPart, debug))
 	}
 }
