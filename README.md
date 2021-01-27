@@ -6,7 +6,7 @@ Advent of Code 2020
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2020 | 41 | 42 |
+| 2020 | 41 | 43 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
 | 2017 | 0  | 2  |
@@ -206,6 +206,28 @@ Part b doesn't work. It *does* print out enough to be able to work out the answe
 ```
 ./day17 -part a -file puzzleInput.txt [-debug]
 ./day17 -part b -file puzzleInput.txt [-debug]
+```
+
+### Day 18 - Operation Order
+
++ [Day 18a](cmd/day18/day18.go)
++ [Day 18b]
+
+```
+./day18 -part a -file puzzleInput.txt [-debug]
+```
+
+I haven't solved Day 18 part b with code yet; I'll need to come back and do this properly. I realised that it was trivial to solve using vi search and replace then using bc so that's what I did:
+
+```
+$ vi puzzleInput.txt
+:%s;^;(;g
+:%s;$;);g
+:%s;*;)*(;g
+:wq
+bc -l puzzleInput.txt > output2.txt
+quit
+paste -sd+ output2.txt | bc
 ```
 
 ### Day 20 - Jurassic Jigsaw
