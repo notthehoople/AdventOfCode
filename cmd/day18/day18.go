@@ -76,7 +76,9 @@ func calcSumRecurse(sumRemainder string, debug bool) (int, string) {
 					completedTheLoop = false
 					break
 				} else if item[0] == ')' {
-					continue
+					// We've reached a double bracket. Return the result and drop one of the brackets
+					return currentResult, sumRemainder[strings.Index(sumRemainder, item)+1:]
+					//continue
 				} else if item[1] == ')' {
 					// closing the sum
 					// blah blah and return with the result
@@ -168,7 +170,7 @@ func calcHomeworkAnswers(filename string, part byte, debug bool) int {
 			fmt.Println("--------- Line:", lineNum)
 		}
 		tempResult, _ = calcSumRecurse(sumLine, debug)
-		fmt.Printf("Line: %d Result: %d\n", lineNum, tempResult)
+		//fmt.Printf("Line: %d Result: %d\n", lineNum, tempResult)
 		calculatedResult += tempResult
 	}
 
