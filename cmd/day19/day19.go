@@ -7,8 +7,8 @@ import (
 )
 
 type rule struct {
-	char   string
-	groups [][]string
+	char    string
+	subRule []string
 }
 
 func matchMessages(filename string, part byte, debug bool) int {
@@ -39,22 +39,23 @@ func matchMessages(filename string, part byte, debug bool) int {
 			//               or "<number>: <number> ... | <number> ..." (1 or 2 numbers in each place)
 			//               or "<number>: "char"" (where char is a or b)
 			matchRules = strings.Split(inputLine, ": ")
-			if len(matchRules) == 2 {
-				if debug {
-					fmt.Printf("Matched: %s with rules %s\n", matchRules[0], matchRules[1:])
-				}
-				// Check for single letter enclosed in quotes. If there then set .char to it
-				// Otherwise process the parts and set the rule parts of the array
-
-				if strings.Contains(matchRules[1], "\"") {
-					fmt.Println("before trim:", matchRules[1])
-					ruleSet[matchRules[0]] = rule{char: strings.Trim(matchRules[1], "\"")}
-					fmt.Printf("char: '%s'\n", strings.Trim(matchRules[1], "\""))
-				}
-			} else {
-				fmt.Printf("Bad input line: %s\n", inputLine)
-				return 0
+			if debug {
+				fmt.Printf("Matched: %s with rules %s\n", matchRules[0], matchRules[1:])
 			}
+			// Check for single letter enclosed in quotes. If there then set .char to it
+			if strings.Contains(matchRules[1], "\"") {
+				fmt.Println("before trim:", matchRules[1])
+				ruleSet[matchRules[0]] = rule{char: strings.Trim(matchRules[1], "\"")}
+				fmt.Printf("char: '%s'\n", strings.Trim(matchRules[1], "\""))
+			} else {
+				// Process the rule parts
+				tempRule := rule{subRule: []string{}}
+				for _, rulePart := range strings.Split(matchRules[1], " | ") {
+					tempRule.subRule = append(tempRule.subRule, strings.Split(rulePart, " "))
+				}
+				ruleSet[matchRules[0]] = tempRule
+			}
+
 		} else {
 			rawMessages = puzzleInput[inputCounter+1:]
 			break
