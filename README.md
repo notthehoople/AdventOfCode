@@ -6,7 +6,7 @@ Advent of Code 2020
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2020 | 41 | 45 |
+| 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
 | 2017 | 0  | 2  |
@@ -228,6 +228,14 @@ $ vi puzzleInput.txt
 bc -l puzzleInput.txt > output2.txt
 quit
 paste -sd+ output2.txt | bc
+```
+
+### Day 19 - Monster Messages
+
++ [Day 19a](cmd/day19/day19.go)
+
+```
+./day19 -part a -file puzzleInput.txt [-debug]
 ```
 
 ### Day 20 - Jurassic Jigsaw

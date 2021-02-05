@@ -8,7 +8,47 @@ import (
 
 type rule struct {
 	char    string
-	subRule []string
+	subRule [][]string
+}
+
+func parseMessage(ruleToUse string, message string, ruleSet map[string]rule, index int) (bool, int) {
+	activeRule := ruleSet[ruleToUse]
+
+	if index == len(message) {
+		// alread at the end of the message so everything's good
+		return true, 0
+	}
+
+	if activeRule.char != "" {
+		// We have a character rather than a set of rules so we've reached the bottom of this traversal. But does it match?
+		if message[index:index+1] == activeRule.char {
+			return true, index + 1
+		}
+		// message fails to match rules
+		return false, 0
+	}
+
+	var pos int
+
+	for _, ruleGroup := range activeRule.subRule {
+		groupResult := true
+
+		pos = index
+
+		for _, rules := range ruleGroup {
+			result, newPos := parseMessage(rules, message, ruleSet, pos)
+			if !result {
+				// that didn't match so bail on this rule and try the next if there is one
+				groupResult = false
+				break
+			}
+			pos = newPos
+		}
+		if groupResult {
+			return true, pos
+		}
+	}
+	return false, index
 }
 
 func matchMessages(filename string, part byte, debug bool) int {
@@ -44,12 +84,10 @@ func matchMessages(filename string, part byte, debug bool) int {
 			}
 			// Check for single letter enclosed in quotes. If there then set .char to it
 			if strings.Contains(matchRules[1], "\"") {
-				fmt.Println("before trim:", matchRules[1])
 				ruleSet[matchRules[0]] = rule{char: strings.Trim(matchRules[1], "\"")}
-				fmt.Printf("char: '%s'\n", strings.Trim(matchRules[1], "\""))
 			} else {
 				// Process the rule parts
-				tempRule := rule{subRule: []string{}}
+				tempRule := rule{subRule: [][]string{}}
 				for _, rulePart := range strings.Split(matchRules[1], " | ") {
 					tempRule.subRule = append(tempRule.subRule, strings.Split(rulePart, " "))
 				}
@@ -57,28 +95,31 @@ func matchMessages(filename string, part byte, debug bool) int {
 			}
 
 		} else {
-			rawMessages = puzzleInput[inputCounter+1:]
+			rawMessages = puzzleInput[inputCounter:]
 			break
 		}
 	}
 
-	// DELETE
+	goodMessageCount := 0
+	for i := 0; i < len(rawMessages); i++ {
+		if debug {
+			fmt.Printf("Message to match: %s\n", rawMessages[i])
+		}
+		ok, pos := parseMessage("0", rawMessages[i], ruleSet, 0)
+		if ok && pos == len(rawMessages[i]) {
+			goodMessageCount++
+		}
+	}
+
 	if debug {
+		fmt.Println("===================================")
+		fmt.Println("RuleSet:")
 		fmt.Println(ruleSet)
+		fmt.Println("Messages:")
 		fmt.Println(rawMessages)
 	}
-	// DELETE
 
-	if debug {
-		fmt.Println("----- Processing messages -----")
-	}
-
-	// Need to determine the number of messages that completely match rule 0
-	//for message := range rawMessages {
-	//
-	//	}
-
-	return 0
+	return goodMessageCount
 }
 
 // Main routine
