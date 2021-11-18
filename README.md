@@ -1,4 +1,4 @@
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/advent2021?color=blueviolet)](https://golang.org/doc/go1.15) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/advent2017)](https://goreportcard.com/report/github.com/notthehoople/advent2017)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/advent2017?color=blueviolet)](https://golang.org/doc/go1.17) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/advent2017)](https://goreportcard.com/report/github.com/notthehoople/advent2017)
 
 # advent2017
 Advent of Code 2017
@@ -28,11 +28,9 @@ go build
 ### Day 1 - 
 
 + [Day 1a](cmd/day01/day01.go)
-+ [Day 1b](cmd/day01/day01.go)
 
 ```
-./day01 -part a -file puzzleInput.txt
-./day01 -part b -file puzzleInput.txt
+./day01 -part a
 ```
 
 ### Day 2 - 
