@@ -5,14 +5,13 @@ import (
 	"fmt"
 )
 
-func calcCaptcha(captcha string) int {
+func calcCaptcha(captcha string, jumpAheadBy int) int {
 	/*
 		The captcha requires you to review a sequence of digits (your puzzle input) and
 		find the sum of all digits that match the next digit in the list. The list is
 		circular, so the digit after the last digit is the first digit in the list.
 	*/
 	var result int
-	var jumpAheadBy int = 1
 	var jumpAheadPos int
 	var firstDigit, secondDigit int
 	if len(captcha) == 0 {
@@ -29,15 +28,21 @@ func calcCaptcha(captcha string) int {
 
 	return result
 }
+
 func solveCaptcha(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
-	return calcCaptcha(puzzleInput[0])
+	if part == 'a' {
+		return calcCaptcha(puzzleInput[0], 1)
+	} else {
+		return calcCaptcha((puzzleInput[0]), len(puzzleInput[0])/2)
+	}
 }
 
 // Main routine
 func main() {
 	filenamePtr, execPart, debug := utils.CatchUserInput()
+
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else {

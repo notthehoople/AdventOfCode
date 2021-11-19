@@ -25,12 +25,14 @@ go build
 
 ## Days of Advent
 
-### Day 1 - 
+### Day 1 - Inverse Captcha
 
 + [Day 1a](cmd/day01/day01.go)
++ [Day 1b](cmd/day01/day01.go)
 
 ```
 ./day01 -part a
+./day01 -part b
 ```
 
 ### Day 2 - 
