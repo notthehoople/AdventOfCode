@@ -35,7 +35,16 @@ go build
 ./day01 -part b
 ```
 
-### Day 2 - 
+### Day 2 - Corruption Checksum
+
+Took me a while to realise the input file was full of tabs but the test data wasn't!
+
++ [Day 2a](cmd/day02/day02.go)
+
+```
+./day02 -part a
+```
+
 ### Day 3 - 
 ### Day 4 - 
 ### Day 5 - 
