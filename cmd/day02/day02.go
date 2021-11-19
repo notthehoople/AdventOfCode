@@ -7,6 +7,34 @@ import (
 	"strings"
 )
 
+func calcRowDifferenceDivisors(row string, debug bool) int {
+	/*
+		For each row, determine the difference between the largest value and the smallest value;
+		the checksum is the sum of all of these differences.
+	*/
+
+	var currValue1, currValue2 int
+
+	for _, i := range strings.Fields(row) {
+		for _, j := range strings.Fields(row) {
+			if i != j {
+				currValue1, _ = strconv.Atoi(i)
+				currValue2, _ = strconv.Atoi(j)
+				if currValue1 > currValue2 {
+					if currValue1%currValue2 == 0 {
+						return currValue1 / currValue2
+					}
+				} else {
+					if currValue2%currValue1 == 0 {
+						return currValue2 / currValue1
+					}
+				}
+			}
+		}
+	}
+	return 0
+}
+
 func calcRowDifference(row string, debug bool) int {
 	/*
 		For each row, determine the difference between the largest value and the smallest value;
@@ -40,7 +68,11 @@ func solveChecksum(filename string, part byte, debug bool) int {
 
 		return checksum
 	} else {
-		return 0
+		for i := range puzzleInput {
+			checksum += calcRowDifferenceDivisors(puzzleInput[i], debug)
+		}
+
+		return checksum
 	}
 }
 

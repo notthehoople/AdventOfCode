@@ -10,7 +10,7 @@ Advent of Code 2017
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
-| 2017 | 0  | 2  |
+| 2017 | 0  | 4  |
 | 2016 | 0  | 0  |
 | 2015 | 0  | 0  |
 
@@ -40,9 +40,11 @@ go build
 Took me a while to realise the input file was full of tabs but the test data wasn't!
 
 + [Day 2a](cmd/day02/day02.go)
++ [Day 2b](cmd/day02/day02.go)
 
 ```
 ./day02 -part a
+./day02 -part b
 ```
 
 ### Day 3 - 

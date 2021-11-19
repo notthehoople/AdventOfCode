@@ -30,10 +30,23 @@ func TestSolveChecksum(t *testing.T) {
 	}{
 		{"test_input", 18},
 	}
+	var testsB = []struct {
+		input    string
+		expected int
+	}{
+		{"test_input_b", 9},
+	}
 	// Test for Part A
 	for _, test := range testsA {
 		if output := solveChecksum(test.input, 'a', false); output != test.expected {
 			t.Error("Part A Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
+		}
+	}
+
+	// Test for Part B
+	for _, test := range testsB {
+		if output := solveChecksum(test.input, 'b', false); output != test.expected {
+			t.Error("Part B Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
 		}
 	}
 }
