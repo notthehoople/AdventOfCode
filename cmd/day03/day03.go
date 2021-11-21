@@ -3,11 +3,16 @@ package main
 import (
 	"aoc/advent2017/utils"
 	"fmt"
-	"strconv"
-	"strings"
 )
 
-func calcSteps(inputData int, debug bool) int {
+type coords struct {
+	x int
+	y int
+}
+
+// valueToCheck is the value that we want to build the spiral to, then
+// check the manhattan distance between it and 1
+func calcSteps(valueToCheck int, debug bool) int {
 	/*
 		Each square on the grid is allocated in a spiral pattern starting at a location
 		marked 1 and then counting up while spiraling outward. For example, the first
@@ -26,28 +31,95 @@ func calcSteps(inputData int, debug bool) int {
 		and square 1.
 	*/
 
-	/*
-		Use a map to build the list. Each key is the number, then alter the coords as
-		appropriate to spiral outwards
-		-or-
-		Use a 2d array to hold the positions
-	*/
-	var 
-	var minValue int = 9999999
-	var maxValue int = 0
-	var currValue int
+	//var spiralPattern map[int,int]int
 
-	for _, j := range strings.Fields(row) {
-		currValue, _ = strconv.Atoi(j)
-		if currValue < minValue {
-			minValue = currValue
+	const LEFT = 1
+	const UP = 2
+	const RIGHT = 3
+	const DOWN = 4
+
+	// The value to create in each position. Starts at 1
+	var currentPosValue int = 1
+	var movingDirection int = RIGHT
+	var currentPosition coords
+
+	spiralPattern := make(map[coords]int)
+	// Set where 1 starts from
+	currentPosition.x = 0
+	currentPosition.y = 0
+	spiralPattern[currentPosition] = currentPosValue
+
+	for currentPosValue <= valueToCheck {
+
+		for movingDirection == RIGHT {
+			// Move one space to the right. Add the currentValue to that position
+			currentPosition.x++
+			currentPosValue++
+			spiralPattern[currentPosition] = currentPosValue
+
+			// If space ABOVE is empty then we start going upwards
+			_, posExists := spiralPattern[coords{currentPosition.x, currentPosition.y - 1}]
+			if !posExists {
+				movingDirection = UP
+			}
 		}
-		if currValue > maxValue {
-			maxValue = currValue
+
+		for movingDirection == UP {
+			// Move one space to UP. Add the currentValue to that position
+			currentPosition.y--
+			currentPosValue++
+			spiralPattern[currentPosition] = currentPosValue
+
+			// If space LEFT is empty then we start going left
+			_, posExists := spiralPattern[coords{currentPosition.x - 1, currentPosition.y}]
+			if !posExists {
+				movingDirection = LEFT
+			}
+		}
+
+		for movingDirection == LEFT {
+			// Move one space to LEFT. Add the currentValue to that position
+			currentPosition.x--
+			currentPosValue++
+			spiralPattern[currentPosition] = currentPosValue
+
+			// If space DOWN is empty then we start going down
+			_, posExists := spiralPattern[coords{currentPosition.x, currentPosition.y + 1}]
+			if !posExists {
+				movingDirection = DOWN
+			}
+		}
+
+		for movingDirection == DOWN {
+			// Move one space to DOWN. Add the currentValue to that position
+			currentPosition.y++
+			currentPosValue++
+			spiralPattern[currentPosition] = currentPosValue
+
+			// If space RIGHT is empty then we start going right
+			_, posExists := spiralPattern[coords{currentPosition.x + 1, currentPosition.y}]
+			if !posExists {
+				movingDirection = RIGHT
+			}
 		}
 	}
 
-	return maxValue - minValue
+	if debug {
+		fmt.Println(spiralPattern)
+	}
+
+	var resultPosition coords
+
+	for i, j := range spiralPattern {
+		if j == valueToCheck {
+			resultPosition = i
+		}
+	}
+
+	if debug {
+		fmt.Println(resultPosition)
+	}
+	return utils.ManhattanDistance2D(0, 0, resultPosition.x, resultPosition.y)
 }
 
 func solveSteps(inputData int, part byte, debug bool) int {

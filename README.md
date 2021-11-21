@@ -10,7 +10,7 @@ Advent of Code 2017
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
-| 2017 | 0  | 4  |
+| 2017 | 0  | 5  |
 | 2016 | 0  | 0  |
 | 2015 | 0  | 0  |
 
@@ -49,7 +49,13 @@ Took me a while to realise the input file was full of tabs but the test data was
 
 ### Day 3 - Spiral Memory
 
+Wow the difficulty ramped up fast!
 
++ [Day 3a](cmd/day03/day03.go)
+
+```
+./day03 -part a [-debug]
+```
 
 ### Day 4 - 
 ### Day 5 - 
