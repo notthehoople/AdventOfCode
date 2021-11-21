@@ -47,7 +47,10 @@ Took me a while to realise the input file was full of tabs but the test data was
 ./day02 -part b
 ```
 
-### Day 3 - 
+### Day 3 - Spiral Memory
+
+
+
 ### Day 4 - 
 ### Day 5 - 
 ### Day 6 - 
