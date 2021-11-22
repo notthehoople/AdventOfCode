@@ -50,7 +50,7 @@ Took me a while to realise the input file was full of tabs but the test data was
 ### Day 3 - Spiral Memory
 
 Wow the difficulty ramped up fast!
-Part B needs refactoring into something that I'm not embarrassed by.
+Part B needs refactoring into something that I'm not embarrassed by...
 
 + [Day 3a](cmd/day03/day03.go)
 + [Day 3b](cmd/day03/day03.go)
