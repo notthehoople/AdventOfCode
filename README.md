@@ -10,7 +10,7 @@ Advent of Code 2017
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
-| 2017 | 0  | 6  |
+| 2017 | 0  | 7  |
 | 2016 | 0  | 0  |
 | 2015 | 0  | 0  |
 
@@ -60,7 +60,14 @@ Part B needs refactoring into something that I'm not embarrassed by...
 ./day03 -part b [-debug]
 ```
 
-### Day 4 - 
+### Day 4 - High-Entropy Passphrases
+
++ [Day 4a](cmd/day04/day04.go)
+
+```
+./day04 -part a [-debug]
+```
+
 ### Day 5 - 
 ### Day 6 - 
 ### Day 7 - 
