@@ -6,11 +6,11 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 0  | 0  |
+| 2021 | 2  | 2  |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
-| 2017 | 0  | 2  |
+| 2017 | 0  | 7  |
 | 2016 | 0  | 0  |
 | 2015 | 0  | 0  |
 
@@ -25,14 +25,14 @@ go build
 
 ## Days of Advent
 
-### Day 1 - 
+### Day 1 - Sonar Sweep
 
 + [Day 1a](cmd/day01/day01.go)
 + [Day 1b](cmd/day01/day01.go)
 
 ```
-./day01 -part a -file puzzleInput.txt
-./day01 -part b -file puzzleInput.txt
+./day01 -part a
+./day01 -part b
 ```
 
 ### Day 2 - 
