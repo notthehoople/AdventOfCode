@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 3  | 3  |
+| 2021 | 4  | 4  |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -38,11 +38,12 @@ go build
 ### Day 2 - Dive!
 
 + [Day 2a](cmd/day02/day02.go)
++ [Day 2b](cmd/day02/day02.go)
 
 ```
 ./day02 -part a
+./day02 -part b
 ```
-
 
 ### Day 3 - 
 ### Day 4 - 
