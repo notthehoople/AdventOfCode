@@ -12,6 +12,12 @@ func TestCountDepthIncreases(t *testing.T) {
 	}{
 		{"test_input", 198},
 	}
+	var testsB = []struct {
+		input    string
+		expected int
+	}{
+		{"test_input", 230},
+	}
 
 	// Test for Part A
 	for _, test := range tests {
@@ -21,11 +27,10 @@ func TestCountDepthIncreases(t *testing.T) {
 		}
 	}
 	// Test for Part B
-	/*
-		for _, test := range testsB {
-			puzzleInput, _ := utils.ReadFile(test.input)
-			if output := calcDepthAndPositionUsingAim(puzzleInput); output != test.expected {
-				t.Error("Part A Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
-			}
-		}*/
+	for _, test := range testsB {
+		puzzleInput, _ := utils.ReadFile(test.input)
+		if output := calcLifeSupportRating(puzzleInput, false); output != test.expected {
+			t.Error("Part A Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
+		}
+	}
 }
