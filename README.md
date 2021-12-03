@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 4  | 4  |
+| 2021 | 5  | 5  |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -45,7 +45,16 @@ go build
 ./day02 -part b
 ```
 
-### Day 3 - 
+### Day 3 - Binary Diagnostic
+
+Nasty code. Would like to clean this up
+
++ [Day 3a](cmd/day03/day03.go)
+
+```
+./day03 -part a [-debug] [-file <filename>]
+```
+
 ### Day 4 - 
 ### Day 5 - 
 ### Day 6 - 
