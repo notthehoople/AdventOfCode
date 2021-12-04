@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 6  | 6  |
+| 2021 | 7  | 7  |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -57,7 +57,16 @@ Nasty code. Would like to clean this up
 ./day03 -part b [-debug] [-file <filename>]
 ```
 
-### Day 4 - 
+### Day 4 - Giant Squid
+
+Started off with a bad choice of data structure. Should've gone back to change it but battered on regardless and wrote nasty code.
+
++ [Day 4a](cmd/day04/day04.go)
+
+```
+./day04 -part a [-debug] [-file <filename>]
+```
+
 ### Day 5 - 
 ### Day 6 - 
 ### Day 7 - 
