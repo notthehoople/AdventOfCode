@@ -8,10 +8,9 @@ import (
 )
 
 func calcLanternfish(lanternfish []int, maxDays int, part byte, debug bool) int {
-	var currentFish int
+	currentFish := make([]int, len(lanternfish))
 
 	for day := 0; day < maxDays; day++ {
-		fmt.Println("Day:", day)
 		if debug {
 			fmt.Printf("Day:%d ", day)
 			for i := 0; i < len(lanternfish); i++ {
@@ -20,28 +19,36 @@ func calcLanternfish(lanternfish []int, maxDays int, part byte, debug bool) int 
 			fmt.Printf("\n")
 		}
 
-		currentFish = len(lanternfish)
-		for i := 0; i < currentFish; i++ {
-
-			if lanternfish[i] == 0 {
-				// Birth of a new fishy
-				lanternfish[i] = 6
-				lanternfish = append(lanternfish, 8)
-			} else {
-				lanternfish[i]--
-			}
+		for i := 0; i <= 8; i++ {
+			currentFish[i] = lanternfish[i]
 		}
+		lanternfish[7] = currentFish[8]
+		lanternfish[6] = currentFish[7]
+		lanternfish[5] = currentFish[6]
+		lanternfish[4] = currentFish[5]
+		lanternfish[3] = currentFish[4]
+		lanternfish[2] = currentFish[3]
+		lanternfish[1] = currentFish[2]
+		lanternfish[0] = currentFish[1]
+		lanternfish[8] = currentFish[0]
+		lanternfish[6] += currentFish[0]
 	}
 
-	return len(lanternfish)
+	var countFish int
+	for i := 0; i < 9; i++ {
+		countFish += lanternfish[i]
+	}
+	return countFish
 }
 
 func solveDay(filename string, days int, part byte, debug bool) int {
+	var startFish int
 	puzzleInput, _ := utils.ReadFile(filename)
 	puzzleInputSplit := strings.Split(puzzleInput[0], ",")
-	lanternfish := make([]int, len(puzzleInputSplit), len(puzzleInputSplit)*100000)
+	lanternfish := make([]int, 10)
 	for i := 0; i < len(puzzleInputSplit); i++ {
-		lanternfish[i], _ = strconv.Atoi(puzzleInputSplit[i])
+		startFish, _ = strconv.Atoi(puzzleInputSplit[i])
+		lanternfish[startFish]++
 	}
 	return calcLanternfish(lanternfish, days, part, debug)
 }

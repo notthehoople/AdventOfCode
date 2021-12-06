@@ -27,11 +27,13 @@ func TestCalcLanternfish(t *testing.T) {
 
 	// Test for Part A
 	for _, test := range tests {
+		var startFish int
 		puzzleInput, _ := utils.ReadFile(test.input)
 		puzzleInputSplit := strings.Split(puzzleInput[0], ",")
-		lanternfish := make([]int, len(puzzleInputSplit), len(puzzleInputSplit)*100)
+		lanternfish := make([]int, 10)
 		for i := 0; i < len(puzzleInputSplit); i++ {
-			lanternfish[i], _ = strconv.Atoi(puzzleInputSplit[i])
+			startFish, _ = strconv.Atoi(puzzleInputSplit[i])
+			lanternfish[startFish]++
 		}
 		if output := calcLanternfish(lanternfish, test.days, 'a', false); output != test.expected {
 			t.Error("Part A Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)

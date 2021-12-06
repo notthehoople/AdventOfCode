@@ -81,12 +81,14 @@ Started off with a bad choice of data structure. Should've gone back to change i
 
 ### Day 6 - Lanternfish
 
-Started with naive approach which is too slow for part b
+Rewritten from naive approach to speedy
 
 + [Day 5a](cmd/day05/day05.go)
++ [Day 5b](cmd/day05/day05.go)
 
 ```
 ./day05 -part a [-debug] [-file <filename>]
+./day05 -part b [-debug] [-file <filename>]
 ```
 
 ### Day 7 - 
