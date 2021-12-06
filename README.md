@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 10 | 10 |
+| 2021 | 11 | 11 |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -79,7 +79,16 @@ Started off with a bad choice of data structure. Should've gone back to change i
 ./day05 -part b [-debug] [-file <filename>]
 ```
 
-### Day 6 - 
+### Day 6 - Lanternfish
+
+Started with naive approach which is too slow for part b
+
++ [Day 5a](cmd/day05/day05.go)
+
+```
+./day05 -part a [-debug] [-file <filename>]
+```
+
 ### Day 7 - 
 ### Day 8 - 
 ### Day 9 - 
