@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 12 | 12 |
+| 2021 | 14 | 14 |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -83,15 +83,26 @@ Started off with a bad choice of data structure. Should've gone back to change i
 
 Rewritten from naive approach to speedy
 
-+ [Day 5a](cmd/day05/day05.go)
-+ [Day 5b](cmd/day05/day05.go)
++ [Day 6a](cmd/day06/day06.go)
++ [Day 6b](cmd/day06/day06.go)
 
 ```
-./day05 -part a [-debug] [-file <filename>]
-./day05 -part b [-debug] [-file <filename>]
+./day06 -part a [-debug] [-file <filename>]
+./day06 -part b [-debug] [-file <filename>]
 ```
 
-### Day 7 - 
+### Day 7 - The Treachery of Whales
+
+Works for part b but I don't understand why. Calculates the average, rounds down and this gives the correct answer.
+
++ [Day 7a](cmd/day07/day07.go)
++ [Day 7b](cmd/day07/day07.go)
+
+```
+./day07 -part a [-debug] [-file <filename>]
+./day07 -part b [-debug] [-file <filename>]
+```
+
 ### Day 8 - 
 ### Day 9 - 
 ### Day 10 - 
