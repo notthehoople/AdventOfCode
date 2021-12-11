@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 15 | 15 |
+| 2021 | 16 | 16 |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -111,7 +111,14 @@ Works for part b but I don't understand why. Calculates the average, rounds down
 ./day08 -part a [-debug] [-file <filename>]
 ```
 
-### Day 9 - 
+### Day 9 - Smoke Basin
+
++ [Day 9a](cmd/day09/day09.go)
+
+```
+./day09 -part a [-debug] [-file <filename>]
+```
+
 ### Day 10 - 
 ### Day 11 - 
 ### Day 12 - 
