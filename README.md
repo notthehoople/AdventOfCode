@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 16 | 16 |
+| 2021 | 17 | 17 |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -119,7 +119,14 @@ Works for part b but I don't understand why. Calculates the average, rounds down
 ./day09 -part a [-debug] [-file <filename>]
 ```
 
-### Day 10 - 
+### Day 10 - Syntax Scoring
+
++ [Day 10a](cmd/day10/day10.go)
+
+```
+./day10 -part a [-debug] [-file <filename>]
+```
+
 ### Day 11 - 
 ### Day 12 - 
 ### Day 13 - 
