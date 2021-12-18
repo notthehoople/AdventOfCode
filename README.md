@@ -122,9 +122,11 @@ Works for part b but I don't understand why. Calculates the average, rounds down
 ### Day 10 - Syntax Scoring
 
 + [Day 10a](cmd/day10/day10.go)
++ [Day 10b](cmd/day10/day10.go)
 
 ```
 ./day10 -part a [-debug] [-file <filename>]
+./day10 -part b [-debug] [-file <filename>]
 ```
 
 ### Day 11 - 
