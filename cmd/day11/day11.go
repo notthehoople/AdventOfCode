@@ -22,7 +22,7 @@ func copyMap(sourceMap map[coords]int) (destinationMap map[coords]int) {
 }
 */
 
-func updateAdjacentOctupus(mapToUpdate map[coords]int, centre coords) {
+func updateAdjacentOctopus(mapToUpdate map[coords]int, centre coords) {
 	if centre.y > 0 {
 		if centre.x > 0 {
 			mapToUpdate[coords{centre.x - 1, centre.y - 1}]++
@@ -51,11 +51,19 @@ func updateAdjacentOctupus(mapToUpdate map[coords]int, centre coords) {
 	}
 }
 
-func stepControl(octopusMap map[coords]int, numberOfSteps int, debug bool) int {
-	var flashCount int
-	//startMap := copyMap(octopusMap)
+func stepControl(octopusMap map[coords]int, numberOfSteps int, part byte, debug bool) int {
+	var totalFlashCount int
 
-	for step := 0; step < numberOfSteps; step++ {
+	var stepLoopContinue bool = true
+	var step int = 0
+
+	for stepLoopContinue {
+
+		step++
+		if step > numberOfSteps && part == 'a' {
+			stepLoopContinue = false
+			continue
+		}
 
 		flashedOctopus := make(map[coords]bool)
 
@@ -79,7 +87,7 @@ func stepControl(octopusMap map[coords]int, numberOfSteps int, debug bool) int {
 					} else {
 						flashedOctopus[k] = true
 						// Update all the octopus adjacent to this one
-						updateAdjacentOctupus(octopusMap, k)
+						updateAdjacentOctopus(octopusMap, k)
 						keepGoing = true
 					}
 				}
@@ -87,9 +95,15 @@ func stepControl(octopusMap map[coords]int, numberOfSteps int, debug bool) int {
 		}
 
 		// Finally, any octopus that flashed during this step has its energy level set to 0
+		var flashCount int
 		for k := range flashedOctopus {
 			octopusMap[k] = 0
-			flashCount++
+			totalFlashCount++ // Total count of all flashes (part a)
+			flashCount++      // Number of flashes in this step (part b)
+		}
+
+		if part == 'b' && flashCount == len(octopusMap) {
+			return step
 		}
 
 		if debug {
@@ -100,34 +114,31 @@ func stepControl(octopusMap map[coords]int, numberOfSteps int, debug bool) int {
 
 	if debug {
 		fmt.Println("Map at Finish:", octopusMap)
-		fmt.Printf("Step: %d Flashes: %d\n", numberOfSteps, flashCount)
+		fmt.Printf("Step: %d Flashes: %d\n", numberOfSteps, totalFlashCount)
 	}
 
-	return flashCount
+	// Part a result
+	return totalFlashCount
 }
 
 func solveDay(filename string, part byte, debug bool) int {
 	puzzleInput, _ := utils.ReadFile(filename)
 	octopusMap := make(map[coords]int)
 
-	if part == 'a' {
-		var numberOfFlashes int
+	var numberOfFlashes int
 
-		for y := 0; y < len(puzzleInput); y++ {
-			for x, startPower := range puzzleInput[y] {
-				if debug {
-					fmt.Printf("x:%d, y:%d, power:%c\n", x, y, startPower)
-				}
-				octopusMap[coords{x: x, y: y}] = int(startPower - '0')
+	for y := 0; y < len(puzzleInput); y++ {
+		for x, startPower := range puzzleInput[y] {
+			if debug {
+				fmt.Printf("x:%d, y:%d, power:%c\n", x, y, startPower)
 			}
+			octopusMap[coords{x: x, y: y}] = int(startPower - '0')
 		}
-
-		numberOfFlashes = stepControl(octopusMap, 100, debug)
-
-		return numberOfFlashes
-	} else {
-		return 0
 	}
+
+	numberOfFlashes = stepControl(octopusMap, 100, part, debug)
+
+	return numberOfFlashes
 }
 
 // Main routine

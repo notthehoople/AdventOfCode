@@ -6,7 +6,7 @@ Advent of Code 2021
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 19 | 19 |
+| 2021 | 20 | 20 |
 | 2020 | 41 | 46 |
 | 2019 | 17 | 21 |
 | 2018 | 24 | 39 |
@@ -132,9 +132,11 @@ Works for part b but I don't understand why. Calculates the average, rounds down
 ### Day 11 - Dumbo Octopus
 
 + [Day 11a](cmd/day11/day11.go)
++ [Day 11b](cmd/day11/day11.go)
 
 ```
 ./day11 -part a [-debug] [-file <filename>]
+./day11 -part b [-debug] [-file <filename>]
 ```
 
 ### Day 12 - 
