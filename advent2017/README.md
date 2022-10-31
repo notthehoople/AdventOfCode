@@ -3,17 +3,6 @@
 # advent2017
 Advent of Code 2017
 
-## Progress
-| Year  | Stars by 25th | Overall |
-| :---: | :-----------: | :-----: |
-| 2021 | 0  | 0  |
-| 2020 | 41 | 46 |
-| 2019 | 17 | 21 |
-| 2018 | 24 | 39 |
-| 2017 | 0  | 7  |
-| 2016 | 0  | 0  |
-| 2015 | 0  | 0  |
-
 ## Instructions
 
 ### Compiling the code
@@ -63,9 +52,11 @@ Part B needs refactoring into something that I'm not embarrassed by...
 ### Day 4 - High-Entropy Passphrases
 
 + [Day 4a](cmd/day04/day04.go)
++ [Day 4b](cmd/day04/day04.go)
 
 ```
 ./day04 -part a [-debug]
+./day04 -part b [-debug]
 ```
 
 ### Day 5 - 

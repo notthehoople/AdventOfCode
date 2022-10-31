@@ -7,7 +7,50 @@ import (
 )
 
 func isAnagram(firstWord string, secondWord string, debug bool) bool {
-	return false
+	var wordExists bool
+	var wordMatches bool = true
+
+	firstWordMap := make(map[rune]int)
+	secondWordMap := make(map[rune]int)
+
+	if debug {
+		fmt.Println("===============")
+		fmt.Printf("Checking %s against %s\n", firstWord, secondWord)
+	}
+
+	for _, i := range firstWord {
+		_, wordExists = firstWordMap[i]
+		if wordExists {
+			firstWordMap[i]++
+		} else {
+			firstWordMap[i] = 1
+		}
+	}
+
+	for _, j := range secondWord {
+		_, wordExists = secondWordMap[j]
+		if wordExists {
+			secondWordMap[j]++
+		} else {
+			secondWordMap[j] = 1
+		}
+	}
+
+	if debug {
+		fmt.Println("First Word Map:", firstWordMap)
+		fmt.Println("Second Word Map:", secondWordMap)
+	}
+
+	for i := range firstWordMap {
+		if firstWordMap[i] != secondWordMap[i] {
+			wordMatches = false
+		}
+	}
+
+	if debug {
+		fmt.Println(wordMatches)
+	}
+	return wordMatches
 }
 
 func isValidPassphrase(passphrase string, part byte, debug bool) bool {
@@ -39,7 +82,7 @@ func isValidPassphrase(passphrase string, part byte, debug bool) bool {
 		word's letters can be rearranged to form any other word in the passphrase.
 	*/
 	for wordPos, firstWord := range wordsList {
-		fmt.Printf("wordPos: %d word: %s\n", wordPos, firstWord)
+		//fmt.Printf("wordPos: %d word: %s\n", wordPos, firstWord)
 		for _, secondWord := range wordsList[wordPos+1:] {
 			// To be an anagram the lengths of the words must be the same
 			if len(firstWord) == len(secondWord) {
