@@ -3,16 +3,10 @@
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
-| 2021 | 20 | 20 |
-| 2020 | 41 | 46 |
-| 2019 | 17 | 21 |
-| 2018 | 24 | 39 |
-| 2017 | 0  | 7  |
-| 2016 | 0  | 0  |
-| 2015 | 0  | 0  |
-
-+ [Advent 2017](advent2017)
-+ [Advent 2018](advent2018)
-+ [Advent 2019](advent2019)
-+ [Advent 2020](advent2020)
-+ [Advent 2021](advent2021)
+| [Advent 2021](advent2021) | 20 | 20 |
+| [Advent 2020](advent2020) | 41 | 46 |
+| [Advent 2019](advent2019) | 17 | 21 |
+| [Advent 2018](advent2018) | 24 | 39 |
+| [Advent 2017](advent2017) | 0  | 7  |
+| Advent 2016 | 0  | 0  |
+| Advent 2015 | 0  | 0  |
