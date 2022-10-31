@@ -27,12 +27,6 @@ func calcLifeSupportRating(subDiagnostics []string, debug bool) int {
 		co2Filter[i] = true
 	}
 
-	/*
-		To find oxygen generator rating, determine the most common value (0 or 1) in the
-		current bit position, and keep only numbers with that bit in that position. If 0
-		and 1 are equally common, keep values with a 1 in the position being considered.
-	*/
-
 	var oneCount, zeroCount, entryCount int
 
 	// oxygen

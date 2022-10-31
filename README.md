@@ -148,7 +148,7 @@ Works for part b but I don't understand why. Calculates the average, rounds down
 ### Day 18 - 
 ### Day 19 - 
 ### Day 20 - 
-### Day 21 - 
+### Day 21 - Dirac Dice
 ### Day 22 - 
 ### Day 23 - 
 ### Day 24 - 
