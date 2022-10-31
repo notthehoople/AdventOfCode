@@ -1,13 +1,13 @@
 package main
 
 import (
-	"aoc/advent2017/utils"
+	"AdventOfCode-go/advent2017/utils"
 	"fmt"
 	"strings"
 )
 
 func isAnagram(firstWord string, secondWord string, debug bool) bool {
-
+	return false
 }
 
 func isValidPassphrase(passphrase string, part byte, debug bool) bool {

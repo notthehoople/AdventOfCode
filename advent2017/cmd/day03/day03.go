@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc/advent2017/utils"
+	"AdventOfCode-go/advent2017/utils"
 	"fmt"
 )
 
