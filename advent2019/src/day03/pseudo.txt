@@ -1,0 +1,9 @@
+- Create a “map” of the circuit for our diagram. It needs to be around 1000x1000 as far as I can tell but I’d start with 2000 x 2000 and see if we have any “out of memory” crashes at any point
+
+- Run through each of the instructions and “draw” in the map 2D array. That should be quite easy to do
+
+- when drawing out the 2nd line, mark intersections with the other line with an X. Don’t mark when it intersects with itself. To me this means that I’ll use “1” to indicate the first line and “2" to show the second, instead of the confusing way the example is shown. Then wn you’re drawing if you find a “1” at a location you want to put a “2" in, you put an “X” instead
+
+- at the end you scan through your 2D map looking for “X”. Each one you find, work out the manhattan distance and keep hold of the smallest distance found
+
+If you want to be really fancy then when calculating the manhattan distance you could start at the centre and work your way outwards, checking all the points with the same manhattan distance looking for an “X”. You can then exit when you find the first one. I doubt I’ll do this as I’m trying to do things quick and dirty to catch up, but this approach would be much faster
