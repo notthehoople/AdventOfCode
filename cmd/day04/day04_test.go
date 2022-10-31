@@ -16,8 +16,28 @@ func TestIsValidPassphrase(t *testing.T) {
 
 	// Test for Part A
 	for _, test := range testsA {
-		if output := isValidPassphrase(test.input, false); output != test.expected {
+		if output := isValidPassphrase(test.input, 'a', false); output != test.expected {
 			t.Error("Part A Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
+		}
+	}
+}
+
+func TestIsValidPassphraseNotAnagram(t *testing.T) {
+	var testsB = []struct {
+		input    string
+		expected bool
+	}{
+		{"abcde fghij", true},
+		{"abcde xyz ecdab", false},
+		{"a ab abc abd abf abj", true},
+		{"iiii oiii ooii oooi oooo", true},
+		{"oiii ioii iioi iiio", false},
+	}
+
+	// Test for Part B
+	for _, test := range testsB {
+		if output := isValidPassphrase(test.input, 'b', false); output != test.expected {
+			t.Error("Part B Test Failed: {} inputted, {} expected, recieved: {}", test.input, test.expected, output)
 		}
 	}
 }
