@@ -1,7 +1,7 @@
 package main
 
 import (
-	"aoc/advent2021/utils"
+	"AdventOfCode-go/advent2021/utils"
 	"fmt"
 	"sort"
 	"strconv"
