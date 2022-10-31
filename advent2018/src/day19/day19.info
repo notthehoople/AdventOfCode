@@ -1,0 +1,71 @@
+There are now 6 registers numbered 0 through 5; the 5 not bound to the instruction pointer behave as normal
+When the instruction pointer is bound to a register, its value is written to that register just before each instruction is executed
+and the value of that register is written back to the instruction pointer immediately after each instruction funushes execution.
+
+Afterwards, move to the next instruction by adding one to the instruction pointer, even if the value has just been updated
+(Because of this, instructions must effectively set the instruction pointer to the instruction BEFORE the one they want executed next)
+
+The instruction pointer is 0 during first instruction, 1 during second, and so on. If the instruction pointer ever causes the
+device to attempt to load an instruction outside the instructions defined in the program, the program immediately halts
+
+Instructions contain 4 values
+- an opcode (string)
+- two inputs (A and B)
+- an output (C)
+- opcode specifies the behavious of the instruction and how the inputs are interpreted
+- the output C is always treated as a register
+
+In opcode descriptions
+- "Value A" means treat the number in A as a value
+- "Register A" means us the number in A as reference to a register and read/write from that register instead
+
+opcodes
+=======
+Addition:
+
+addr (add register) stores into register C the result of adding register A and register B.
+addi (add immediate) stores into register C the result of adding register A and value B.
+
+Multiplication:
+
+mulr (multiply register) stores into register C the result of multiplying register A and register B.
+muli (multiply immediate) stores into register C the result of multiplying register A and value B.
+
+Bitwise AND:
+
+banr (bitwise AND register) stores into register C the result of the bitwise AND of register A and register B.
+bani (bitwise AND immediate) stores into register C the result of the bitwise AND of register A and value B.
+
+Bitwise OR:
+
+borr (bitwise OR register) stores into register C the result of the bitwise OR of register A and register B.
+bori (bitwise OR immediate) stores into register C the result of the bitwise OR of register A and value B.
+
+Assignment:
+
+setr (set register) copies the contents of register A into register C. (Input B is ignored.)
+seti (set immediate) stores value A into register C. (Input B is ignored.)
+
+Greater-than testing:
+
+gtir (greater-than immediate/register) sets register C to 1 if value A is greater than register B. Otherwise, register C is set to 0.
+gtri (greater-than register/immediate) sets register C to 1 if register A is greater than value B. Otherwise, register C is set to 0.
+gtrr (greater-than register/register) sets register C to 1 if register A is greater than register B. Otherwise, register C is set to 0.
+
+Equality testing:
+
+eqir (equal immediate/register) sets register C to 1 if value A is equal to register B. Otherwise, register C is set to 0.
+eqri (equal register/immediate) sets register C to 1 if register A is equal to value B. Otherwise, register C is set to 0.
+eqrr (equal register/register) sets register C to 1 if register A is equal to register B. Otherwise, register C is set to 0.
+
+Inputs
+======
+
+Before: [a b c d]
+e f g h
+After: [i j k l]
+
+e f g h are instructions
+Before shows the 4 registers BEFORE the instructions are carried out
+After shows the results
+
