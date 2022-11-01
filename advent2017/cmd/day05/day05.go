@@ -27,7 +27,16 @@ func getOutOfMaze(filename string, part byte, debug bool) int {
 	stepsTaken = 0
 	for {
 		movement = instructionList[instructionPos]
-		instructionList[instructionPos]++
+
+		if part == 'a' {
+			instructionList[instructionPos]++
+		} else {
+			if movement >= 3 {
+				instructionList[instructionPos]--
+			} else {
+				instructionList[instructionPos]++
+			}
+		}
 
 		instructionPos += movement
 
@@ -37,6 +46,7 @@ func getOutOfMaze(filename string, part byte, debug bool) int {
 		}
 
 		stepsTaken++
+
 		if instructionPos > len(instructionList)-1 {
 			return stepsTaken
 		}

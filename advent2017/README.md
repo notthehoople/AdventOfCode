@@ -16,8 +16,7 @@ go build
 
 ### Day 1 - Inverse Captcha
 
-+ [Day 1a](cmd/day01/day01.go)
-+ [Day 1b](cmd/day01/day01.go)
++ [Day 1](cmd/day01/day01.go)
 
 ```
 ./day01 -part a
@@ -28,8 +27,7 @@ go build
 
 Took me a while to realise the input file was full of tabs but the test data wasn't!
 
-+ [Day 2a](cmd/day02/day02.go)
-+ [Day 2b](cmd/day02/day02.go)
++ [Day 2](cmd/day02/day02.go)
 
 ```
 ./day02 -part a
@@ -41,8 +39,7 @@ Took me a while to realise the input file was full of tabs but the test data was
 Wow the difficulty ramped up fast!
 Part B needs refactoring into something that I'm not embarrassed by...
 
-+ [Day 3a](cmd/day03/day03.go)
-+ [Day 3b](cmd/day03/day03.go)
++ [Day 3](cmd/day03/day03.go)
 
 ```
 ./day03 -part a [-debug]
@@ -51,8 +48,7 @@ Part B needs refactoring into something that I'm not embarrassed by...
 
 ### Day 4 - High-Entropy Passphrases
 
-+ [Day 4a](cmd/day04/day04.go)
-+ [Day 4b](cmd/day04/day04.go)
++ [Day 4](cmd/day04/day04.go)
 
 ```
 ./day04 -part a [-debug]
@@ -61,10 +57,11 @@ Part B needs refactoring into something that I'm not embarrassed by...
 
 ### Day 5 - A Maze of Twisty Trampolines, All Alike
 
-+ [Day 5a](cmd/day04/day05.go)
++ [Day 5](cmd/day05/day05.go)
 
 ```
 ./day05 -part a [-debug]
+./day05 -part b [-debug] [-file <testinput|input>]
 ```
 
 ### Day 6 - 
