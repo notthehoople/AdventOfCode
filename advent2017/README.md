@@ -59,7 +59,14 @@ Part B needs refactoring into something that I'm not embarrassed by...
 ./day04 -part b [-debug]
 ```
 
-### Day 5 - 
+### Day 5 - A Maze of Twisty Trampolines, All Alike
+
++ [Day 5a](cmd/day04/day05.go)
+
+```
+./day05 -part a [-debug]
+```
+
 ### Day 6 - 
 ### Day 7 - 
 ### Day 8 - 
