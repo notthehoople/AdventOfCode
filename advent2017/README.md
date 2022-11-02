@@ -64,7 +64,14 @@ Part B needs refactoring into something that I'm not embarrassed by...
 ./day05 -part b [-debug] [-file <testinput|input>]
 ```
 
-### Day 6 - 
+### Day 6 - Memory Reallocation
+
++ [Day 6](cmd/day06/day06.go)
+
+```
+./day06 -part a [-debug] [-file <testinput|input>]
+```
+
 ### Day 7 - 
 ### Day 8 - 
 ### Day 9 - 
