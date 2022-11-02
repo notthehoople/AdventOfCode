@@ -68,8 +68,11 @@ Part B needs refactoring into something that I'm not embarrassed by...
 
 + [Day 6](cmd/day06/day06.go)
 
+Not proud of part b code but it works so it'll do!
+
 ```
 ./day06 -part a [-debug] [-file <testinput|input>]
+./day06 -part b [-debug] [-file <testinput|input>]
 ```
 
 ### Day 7 - 
