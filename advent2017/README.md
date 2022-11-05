@@ -75,7 +75,17 @@ Not proud of part b code but it works so it'll do!
 ./day06 -part b [-debug] [-file <testinput|input>]
 ```
 
-### Day 7 - 
+### Day 7 - Recursive Circus
+
++ [Day 7](cmd/day07/day07.go)
+
+Part a was all about building the program tower in the right way
+
+```
+./day07 -part a [-debug] [-file <testinput|input>]
+```
+
+
 ### Day 8 - 
 ### Day 9 - 
 ### Day 10 - 

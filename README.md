@@ -7,6 +7,6 @@
 | [Advent 2020](advent2020) | 41 | 46 |
 | [Advent 2019](advent2019) | 17 | 21 |
 | [Advent 2018](advent2018) | 24 | 39 |
-| [Advent 2017](advent2017) | 0  | 12 |
+| [Advent 2017](advent2017) | 0  | 13 |
 | Advent 2016 | 0  | 0  |
 | Advent 2015 | 0  | 0  |
