@@ -82,6 +82,61 @@ func findBottomProgram(tower map[string]program, part byte, debug bool) string {
 	return "Not found"
 }
 
+func getChildStackWeights(rootProgramName string, tower map[string]program) int {
+	rootProgram := tower[rootProgramName]
+	rootWeight := rootProgram.weight
+
+	//fmt.Printf("============= Parent: %s ==============\n", rootProgramName)
+	var childWeightSum int
+	for _, child := range rootProgram.children {
+		//fmt.Println("Child: ", child)
+		childWeight := getChildStackWeights(child, tower)
+		childWeightSum += childWeight
+	}
+
+	return rootWeight + childWeightSum
+}
+
+func isProgramBalanced(rootProgramName string, tower map[string]program, debug bool) (string, int) {
+	topLevelOccurances := make(map[int]int, 0)
+	children := make(map[int]string)
+
+	// Count occurance of weight totals for the program's children
+	for _, child := range tower[rootProgramName].children {
+		topLevelOccurances[getChildStackWeights(child, tower)]++
+		children[getChildStackWeights(child, tower)] = child
+	}
+
+	// with thanks to tardisman5197 on github
+	var result, odd, normal = "", 0, 0
+	for k, v := range topLevelOccurances {
+		if v == 1 {
+			result = children[k]
+			odd = k
+		} else {
+			normal = k
+		}
+	}
+	return result, normal - odd
+}
+
+func findWrongWeight(rootProgramName string, tower map[string]program, part byte, debug bool) int {
+	// The program that needs its weight to be adjusted is the one that matches these 2 criteria:
+	// - it has a different *total* weight (weight of the subtower starting from that program) than total weight of
+	//   other programs that are standing on the disc that the program is standing on
+	// - it holds a balanced disc (all of its children have the same total weight)
+	//
+	// with thanks to tardisman5197 on github
+
+	if wrong, diff := isProgramBalanced(rootProgramName, tower, debug); wrong != "" {
+		if findWrongWeight(wrong, tower, part, debug) == 0 {
+			return tower[wrong].weight + diff
+		}
+		return findWrongWeight(wrong, tower, part, debug)
+	}
+	return 0
+}
+
 // Main routine
 func main() {
 	filenamePtr, execPart, debug := utils.CatchUserInput()
@@ -91,7 +146,9 @@ func main() {
 		tower := processInputTower(filenamePtr, execPart, debug)
 		fmt.Printf("Bottom Program is: %s\n", findBottomProgram(tower, execPart, debug))
 	case 'b':
-		fmt.Printf("Not implemented yet\n")
+		tower := processInputTower(filenamePtr, execPart, debug)
+		rootProgramName := findBottomProgram(tower, 'a', debug)
+		fmt.Printf("Revised weight is: %d\n", findWrongWeight(rootProgramName, tower, execPart, debug))
 	case 'z':
 		if execPart == 'z' {
 			fmt.Println("Bad part choice. Available choices are 'a' and 'b'")

@@ -79,12 +79,12 @@ Not proud of part b code but it works so it'll do!
 
 + [Day 7](cmd/day07/day07.go)
 
-Part a was all about building the program tower in the right way
+Part a was all about building the program tower in the right way. Part b I strugged with.
 
 ```
 ./day07 -part a [-debug] [-file <testinput|input>]
+./day07 -part b [-debug] [-file <testinput|input>]
 ```
-
 
 ### Day 8 - 
 ### Day 9 - 
