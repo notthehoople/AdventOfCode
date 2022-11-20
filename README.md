@@ -1,4 +1,8 @@
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/AdventOfCode-go?color=blueviolet)](https://golang.org/doc/go1.19) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/AdventOfCode-go)](https://goreportcard.com/report/github.com/notthehoople/AdventOfCode-go)
+# Advent of Code
+
+[Advent of Code](https://adventofcode.com/)
+
+All coding in Go.
 
 ## Progress
 | Year  | Stars by 25th | Overall |

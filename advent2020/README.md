@@ -3,16 +3,6 @@
 # advent2020
 Advent of Code 2020
 
-## Progress
-| Year  | Stars by 25th | Overall |
-| :---: | :-----------: | :-----: |
-| 2020 | 41 | 46 |
-| 2019 | 17 | 21 |
-| 2018 | 24 | 39 |
-| 2017 | 0  | 2  |
-| 2016 | 0  | 0  |
-| 2015 | 0  | 0  |
-
 ## Instructions
 
 ### Compiling the code
