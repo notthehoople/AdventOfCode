@@ -1,8 +1,9 @@
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/advent2021?color=blueviolet)](https://golang.org/doc/go1.15) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/advent2021)](https://goreportcard.com/report/github.com/notthehoople/advent2021)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/AdventOfCode-go?color=blueviolet)](https://golang.org/doc/go1.19) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/AdventOfCode-go)](https://goreportcard.com/report/github.com/notthehoople/AdventOfCode-go)
 
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
+| [Advent 2022](advent2022) | 0 | 0 |
 | [Advent 2021](advent2021) | 20 | 20 |
 | [Advent 2020](advent2020) | 41 | 46 |
 | [Advent 2019](advent2019) | 17 | 21 |
