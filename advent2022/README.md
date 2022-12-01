@@ -14,9 +14,13 @@ go build
 
 ## Days of Advent
 
-### Day 1 -
+### Day 1 - Calorie Counting
 
-+ []()
++ [Day 1](cmd/day01/day01.go)
+
+```
+./day01 -part a
+```
 
 ```
 ```
