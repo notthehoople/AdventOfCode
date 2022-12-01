@@ -6,36 +6,56 @@ import (
 	"strconv"
 )
 
+func rankCalories(firstElfCalories int, secondElfCalories int, thirdElfCalories int, calories int) (int, int, int) {
+	switch {
+	case calories > firstElfCalories:
+		thirdElfCalories = secondElfCalories
+		secondElfCalories = firstElfCalories
+		firstElfCalories = calories
+	case calories > secondElfCalories && calories < firstElfCalories:
+		thirdElfCalories = secondElfCalories
+		secondElfCalories = calories
+	case calories > thirdElfCalories && calories < secondElfCalories:
+		thirdElfCalories = calories
+	}
+	return firstElfCalories, secondElfCalories, thirdElfCalories
+}
+
 func elfMunchies(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
-	if part == 'a' {
-		var elf int = 1
-		var topElf int
-		var topElfCalories int
-		var calories int
-		for _, j := range puzzleInput {
+	var elf int = 1
+	//var topElf int
+	//var topElfCalories int
+	var firstElfCalories, secondElfCalories, thirdElfCalories int
+	var calories int
+	for i, j := range puzzleInput {
 
-			if j == "" {
-				fmt.Println("Blank Line found")
-				if calories > topElfCalories {
-					topElf = elf
-					topElfCalories = calories
-				}
-				calories = 0
-				elf++
-			} else {
-				foodCalories, _ := strconv.Atoi(j)
-				fmt.Printf("Elf: %d Carrying food: %d\n", elf, foodCalories)
-				calories += foodCalories
+		if j == "" {
+			fmt.Println("Blank Line found")
+
+			firstElfCalories, secondElfCalories, thirdElfCalories = rankCalories(firstElfCalories, secondElfCalories, thirdElfCalories, calories)
+
+			calories = 0
+			elf++
+		} else {
+			foodCalories, _ := strconv.Atoi(j)
+			fmt.Printf("Elf: %d Carrying food: %d\n", elf, foodCalories)
+			calories += foodCalories
+
+			if i == len(puzzleInput)-1 {
+				firstElfCalories, secondElfCalories, thirdElfCalories = rankCalories(firstElfCalories, secondElfCalories, thirdElfCalories, calories)
 			}
 		}
+	}
 
-		fmt.Printf("Top Elf: %d Carrying calories: %d\n", topElf, topElfCalories)
-
-		return topElfCalories
+	if part == 'a' {
+		return firstElfCalories
 	} else {
-		return 0
+		fmt.Printf("First place elf: %d\n", firstElfCalories)
+		fmt.Printf("Second place elf: %d\n", secondElfCalories)
+		fmt.Printf("Third place elf: %d\n", thirdElfCalories)
+		return firstElfCalories + secondElfCalories + thirdElfCalories
 	}
 }
 

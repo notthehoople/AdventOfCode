@@ -16,10 +16,13 @@ go build
 
 ### Day 1 - Calorie Counting
 
+Edge case fun with part b on the test input.
+
 + [Day 1](cmd/day01/day01.go)
 
 ```
 ./day01 -part a
+./day01 -part b
 ```
 
 ```
