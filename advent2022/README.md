@@ -25,10 +25,14 @@ Edge case fun with part b on the test input.
 ./day01 -part b
 ```
 
+### Day 2 - Rock Paper Scissors
+
++ [Day 2](cmd/day02/day02.go)
+
 ```
+./day01 -part a
 ```
 
-### Day 2 -
 ### Day 3 -
 ### Day 4 -
 ### Day 5 -
