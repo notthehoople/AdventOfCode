@@ -30,7 +30,8 @@ Edge case fun with part b on the test input.
 + [Day 2](cmd/day02/day02.go)
 
 ```
-./day01 -part a
+./day02 -part a [-file <filename>] [-debug]
+./day02 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 3 -
