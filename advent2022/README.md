@@ -34,7 +34,15 @@ Edge case fun with part b on the test input.
 ./day02 -part b [-file <filename>] [-debug]
 ```
 
-### Day 3 -
+### Day 3 - Rucksack Reorganization
+
++ [Day 3](cmd/day03/day03.go)
+
+```
+./day03 -part a [-file <filename>] [-debug]
+```
+
+
 ### Day 4 -
 ### Day 5 -
 ### Day 6 -
