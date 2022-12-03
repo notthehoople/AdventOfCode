@@ -40,8 +40,8 @@ Edge case fun with part b on the test input.
 
 ```
 ./day03 -part a [-file <filename>] [-debug]
+./day03 -part b [-file <filename>] [-debug]
 ```
-
 
 ### Day 4 -
 ### Day 5 -
