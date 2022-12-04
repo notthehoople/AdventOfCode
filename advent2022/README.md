@@ -43,7 +43,14 @@ Edge case fun with part b on the test input.
 ./day03 -part b [-file <filename>] [-debug]
 ```
 
-### Day 4 -
+### Day 4 - Camp Cleanup
+
++ [Day 4](cmd/day04/day04.go)
+
+```
+./day04 -part a [-file <filename>] [-debug]
+```
+
 ### Day 5 -
 ### Day 6 -
 ### Day 7 -
