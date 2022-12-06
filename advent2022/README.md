@@ -52,7 +52,14 @@ Edge case fun with part b on the test input.
 ./day04 -part b [-file <filename>] [-debug]
 ```
 
-### Day 5 -
+### Day 5 - Supply Stacks
+
++ [Day 5](cmd/day05/day05.go)
+
+```
+./day05 -part a [-file <filename>] [-debug]
+```
+
 ### Day 6 -
 ### Day 7 -
 ### Day 8 - 
