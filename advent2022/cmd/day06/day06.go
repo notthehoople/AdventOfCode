@@ -5,6 +5,38 @@ import (
 	"fmt"
 )
 
+// Check if the 14 characters passed through are a start of message (i.e. are all different)
+func isMessage(testBlock string) bool {
+
+	for i := 0; i < len(testBlock)-1; i++ {
+		for j := i + 1; j < len(testBlock); j++ {
+			if testBlock[i] == testBlock[j] {
+				return false
+			}
+		}
+	}
+	return true
+}
+
+// Part A: look for the start of message (14 chars all different)
+func findStartOfMessage(filename string, part byte, debug bool) int {
+
+	puzzleInput, _ := utils.ReadFile(filename)
+	communication := puzzleInput[0]
+
+	endOfString := len(communication)
+
+	for pos := 0; pos < endOfString-13; pos++ {
+		if isMessage(communication[pos : pos+14]) {
+			fmt.Println("Found at", communication[pos:pos+14])
+			return pos + 14
+		}
+
+	}
+
+	return 0
+}
+
 // Check if the 4 characters passed through are a start of packet marker (i.e. are all different)
 func isPacketMarker(testBlock string) bool {
 	if (testBlock[0] != testBlock[1]) && (testBlock[0] != testBlock[2]) && (testBlock[0] != testBlock[3]) {
@@ -44,7 +76,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Result is: %d\n", findStartOfPacket(filenamePtr, execPart, debug))
 	case 'b':
-		fmt.Println("Not implemented yet")
+		fmt.Printf("Result is: %d\n", findStartOfMessage(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
