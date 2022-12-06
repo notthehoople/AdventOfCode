@@ -62,6 +62,13 @@ Edge case fun with part b on the test input.
 ```
 
 ### Day 6 - Tuning Trouble
+
++ [Day 6](cmd/day06/day06.go)
+
+```
+./day06 -part a [-file <filename>] [-debug]
+```
+
 ### Day 7 -
 ### Day 8 - 
 ### Day 9 - 
