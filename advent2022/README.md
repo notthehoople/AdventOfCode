@@ -58,6 +58,7 @@ Edge case fun with part b on the test input.
 
 ```
 ./day05 -part a [-file <filename>] [-debug]
+./day05 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 6 -

@@ -42,12 +42,6 @@ func (s *Stack) PrintTopItem() (string, bool) {
 	}
 }
 
-func processInputData() {
-	// Look through the input for the column numbers
-	// Find position in the line for each column number
-	// Search through the previous lines for items in colPos-1 and colPos+1
-}
-
 // Part A:
 func cargoArrangement(filename string, part byte, debug bool) string {
 
@@ -112,10 +106,22 @@ func cargoArrangement(filename string, part byte, debug bool) string {
 		}
 
 		// Carry out the movement instructions
-		var item string
-		for move := numToMove; move > 0; move-- {
-			item, _ = stackSet[start].Pop()
-			stackSet[destination].Push(item)
+		if part == 'a' {
+			var item string
+			for move := numToMove; move > 0; move-- {
+				item, _ = stackSet[start].Pop()
+				stackSet[destination].Push(item)
+			}
+		} else {
+			// In part b we need to keep the order of items the same. So build a temporary list to hold the items
+			moveItems := make([]string, numToMove+1)
+			for move := numToMove; move > 0; move-- {
+				moveItems[move], _ = stackSet[start].Pop()
+			}
+			// Now add the items in the reverse that they came off the stack so we maintain the order
+			for move := 1; move < numToMove+1; move++ {
+				stackSet[destination].Push(moveItems[move])
+			}
 		}
 	}
 
@@ -139,7 +145,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Result is: %s\n", cargoArrangement(filenamePtr, execPart, debug))
 	case 'b':
-		fmt.Println("Not implemented yet")
+		fmt.Printf("Result is: %s\n", cargoArrangement(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
