@@ -70,7 +70,14 @@ Edge case fun with part b on the test input.
 ./day06 -part b [-file <filename>] [-debug]
 ```
 
-### Day 7 -
+### Day 7 - No Space Left On Device
+
++ [Day 7](cmd/day07/day07.go)
+
+```
+./day07 -part a [-file <filename>] [-debug]
+```
+
 ### Day 8 - 
 ### Day 9 - 
 ### Day 10 - 
