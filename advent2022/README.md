@@ -74,8 +74,11 @@ Edge case fun with part b on the test input.
 
 + [Day 7](cmd/day07/day07.go)
 
+Needs tidied up. Part b doesn't give the answer directly. You need to pick from a list and work out what's the lowest value.
+
 ```
 ./day07 -part a [-file <filename>] [-debug]
+./day07 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 8 - 

@@ -50,7 +50,9 @@ func buildDirectoryTree(input []string, debug bool) directory {
 			fmt.Sscanf(line, "$ %s %s\n", &command, &action)
 			switch command {
 			case "cd":
-				fmt.Printf("cd seen with %s\n", action)
+				if debug {
+					fmt.Printf("cd seen with %s\n", action)
+				}
 				if action == ".." {
 					currDirectory = currDirectory.parent
 				} else {
@@ -64,7 +66,9 @@ func buildDirectoryTree(input []string, debug bool) directory {
 				}
 
 			case "ls":
-				fmt.Println("ls seen")
+				if debug {
+					fmt.Println("ls seen")
+				}
 				// do we do anything here at all?
 			}
 		} else {
@@ -103,7 +107,7 @@ func increaseDirSize(currDirectory *directory, size int64) {
 	}
 }
 
-// Part A:
+// Part A: calculate directories less than maxDirSizePartA (100000)
 func calcSmallDirs(dir *directory) int64 {
 	var totalSize int64
 
@@ -119,7 +123,19 @@ func calcSmallDirs(dir *directory) int64 {
 	return totalSize
 }
 
-func amountToDelete(dir *directory) int64 {
+// Part B: What to delete to save enough space for the update?
+func amountToDelete(dir *directory, spaceToSave int64) int64 {
+
+	//	fmt.Println("Current space available:", spaceToSave)
+	//	fmt.Println("Space to save:", minDiskSpace-spaceToSave)
+
+	for _, subDir := range dir.dirs {
+		if subDir.size > spaceToSave {
+			fmt.Printf("Name: %s Size: %d\n", subDir.name, subDir.size)
+		}
+		amountToDelete(subDir, spaceToSave)
+	}
+
 	return 0
 }
 
@@ -129,12 +145,16 @@ func processFileSystem(filename string, part byte, debug bool) int64 {
 
 	directoryTree := buildDirectoryTree(puzzleInput, debug)
 
-	printDirectoryTree(directoryTree, debug)
+	if debug {
+		printDirectoryTree(directoryTree, debug)
+	}
 
 	if part == 'a' {
 		return calcSmallDirs(&directoryTree)
 	} else {
-		return amountToDelete(&directoryTree)
+		var spaceToSave int64 = minDiskSpace - (totalDiskSpace - directoryTree.size)
+
+		return amountToDelete(&directoryTree, spaceToSave)
 	}
 }
 
@@ -146,6 +166,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Result is: %d\n", processFileSystem(filenamePtr, execPart, debug))
 	case 'b':
+		fmt.Println("Choose the smallest from the following results:")
 		fmt.Printf("Result is: %d\n", processFileSystem(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
