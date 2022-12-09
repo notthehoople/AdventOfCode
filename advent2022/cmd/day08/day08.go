@@ -20,9 +20,8 @@ func printTreeArea(treeArea [][]int, debug bool) {
 //			i.e. the first digit is the Y axis
 
 func buildTreeArray(input []string, debug bool) [][]int {
-	var treeArea [][]int
 
-	treeArea = make([][]int, len(input))
+	treeArea := make([][]int, len(input))
 	for i := 0; i < len(input); i++ {
 		treeArea[i] = make([]int, len(input[0]))
 	}
@@ -146,7 +145,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Result is: %d\n", countVisibleTrees(filenamePtr, execPart, debug))
 	case 'b':
-		fmt.Println("Not implemented yet")
+		fmt.Printf("Result is: %d\n", findMaxScenicScore(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

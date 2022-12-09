@@ -87,6 +87,7 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 
 ```
 ./day08 -part a [-file <filename>] [-debug]
+./day08 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 9 - 
