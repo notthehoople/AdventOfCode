@@ -81,7 +81,14 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 ./day07 -part b [-file <filename>] [-debug]
 ```
 
-### Day 8 - 
+### Day 8 - Treetop Tree House
+
++ [Day 8](cmd/day08/day08.go)
+
+```
+./day08 -part a [-file <filename>] [-debug]
+```
+
 ### Day 9 - 
 ### Day 10 - 
 ### Day 11 - 
