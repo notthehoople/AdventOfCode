@@ -17,3 +17,6 @@
 # Binaries specific to advent of code
 advent20??/cmd/day??/day??
 advent20??/src/day??/day??
+
+# Input files, as AoC ask us not to commit the personal puzzle inputs
+**/input

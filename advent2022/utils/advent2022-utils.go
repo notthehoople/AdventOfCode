@@ -56,10 +56,19 @@ func ConvertInputToNumbers(stringList []string) []int {
 	return numberList
 }
 
-func Print2DArray(toPrint [][]byte) {
+func Print2DArrayByte(toPrint [][]byte) {
 	for y := 0; y < len(toPrint); y++ {
 		for x := 0; x < len(toPrint[0]); x++ {
 			fmt.Printf("%c", toPrint[y][x])
+		}
+		fmt.Printf("\n")
+	}
+}
+
+func Print2DArrayInt(toPrint [][]int) {
+	for y := 0; y < len(toPrint); y++ {
+		for x := 0; x < len(toPrint[y]); x++ {
+			fmt.Printf("%d", toPrint[y][x])
 		}
 		fmt.Printf("\n")
 	}

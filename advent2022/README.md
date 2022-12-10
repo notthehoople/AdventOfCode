@@ -91,7 +91,14 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 ```
 
 ### Day 9 - 
-### Day 10 - 
+### Day 10 - Cathode-Ray Tube
+
++ [Day 10](cmd/day10/day10.go)
+
+```
+./day10 -part a [-file <filename>] [-debug]
+```
+
 ### Day 11 - 
 ### Day 12 - 
 ### Day 13 - 
