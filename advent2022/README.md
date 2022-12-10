@@ -90,7 +90,14 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 ./day08 -part b [-file <filename>] [-debug]
 ```
 
-### Day 9 - 
+### Day 9 - Rope Bridge
+
++ [Day 9](cmd/day09/day09.go)
+
+```
+./day09 -part a [-file <filename>] [-debug]
+```
+
 ### Day 10 - Cathode-Ray Tube
 
 + [Day 10](cmd/day10/day10.go)
