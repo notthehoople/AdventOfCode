@@ -96,7 +96,7 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 + [Day 10](cmd/day10/day10.go)
 
 ```
-./day10 -part a [-file <filename>] [-debug]
+./day10 [-file <filename>] [-debug]
 ```
 
 ### Day 11 - 
