@@ -12,7 +12,7 @@ type Coords struct {
 	y int
 }
 
-func printCaves(caves map[Coords]byte) {
+func calcMaximums(caves map[Coords]byte) (int, int, int, int) {
 	var minX, minY int = 99999, 99999
 	var maxX, maxY int
 
@@ -30,6 +30,13 @@ func printCaves(caves map[Coords]byte) {
 			minY = tempCoords.y
 		}
 	}
+
+	return minX, maxX, minY, maxY
+}
+
+func printCaves(caves map[Coords]byte) {
+
+	minX, maxX, minY, maxY := calcMaximums(caves)
 
 	for y := minY; y <= maxY; y++ {
 		for x := minX; x <= maxX; x++ {
@@ -79,26 +86,21 @@ func buildCaveArray(puzzleInput []string, debug bool) map[Coords]byte {
 			if startPos.y == endPos.y {
 				if endPos.x > startPos.x {
 					for j := startPos.x; j <= endPos.x; j++ {
-						//fmt.Printf("endPosX > Adding x:%d y:%d Coords %v\n", j, startPos.y, Coords{x: j, y: startPos.y})
 						caves[Coords{x: j, y: startPos.y}] = '#'
 					}
 				} else {
-					//fmt.Printf("here endPos.x: %d startPos.x: %d\n", endPos.x, startPos.x)
 					for j := startPos.x; j >= endPos.x; j-- {
-						//fmt.Printf("endPosX < Adding x:%d y:%d Coords %v\n", j, startPos.y, Coords{x: j, y: startPos.y})
 						caves[Coords{x: j, y: startPos.y}] = '#'
 					}
 				}
 			} else {
 				if endPos.y > startPos.y {
 					for j := startPos.y; j <= endPos.y; j++ {
-						//fmt.Printf("endPosY > Adding x:%d y:%d Coords %v\n", startPos.x, j, Coords{x: startPos.x, y: j})
 
 						caves[Coords{x: startPos.x, y: j}] = '#'
 					}
 				} else {
 					for j := startPos.y; j >= endPos.y; j-- {
-						//fmt.Printf("endPosY < Adding x:%d y:%d Coords %v\n", j, startPos.y, Coords{x: startPos.x, y: j})
 
 						caves[Coords{x: startPos.x, y: j}] = '#'
 					}
@@ -112,18 +114,39 @@ func buildCaveArray(puzzleInput []string, debug bool) map[Coords]byte {
 
 func dropSingleSand(caves map[Coords]byte, startPoint Coords) (Coords, bool) {
 	var currentPos Coords
+
+	// We need the maximum Y of the walls so we know when we've gone off the end of the cave
+	_, _, _, maxY := calcMaximums(caves)
+
 	currentPos = startPoint
-	for {
+	for currentPos.y <= maxY {
 		if value, doesMapContainKey := caves[Coords{x: currentPos.x, y: currentPos.y + 1}]; doesMapContainKey {
-			fmt.Printf("Next cell contains: %c\n", value)
-			if value == '#' {
-				// Need the smarts at this point
-				return currentPos, false
+			if value == '#' || value == 'o' {
+
+				if valueLeft, doesMapContainKeyLeft := caves[Coords{x: currentPos.x - 1, y: currentPos.y + 1}]; doesMapContainKeyLeft {
+					if valueLeft == '#' || valueLeft == 'o' {
+						if valueRight, doesMapContainKeyRight := caves[Coords{x: currentPos.x + 1, y: currentPos.y + 1}]; doesMapContainKeyRight {
+							if valueRight == '#' || valueRight == 'o' {
+								return currentPos, false
+							} else {
+								currentPos = Coords{x: currentPos.x + 1, y: currentPos.y + 1}
+							}
+						} else {
+							// Doesn't exist in the map
+							currentPos = Coords{x: currentPos.x + 1, y: currentPos.y + 1}
+						}
+					} else {
+						// Exists in the map but isn't a # or o
+						currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
+					}
+				} else {
+					// Doesn't exist in the map
+					currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
+				}
 			}
 		} else {
-			fmt.Printf("Map doesn't contain anything\n")
+			currentPos = Coords{x: currentPos.x, y: currentPos.y + 1}
 		}
-		currentPos = Coords{x: currentPos.x, y: currentPos.y + 1}
 	}
 
 	return Coords{x: 0, y: 0}, true
@@ -135,19 +158,30 @@ func calcUnitsOfSand(filename string, part byte, debug bool) int {
 	puzzleInput, _ := utils.ReadFile(filename)
 
 	caves := buildCaveArray(puzzleInput, debug)
-	//fmt.Println("Cave Array:", caves)
-	printCaves(caves)
-
-	var sandCoords Coords
-	var finished bool
-	sandCoords, finished = dropSingleSand(caves, startPoint)
-	if !finished {
-		caves[sandCoords] = 'o'
+	if debug {
+		printCaves(caves)
 	}
 
-	printCaves(caves)
+	for {
+		var sandCoords Coords
+		var finished bool
+		sandCoords, finished = dropSingleSand(caves, startPoint)
+		if !finished {
+			caves[sandCoords] = 'o'
+		} else {
+			printCaves(caves)
+			break
+		}
+	}
 
-	return 0
+	var sandCount int
+	for _, value := range caves {
+		if value == 'o' {
+			sandCount++
+		}
+	}
+
+	return sandCount
 }
 
 // Main routine

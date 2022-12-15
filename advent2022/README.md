@@ -117,7 +117,14 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 
 ### Day 12 - 
 ### Day 13 - 
-### Day 14 - 
+### Day 14 - Regolith Reservoir
+
++ [Day 14](cmd/day14/day14.go)
+
+```
+./day14 -part a [-file <filename>] [-debug]
+```
+
 ### Day 15 - 
 ### Day 16 - 
 ### Day 17 - 
