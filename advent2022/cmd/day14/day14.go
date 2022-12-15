@@ -112,7 +112,50 @@ func buildCaveArray(puzzleInput []string, debug bool) map[Coords]byte {
 	return caves
 }
 
-func dropSingleSand(caves map[Coords]byte, startPoint Coords) (Coords, bool) {
+func dropSingleSandPartB(caves map[Coords]byte, startPoint Coords, maxY int) (Coords, bool) {
+	var currentPos Coords
+
+	currentPos = startPoint
+	for currentPos.y < maxY+1 {
+		if value, doesMapContainKey := caves[Coords{x: currentPos.x, y: currentPos.y + 1}]; doesMapContainKey {
+			if value == '#' || value == 'o' {
+
+				if valueLeft, doesMapContainKeyLeft := caves[Coords{x: currentPos.x - 1, y: currentPos.y + 1}]; doesMapContainKeyLeft {
+					if valueLeft == '#' || valueLeft == 'o' {
+						if valueRight, doesMapContainKeyRight := caves[Coords{x: currentPos.x + 1, y: currentPos.y + 1}]; doesMapContainKeyRight {
+							if valueRight == '#' || valueRight == 'o' {
+								return currentPos, false
+							} else {
+								currentPos = Coords{x: currentPos.x + 1, y: currentPos.y + 1}
+							}
+						} else {
+							// Doesn't exist in the map
+							currentPos = Coords{x: currentPos.x + 1, y: currentPos.y + 1}
+						}
+					} else {
+						// Exists in the map but isn't a # or o
+						fmt.Println("Got here???")
+						//currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
+					}
+				} else {
+					// Doesn't exist in the map
+					currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
+				}
+			} else if value == '+' {
+				return Coords{x: currentPos.x, y: currentPos.y + 1}, true
+			}
+		} else {
+			currentPos = Coords{x: currentPos.x, y: currentPos.y + 1}
+		}
+	}
+	if currentPos.y == maxY+1 {
+		return currentPos, false
+	}
+
+	return Coords{x: 0, y: 0}, true
+}
+
+func dropSingleSand(caves map[Coords]byte, startPoint Coords, part byte) (Coords, bool) {
 	var currentPos Coords
 
 	// We need the maximum Y of the walls so we know when we've gone off the end of the cave
@@ -137,12 +180,15 @@ func dropSingleSand(caves map[Coords]byte, startPoint Coords) (Coords, bool) {
 						}
 					} else {
 						// Exists in the map but isn't a # or o
-						currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
+						fmt.Println("Got here???")
+						//currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
 					}
 				} else {
 					// Doesn't exist in the map
 					currentPos = Coords{x: currentPos.x - 1, y: currentPos.y + 1}
 				}
+			} else if value == '+' {
+				return Coords{x: currentPos.x, y: currentPos.y + 1}, true
 			}
 		} else {
 			currentPos = Coords{x: currentPos.x, y: currentPos.y + 1}
@@ -154,6 +200,7 @@ func dropSingleSand(caves map[Coords]byte, startPoint Coords) (Coords, bool) {
 
 func calcUnitsOfSand(filename string, part byte, debug bool) int {
 	var startPoint Coords = Coords{x: 500, y: 0}
+	var maxY int
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
@@ -162,15 +209,41 @@ func calcUnitsOfSand(filename string, part byte, debug bool) int {
 		printCaves(caves)
 	}
 
+	if part == 'b' {
+		// We need the maximum Y of the walls so we know when we've gone off the end of the cave
+		_, _, _, maxY = calcMaximums(caves)
+	}
+
 	for {
 		var sandCoords Coords
 		var finished bool
-		sandCoords, finished = dropSingleSand(caves, startPoint)
-		if !finished {
-			caves[sandCoords] = 'o'
+
+		if part == 'a' {
+			sandCoords, finished = dropSingleSand(caves, startPoint, part)
+			if !finished {
+				caves[sandCoords] = 'o'
+			} else {
+				printCaves(caves)
+				break
+			}
 		} else {
-			printCaves(caves)
-			break
+			// part b
+			sandCoords, finished = dropSingleSandPartB(caves, startPoint, maxY)
+
+			if !finished {
+				if value, check := caves[sandCoords]; check {
+					if value == '+' {
+						fmt.Println("Finished")
+						caves[sandCoords] = 'o'
+						printCaves(caves)
+						break
+					}
+				}
+				caves[sandCoords] = 'o'
+			} else {
+				printCaves(caves)
+				break
+			}
 		}
 	}
 
@@ -192,7 +265,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Units of Sand: %d\n", calcUnitsOfSand(filenamePtr, execPart, debug))
 	case 'b':
-		fmt.Printf("Not implemented yet\n")
+		fmt.Printf("Units of Sand: %d\n", calcUnitsOfSand(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

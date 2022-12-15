@@ -121,8 +121,11 @@ Needs tidied up. Part b doesn't give the answer directly. You need to pick from 
 
 + [Day 14](cmd/day14/day14.go)
 
+Note for part B: it will print out the complete finished cave system which is fun to look at!
+
 ```
 ./day14 -part a [-file <filename>] [-debug]
+./day14 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 15 - 
