@@ -81,7 +81,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Monkey root shouts: %d\n", calcMonkeySpeach(filenamePtr, execPart, debug))
 	case 'b':
-		fmt.Printf("Not implemented yet\n")
+		fmt.Printf("humn needs to shout: %d\n", calcMonkeySpeachPartB(filenamePtr, execPart, debug))
 	case 'z':
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

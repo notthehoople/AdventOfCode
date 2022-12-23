@@ -84,3 +84,17 @@ func ManhattanDistance2D(xCoord1 int, yCoord1 int, xCoord2 int, yCoord2 int) int
 
 	return int(distance)
 }
+
+func AbsDiff(firstNum int, secondNum int) int {
+	if firstNum > secondNum {
+		return firstNum - secondNum
+	}
+	return secondNum - firstNum
+}
+
+func Abs(firstNum int) int {
+	if firstNum > 0 {
+		return firstNum
+	}
+	return -firstNum
+}

@@ -138,8 +138,11 @@ Note for part B: it will print out the complete finished cave system which is fu
 
 + [Day 21](cmd/day21/day21.go)
 
+Need to revisit Part B. I've got the answer so I'm carrying on with other puzzles, but this code is utter crap and needs manual help to get the answer. To make it work, change humnShouts in calcMonkeySpeachPartB(). Set it to 1 to start with, and set changeSteps to a big number (say 1000000000). When the code stops, take the "humn shouts" number output 3 STEPS ABOVE where it stops. Use this number to replace humnShouts in the code, reduce the size of changeSteps, then run again. Repeat until you get the result "humn needs to shout: <x>" and <x> is the result you want.
+
 ```
 ./day21 -part a [-file <filename>] [-debug]
+./day21 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 22 - 
