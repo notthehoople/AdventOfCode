@@ -134,7 +134,14 @@ Note for part B: it will print out the complete finished cave system which is fu
 ### Day 18 - 
 ### Day 19 - 
 ### Day 20 - 
-### Day 21 - 
+### Day 21 - Monkey Math
+
++ [Day 21](cmd/day21/day21.go)
+
+```
+./day21 -part a [-file <filename>] [-debug]
+```
+
 ### Day 22 - 
 ### Day 23 - 
 ### Day 24 - 
