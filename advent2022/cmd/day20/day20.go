@@ -34,6 +34,8 @@ func buildGroveRing(numbersList []int, debug bool) map[position]*ring.Ring {
 func calcGroveCoords(filename string, part byte, debug bool) int {
 	const decryptKey int = 811589153
 
+	zeroPos := position{}
+
 	puzzleInput, _ := utils.ReadFile(filename)
 	numbersList := make([]int, len(puzzleInput))
 	for i := 0; i < len(puzzleInput); i++ {
@@ -41,11 +43,15 @@ func calcGroveCoords(filename string, part byte, debug bool) int {
 		if part == 'b' {
 			numbersList[i] *= decryptKey
 		}
+		// We need the zero pos so we can calc the coords starting from 0. Grab it when we see it go passed
+		if numbersList[i] == 0 {
+			zeroPos.index = i
+			zeroPos.number = 0
+		}
 	}
 
 	// We need a map to point into the ring so we don't lose track of where things are as we're moving things around
 	groveCoords := buildGroveRing(numbersList, debug)
-	zeroPos := position{}
 
 	// Loop through the list of numbers, using them to look into the map to get the item to be moved
 	var loopCount int = 1
@@ -53,20 +59,29 @@ func calcGroveCoords(filename string, part byte, debug bool) int {
 		loopCount = 10
 	}
 
+	// Testing speedup code
+	listLength := len(numbersList) - 1
+	halfLength := listLength >> 1
+
 	for loop := 0; loop < loopCount; loop++ {
 		fmt.Println("Loop:", loop)
 
 		for index, number := range numbersList {
-			// We need the zero pos so we can calc the coords starting from 0. Grab it when we see it go passed
-			if number == 0 {
-				zeroPos.index = index
-				zeroPos.number = 0
-			}
-
 			// Grab the loop pointer for the position we're at in the list of numbers
 			ringPos := groveCoords[position{index: index, number: number}].Prev()
-
 			movingItem := ringPos.Unlink(1)
+
+			// With thanks to dhruvmanila, this optimisation from Python's deque.rotate method took my solution from several hours to under a second
+			if (number > halfLength) || (number < -halfLength) {
+				number %= listLength
+				switch {
+				case number > halfLength:
+					number -= listLength
+				case number < -halfLength:
+					number += listLength
+				}
+			}
+
 			ringPos.Move(number).Link(movingItem)
 		}
 	}

@@ -138,9 +138,11 @@ Note for part B: it will print out the complete finished cave system which is fu
 + [Day 20](cmd/day20/day20.go)
 
 First time using container/ring. Wish it had a few more features, might have to write something which has the extras I needed.
+Part b added optimisation from dhruvmanila. Changed my solution from taking several hours to under a second!
 
 ```
 ./day20 -part a [-file <filename>] [-debug]
+./day20 -part b [-file <filename>] [-debug]
 ```
 
 ### Day 21 - Monkey Math
