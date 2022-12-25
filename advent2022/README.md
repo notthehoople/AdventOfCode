@@ -3,6 +3,17 @@
 # advent2022
 Advent of Code 2022
 
+## Commentry from Reddit
+
+Post by u/paul_sb76: [2022] How would you rate the difficulty of this year's puzzles?
+
+~~Trivial: 1, 2, 4, 6~~
+Easy: ~~3, 5, 8, 10~~, 12, 18, ~~20, 25~~
+Medium: ~~7~~, 9, ~~11~~, 13, ~~14~~, 15, ~~21~~, 23, 24
+Hard: 16, 17, 19, 22
+
+I'll use this as the order to finish the rest of the puzzles over time.
+
 ## Instructions
 
 ### Compiling the code
@@ -159,4 +170,12 @@ Need to revisit Part B. I've got the answer so I'm carrying on with other puzzle
 ### Day 22 - 
 ### Day 23 - 
 ### Day 24 - 
-### Day 25 - 
+### Day 25 - Full of Hot Air
+
++ [Day 25](cmd/day25/day25.go)
+
+There's no part B for Day 25. "Just" need to complete all the other days and you're given the last star.
+
+```
+./day25 -part a [-file <filename>] [-debug]
+```
