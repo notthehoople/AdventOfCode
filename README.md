@@ -7,6 +7,7 @@ All coding in Go.
 ## Progress
 | Year  | Stars by 25th | Overall |
 | :---: | :-----------: | :-----: |
+| [Advent 2023](advent2023) | 0  | 0  |
 | [Advent 2022](advent2022) | 28 | 28 |
 | [Advent 2021](advent2021) | 20 | 20 |
 | [Advent 2020](advent2020) | 41 | 46 |
