@@ -16,4 +16,4 @@ All coding in Go.
 | [Advent 2017](advent2017) | 0  | 14 |
 | Advent 2016 | 0  | 0  |
 | Advent 2015 | 0  | 0  |
-| **Total** |   | 168/500 |
+| **Total** |   | 170/500 |
