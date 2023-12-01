@@ -21,7 +21,8 @@ Comment:
 + [Day 1](cmd/day01/day01.go)
 
 ```
-./day01 -part a
+./day01 -part a -file input
+./day01 -part b -file input
 ```
 
 ### Day 2 -
