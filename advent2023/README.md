@@ -14,7 +14,7 @@ go build
 
 ## Days of Advent
 
-### Day 1 -
+### Day 1 - Trebuchet?!
 
 Comment:
 
@@ -22,7 +22,6 @@ Comment:
 
 ```
 ./day01 -part a
-./day01 -part b
 ```
 
 ### Day 2 -
