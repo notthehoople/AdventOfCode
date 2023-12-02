@@ -25,7 +25,16 @@ Comment:
 ./day01 -part b -file input
 ```
 
-### Day 2 -
+### Day 2 - Cube Conundrum
+
+Comment: First use of regex. Easier than yesterday!
+
++ [Day 2](cmd/day02/day02.go)
+
+```
+./day02 -part a -file input
+```
+
 ### Day 3 -
 ### Day 4 -
 ### Day 5 -

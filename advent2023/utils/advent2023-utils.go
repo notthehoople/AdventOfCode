@@ -98,3 +98,11 @@ func Abs(firstNum int) int {
 	}
 	return -firstNum
 }
+
+// Returns the highest number out of the 2 params
+func Highest(firstNum int, secondNum int) int {
+	if firstNum > secondNum {
+		return firstNum
+	}
+	return secondNum
+}
