@@ -33,6 +33,7 @@ Comment: First use of regex. Easier than yesterday!
 
 ```
 ./day02 -part a -file input
+./day02 -part b -file input
 ```
 
 ### Day 3 -

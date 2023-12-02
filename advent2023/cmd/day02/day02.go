@@ -8,6 +8,36 @@ import (
 	"strings"
 )
 
+func cubePower(puzzleLine string) int {
+	// Find the highest red, highest green, highest blue and multiple together
+	// Return this - the cubePower
+
+	var remainingLine string
+	var highRed, highGreen, highBlue int
+
+	remainingLine = strings.Split(puzzleLine, ": ")[1]
+
+	for _, cubeSet := range strings.Split(remainingLine, "; ") {
+
+		reg := regexp.MustCompile(`(\d+) (\w+)`)
+		matched := reg.FindAllStringSubmatch(cubeSet, -1)
+
+		for _, match := range matched {
+			numCubes, _ := strconv.Atoi(match[1])
+			switch match[2] {
+			case "red":
+				highRed = utils.Highest(highRed, numCubes)
+			case "green":
+				highGreen = utils.Highest(highGreen, numCubes)
+			case "blue":
+				highBlue = utils.Highest(highBlue, numCubes)
+			}
+		}
+	}
+
+	return highRed * highGreen * highBlue
+}
+
 func validGame(puzzleLine string, maxRed int, maxGreen int, maxBlue int) int {
 	// Pull out the game number from the puzzleLine
 	// Split the line by ';'
@@ -54,17 +84,15 @@ func day02(filename string, part byte, maxRed int, maxGreen int, maxBlue int, de
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
-	if part == 'a' {
-		for _, puzzleLine := range puzzleInput {
+	for _, puzzleLine := range puzzleInput {
 
+		if part == 'a' {
 			result += validGame(puzzleLine, maxRed, maxGreen, maxBlue)
+		} else {
+			result += cubePower(puzzleLine)
 		}
-		return result
 	}
-
-	// Part b
-
-	return 0
+	return result
 }
 
 // Main routine
