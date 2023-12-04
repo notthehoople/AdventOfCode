@@ -36,7 +36,13 @@ Comment: First use of regex. Easier than yesterday!
 ./day02 -part b -file input
 ```
 
-### Day 3 -
+### Day 3 - Gear Ratios
+
++ [Day 3](cmd/day03/day03.go)
+
+```
+./day03 -part a -file input
+```
 
 ### Day 4 - Scratchcards
 

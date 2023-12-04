@@ -1,0 +1,47 @@
+7 . .
+. * .
+. . .
+
+. 7 .
+. * .
+. . .
+
+. . 7
+. * .
+. . .
+
+. . .
+7 * .
+. . .
+
+. . .
+. * 7
+. . .
+
+. . .
+. * .
+7 . .
+
+. . .
+. * .
+. 7 .
+
+. . .
+. * .
+. . 7
+
+Need to call the expandNumber routine TWICE when on the same line as the symbol - once to the LEFT and once to the RIGHT
+
+For LEFT: check y, x-1:
+- If number then it's a match. Build number out to the left until find another '.' then return number
+
+For RIGHT: check y, x+1.
+- If number then it's a match. Build number out to the right until find another '.' then return number
+
+For UP: check y-1, x:
+- If it's a '.' then call TWICE, once for y-1, x-1 and once for y-1, x+1; 
+- If it's a number then call ONCE for y-1, x
+
+For DOWN: check y+1, x:
+- If it's a '.' then call TWICE, once for y+1, x-1 and once for y+1, x+1; 
+- If it's a number then call ONCE for y+1, x
