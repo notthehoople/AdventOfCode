@@ -1,4 +1,4 @@
-[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/AdventofCode-go/advent2023?color=blueviolet)](https://golang.org/doc/go1.17) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/AdventofCode-go/advent2023)](https://goreportcard.com/report/github.com/notthehoople/AdventofCode-go/advent2023)
+[![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/notthehoople/AdventofCode-go/?color=blueviolet)](https://golang.org/doc/go1.17) [![Go Report Card](https://goreportcard.com/badge/github.com/notthehoople/AdventofCode-go/advent2023)](https://goreportcard.com/report/github.com/notthehoople/AdventofCode-go/advent2023)
 
 # advent2023
 Advent of Code 2023
@@ -37,7 +37,15 @@ Comment: First use of regex. Easier than yesterday!
 ```
 
 ### Day 3 -
-### Day 4 -
+
+### Day 4 - Scratchcards
+
++ [Day 4](cmd/day04/day04.go)
+
+```
+./day04 -part a -file input
+```
+
 ### Day 5 -
 ### Day 6 -
 ### Day 7 -
