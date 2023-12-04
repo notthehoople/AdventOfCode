@@ -44,6 +44,7 @@ Comment: First use of regex. Easier than yesterday!
 
 ```
 ./day04 -part a -file input
+./day04 -part b -file input
 ```
 
 ### Day 5 -
