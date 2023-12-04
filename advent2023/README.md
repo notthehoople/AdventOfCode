@@ -42,6 +42,7 @@ Comment: First use of regex. Easier than yesterday!
 
 ```
 ./day03 -part a -file input
+./day03 -part b -file input
 ```
 
 ### Day 4 - Scratchcards

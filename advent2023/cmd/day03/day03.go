@@ -19,6 +19,10 @@ func isSymbol(item byte) bool {
 	return false
 }
 
+func isGear(item byte) bool {
+	return item == 42
+}
+
 func expandNumber(engine [][]byte, y int, x int) int {
 	var number int
 
@@ -28,7 +32,6 @@ func expandNumber(engine [][]byte, y int, x int) int {
 				number = int(engine[y][x+2] - '0')
 				number += int(engine[y][x+1]-'0') * 10
 				number += int(engine[y][x]-'0') * 100
-				fmt.Println("Number is", number)
 
 				return number
 			} else {
@@ -36,13 +39,11 @@ func expandNumber(engine [][]byte, y int, x int) int {
 					number = int(engine[y][x+1] - '0')
 					number += int(engine[y][x]-'0') * 10
 					number += int(engine[y][x-1]-'0') * 100
-					fmt.Println("Number is", number)
 
 					return number
 				} else {
 					number = int(engine[y][x+1] - '0')
 					number += int(engine[y][x]-'0') * 10
-					fmt.Println("Number is", number)
 
 					return number
 				}
@@ -53,20 +54,17 @@ func expandNumber(engine [][]byte, y int, x int) int {
 					number = int(engine[y][x-2]-'0') * 100
 					number += int(engine[y][x-1]-'0') * 10
 					number += int(engine[y][x] - '0')
-					fmt.Println("Number is", number)
 
 					return number
 				} else {
 					number = int(engine[y][x-1]-'0') * 10
 					number += int(engine[y][x] - '0')
-					fmt.Println("Number is", number)
 
 					return number
 				}
 			}
 		}
 		number += int(engine[y][x] - '0')
-		fmt.Println("Number is", number)
 
 		return number
 	}
@@ -74,43 +72,105 @@ func expandNumber(engine [][]byte, y int, x int) int {
 	return number
 }
 
-func checkForNumber(item byte, engine [][]byte, y int, x int) int {
+func checkForNumber(item byte, engine [][]byte, y int, x int, part byte) int {
 
 	var number int
+	var result int
+	var foundNumbers []int
+	var count int // in part b, we only care about gears that have two numbers next to a '*'
 
 	// For UP: check y-1, x:
 	// - If it's a '.' then call TWICE, once for y-1, x-1 and once for y-1, x+1;
 	// - If it's a number then call ONCE for y-1, x
 	if isNumber(engine[y-1][x]) {
-		number += expandNumber(engine, y-1, x)
+		result = expandNumber(engine, y-1, x)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
 	} else {
-		number += expandNumber(engine, y-1, x-1)
-		number += expandNumber(engine, y-1, x+1)
+		result = 0
+		result = expandNumber(engine, y-1, x-1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
+
+		result = 0
+		result = expandNumber(engine, y-1, x+1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
+
 	}
 
 	// For LEFT: check y, x-1:
 	// - If number then it's a match. Build number out to the left until find another '.' then return number
 	if isNumber(engine[y][x-1]) {
-		number += expandNumber(engine, y, x-1)
+		result = 0
+		result = expandNumber(engine, y, x-1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
+
 	}
 
 	// For RIGHT: check y, x+1.
 	// - If number then it's a match. Build number out to the right until find another '.' then return number
 	if isNumber(engine[y][x+1]) {
-		number += expandNumber(engine, y, x+1)
+		result = 0
+		result = expandNumber(engine, y, x+1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
 	}
 
 	// For DOWN: check y+1, x:
 	// - If it's a '.' then call TWICE, once for y+1, x-1 and once for y+1, x+1;
 	// - If it's a number then call ONCE for y+1, x
 	if isNumber(engine[y+1][x]) {
-		number += expandNumber(engine, y+1, x)
+		result = 0
+		result = expandNumber(engine, y+1, x)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
 	} else {
-		number += expandNumber(engine, y+1, x-1)
-		number += expandNumber(engine, y+1, x+1)
+		result = 0
+		result = expandNumber(engine, y+1, x-1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
+
+		result = 0
+		result = expandNumber(engine, y+1, x+1)
+		if result > 0 {
+			number += result
+			foundNumbers = append(foundNumbers, result)
+			count++
+		}
 	}
 
-	return number
+	if part == 'a' {
+		return number
+	}
+
+	if count == 2 {
+		return foundNumbers[0] * foundNumbers[1]
+	}
+
+	return 0
 }
 
 // Any number adjacent to a symbol, even diagonally, is a "part number" and should be
@@ -165,13 +225,19 @@ func day03(filename string, part byte, debug bool) int {
 		for x := 0; x < len(engineLine); x++ {
 			item := engineLine[x]
 
-			if isSymbol(item) {
-				//fmt.Println("Found symbol:", item)
-				// Now check for number above, to the left, to the right and below
-				// If number found then add the number to the result
-				// Edge Case: how do we deal with numbers that are next to TWO or more symbols?
-				// NOTE: numbers appear at least twice in the input file so can't use a map
-				result += checkForNumber(item, padding, y, x)
+			if part == 'a' {
+				if isSymbol(item) {
+					//fmt.Println("Found symbol:", item)
+					// Now check for number above, to the left, to the right and below
+					// If number found then add the number to the result
+					// Edge Case: how do we deal with numbers that are next to TWO or more symbols?
+					// NOTE: numbers appear at least twice in the input file so can't use a map
+					result += checkForNumber(item, padding, y, x, part)
+				}
+			} else {
+				if isGear(item) {
+					result += checkForNumber(item, padding, y, x, part)
+				}
 			}
 		}
 	}
@@ -183,9 +249,12 @@ func day03(filename string, part byte, debug bool) int {
 func main() {
 	filenamePtr, execPart, debug := utils.CatchUserInput()
 
-	if execPart == 'z' {
-		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
-	} else {
+	switch execPart {
+	case 'a':
 		fmt.Printf("Result is: %d\n", day03(filenamePtr, execPart, debug))
+	case 'b':
+		fmt.Printf("Result is: %d\n", day03(filenamePtr, execPart, debug))
+	default:
+		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
 }
