@@ -58,8 +58,11 @@ Comment: First use of regex. Easier than yesterday!
 
 + [Day 5](cmd/day05/day05.go)
 
+Part b is Sloooooow but I decided I don't care :-)
+
 ```
 ./day05 -part a -file input
+./day05 -part b -file input
 ```
 
 ### Day 6 -

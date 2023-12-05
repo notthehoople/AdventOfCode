@@ -46,6 +46,8 @@ func day05(filename string, part byte, debug bool) int {
 
 	seeds := strings.Split(puzzleInput[0], ":")
 	seedNumbersStr := strings.Fields(strings.TrimSpace(seeds[1]))
+
+	//var seedNumbers []int
 	seedNumbers := make([]int, len(seedNumbersStr))
 	for key, value := range seedNumbersStr {
 		seedNumbers[key], _ = strconv.Atoi(value)
@@ -87,8 +89,8 @@ func day05(filename string, part byte, debug bool) int {
 
 	var result int = 999999999
 
+	// Now we've built the maps, lets work through each seed
 	if part == 'a' {
-		// Now we've built the maps, lets work through each seed
 		var destinationFromSource int
 		for _, seed := range seedNumbers {
 			if debug {
@@ -103,6 +105,29 @@ func day05(filename string, part byte, debug bool) int {
 			destinationFromSource = findDestination(humidityToLocation, destinationFromSource)
 			if debug {
 				fmt.Println("Location:", destinationFromSource)
+			}
+			fmt.Printf("seed: %d location: %d\n", seed, destinationFromSource)
+			if destinationFromSource < result {
+				result = destinationFromSource
+			}
+		}
+
+		return result
+	}
+
+	var destinationFromSource int
+	for i := 0; i < len(seedNumbers); i += 2 {
+		for seed := seedNumbers[i]; seed < (seedNumbers[i] + seedNumbers[i+1]); seed++ {
+
+			destinationFromSource = findDestination(seedToSoil, seed)
+			destinationFromSource = findDestination(soilToFertilizer, destinationFromSource)
+			destinationFromSource = findDestination(fertilizerToWater, destinationFromSource)
+			destinationFromSource = findDestination(waterToLight, destinationFromSource)
+			destinationFromSource = findDestination(lightToTemperature, destinationFromSource)
+			destinationFromSource = findDestination(temperatureToHumidity, destinationFromSource)
+			destinationFromSource = findDestination(humidityToLocation, destinationFromSource)
+			if debug {
+				fmt.Printf("seed: %d location: %d\n", seed, destinationFromSource)
 			}
 			if destinationFromSource < result {
 				result = destinationFromSource
@@ -121,7 +146,7 @@ func main() {
 	case 'a':
 		fmt.Printf("Result is: %d\n", day05(filenamePtr, execPart, debug))
 	case 'b':
-		//fmt.Printf("Result is: %d\n", day04b(filenamePtr, execPart, debug))
+		fmt.Printf("Result is: %d\n", day05(filenamePtr, execPart, debug))
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}
