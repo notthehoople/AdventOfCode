@@ -54,7 +54,14 @@ Comment: First use of regex. Easier than yesterday!
 ./day04 -part b -file input
 ```
 
-### Day 5 -
+### Day 5 - If You Give A Seed A Fertilizer
+
++ [Day 5](cmd/day05/day05.go)
+
+```
+./day05 -part a -file input
+```
+
 ### Day 6 -
 ### Day 7 -
 ### Day 8 -
