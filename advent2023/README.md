@@ -65,7 +65,14 @@ Part b is Sloooooow but I decided I don't care :-)
 ./day05 -part b -file input
 ```
 
-### Day 6 -
+### Day 6 - Wait For It
+
++ [Day 6](cmd/day06/day06.go)
+
+```
+./day06 -part a -file input
+```
+
 ### Day 7 -
 ### Day 8 -
 ### Day 9 -
