@@ -67,10 +67,13 @@ Part b is Sloooooow but I decided I don't care :-)
 
 ### Day 6 - Wait For It
 
+Expected to change to an equation to solve part 2 but my naive solution ran in under 0.1 sec so I didn't bother
+
 + [Day 6](cmd/day06/day06.go)
 
 ```
 ./day06 -part a -file input
+./day06 -part b -file input
 ```
 
 ### Day 7 -
