@@ -54,15 +54,33 @@ func day09(filename string, part byte, debug bool) int {
 		// We now have the built array of sequences. Now to predict the next in the sequence
 
 		var resultAdd, predictAdd int
-		for i := len(resultsArray) - 1; i >= 0; i-- {
-			if resultsArray[i] != nil {
-				if debug {
-					fmt.Println("Last digit:", resultsArray[i][len(resultsArray[i])-1])
-				}
+		if part == 'a' {
+			for i := len(resultsArray) - 1; i >= 0; i-- {
+				if resultsArray[i] != nil {
+					if debug {
+						fmt.Println("Last digit:", resultsArray[i][len(resultsArray[i])-1])
+					}
 
-				predictAdd = predictAdd + resultsArray[i][len(resultsArray[i])-1]
-				if i > 0 {
-					resultAdd = resultsArray[i-1][len(resultsArray[i-1])-1] + predictAdd
+					predictAdd = predictAdd + resultsArray[i][len(resultsArray[i])-1]
+					if i > 0 {
+						resultAdd = resultsArray[i-1][len(resultsArray[i-1])-1] + predictAdd
+					}
+				}
+			}
+		} else {
+			// Part b we predict earlier results instead of future results
+			var firstResult bool = true
+			for i := len(resultsArray) - 1; i >= 0; i-- {
+				if resultsArray[i] != nil {
+					if firstResult {
+						firstResult = false
+						predictAdd = resultsArray[i][0]
+					} else {
+						predictAdd = resultsArray[i][0] - predictAdd
+					}
+					if i > 0 {
+						resultAdd = resultsArray[i-1][0] - predictAdd
+					}
 				}
 			}
 		}

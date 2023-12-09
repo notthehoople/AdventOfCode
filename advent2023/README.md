@@ -90,10 +90,13 @@ LCM needed to speed up part 2
 
 ### Day 9 - Mirage Maintenance
 
+I don't understand how I made part 2 work, but it does so I'm done.
+
 + [Day 9](cmd/day09/day09.go)
 
 ```
 ./day09 -part a -file input
+./day09 -part b -file input
 ```
 
 ### Day 10 -
