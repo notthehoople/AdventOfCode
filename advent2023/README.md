@@ -79,10 +79,13 @@ Expected to change to an equation to solve part 2 but my naive solution ran in u
 ### Day 7 -
 ### Day 8 - Haunted Wasteland
 
+LCM needed to speed up part 2
+
 + [Day 8](cmd/day08/day08.go)
 
 ```
 ./day08 -part a -file input
+./day08 -part b -file input
 ```
 
 ### Day 9 -
