@@ -88,7 +88,14 @@ LCM needed to speed up part 2
 ./day08 -part b -file input
 ```
 
-### Day 9 -
+### Day 9 - Mirage Maintenance
+
++ [Day 9](cmd/day09/day09.go)
+
+```
+./day09 -part a -file input
+```
+
 ### Day 10 -
 ### Day 11 -
 ### Day 12 -
