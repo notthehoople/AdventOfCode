@@ -77,7 +77,14 @@ Expected to change to an equation to solve part 2 but my naive solution ran in u
 ```
 
 ### Day 7 -
-### Day 8 -
+### Day 8 - Haunted Wasteland
+
++ [Day 8](cmd/day08/day08.go)
+
+```
+./day08 -part a -file input
+```
+
 ### Day 9 -
 ### Day 10 -
 ### Day 11 -
