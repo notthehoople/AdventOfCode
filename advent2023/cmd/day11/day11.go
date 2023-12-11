@@ -3,7 +3,6 @@ package main
 import (
 	"AdventOfCode-go/advent2023/utils"
 	"fmt"
-	"slices"
 	"strings"
 )
 
@@ -22,23 +21,30 @@ func noGalaxiesHere(grid [][]byte, column int) bool {
 	return true
 }
 
-func extendColumnHere(column int, columnArray []int) bool {
-	for _, val := range columnArray {
-		if val == column {
-			return true
-		}
-	}
-	return false
-}
-
-func createGalaxies(skyGridExt [][]byte) []galaxy {
+func createGalaxies(skyGridExt [][]byte, rowsFound []int, columnsFound []int, increase int) []galaxy {
 	var galaxyCount int = 1
 	galaxyList := make([]galaxy, 0)
 
 	for y := 0; y < len(skyGridExt); y++ {
 		for x := 0; x < len(skyGridExt[y]); x++ {
 			if skyGridExt[y][x] == '#' {
-				galaxyList = append(galaxyList, galaxy{galaxyCount, x, y})
+				// here we calculate the affect of the expanding galaxy
+				// each time x is greater than the columnsFound entries, add increase to the x coord
+				// each time y is greater than the rowsFound entries, add increase to the y coord
+				var expansionX, expansionY int
+				for _, i := range columnsFound {
+					if x > i {
+						// We're replacing the empty column with our increase, so remove the empty column by subtracting 1
+						expansionX += increase - 1
+					}
+				}
+				for _, i := range rowsFound {
+					if y > i {
+						// We're replacing the empty row with our increase, so remove the empty row by subtracting 1
+						expansionY += increase - 1
+					}
+				}
+				galaxyList = append(galaxyList, galaxy{galaxyCount, x + expansionX, y + expansionY})
 				galaxyCount++
 			}
 		}
@@ -50,9 +56,11 @@ func createGalaxies(skyGridExt [][]byte) []galaxy {
 //
 //
 
-func day11(filename string, part byte, debug bool) int {
+func day11(filename string, part byte, debug bool, increase int) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
+
+	// Make a grid for the starting position to be built in
 
 	skyGrid := make([][]byte, len(puzzleInput))
 	for line, puzzleLine := range puzzleInput {
@@ -62,22 +70,20 @@ func day11(filename string, part byte, debug bool) int {
 		}
 	}
 
-	// Check for row being empty of Galaxies. Add an extra line if an empty line is found
-
 	if debug {
 		utils.Print2DArrayByte(skyGrid)
 	}
 
+	// Check for row being empty of Galaxies. If found, add to the list of empty rows for later use
+	var rowsFound []int
 	for i := 0; i < len(skyGrid); i++ {
 		if strings.Contains(string(skyGrid[i]), "#") {
 		} else {
-			skyGrid = slices.Insert(skyGrid, i, skyGrid[i])
-			i++
+			rowsFound = append(rowsFound, i)
 		}
 	}
 
-	// Check for a column being empty of Galaxies
-
+	// Check for a column being empty of Galaxies. If found, add to the list of empty columns for later use
 	var columnsFound []int
 	for i := 0; i < len(skyGrid[0]); i++ {
 		if noGalaxiesHere(skyGrid, i) {
@@ -85,26 +91,8 @@ func day11(filename string, part byte, debug bool) int {
 		}
 	}
 
-	// Extend the skyGrid with the new columns
-	skyGridExt := make([][]byte, len(skyGrid))
-	for line, skyGridLine := range skyGrid {
-		skyGridExt[line] = make([]byte, len(skyGrid[line])+len(columnsFound))
-		var pos int
-		for key, value := range skyGridLine {
-			if extendColumnHere(key, columnsFound) {
-				skyGridExt[line][pos] = '.'
-				skyGridExt[line][pos+1] = byte(value)
-				pos += 2
-			} else {
-				skyGridExt[line][pos] = byte(value)
-				pos++
-			}
-
-		}
-	}
-
 	// Find the galaxies and build a list with an identifier and coords
-	galaxyList := createGalaxies(skyGridExt)
+	galaxyList := createGalaxies(skyGrid, rowsFound, columnsFound, increase)
 
 	var sumLengths int
 	for _, i := range galaxyList {
@@ -116,14 +104,7 @@ func day11(filename string, part byte, debug bool) int {
 	}
 
 	if debug {
-		fmt.Println(columnsFound)
 		fmt.Println("skyGrid:", len(skyGrid), len(skyGrid[0]))
-		fmt.Println("skyGridExt:", len(skyGridExt), len(skyGridExt[0]))
-	}
-
-	if debug {
-		fmt.Println("====================================")
-		utils.Print2DArrayByte(skyGridExt)
 	}
 
 	return sumLengths / 2
@@ -135,9 +116,10 @@ func main() {
 
 	switch execPart {
 	case 'a':
-		fmt.Printf("Result is: %d\n", day11(filenamePtr, execPart, debug))
+		fmt.Printf("Result is: %d\n", day11(filenamePtr, execPart, debug, 2))
 	case 'b':
-		fmt.Printf("Result is: %d\n", day11(filenamePtr, execPart, debug))
+		fmt.Printf("Result is: %d\n", day11(filenamePtr, execPart, debug, 1000000))
+
 	default:
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	}

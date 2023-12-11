@@ -103,10 +103,13 @@ I don't understand how I made part 2 work, but it does so I'm done.
 
 ### Day 11 - Cosmic Expansion
 
+Had to rewrite once I saw part 2 and realised I didn't need to map out the expanded universe
+
 + [Day 11](cmd/day11/day11.go)
 
 ```
 ./day11 -part a -file input
+./day11 -part b -file input
 ```
 
 ### Day 12 -
