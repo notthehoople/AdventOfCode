@@ -100,7 +100,15 @@ I don't understand how I made part 2 work, but it does so I'm done.
 ```
 
 ### Day 10 -
-### Day 11 -
+
+### Day 11 - Cosmic Expansion
+
++ [Day 11](cmd/day11/day11.go)
+
+```
+./day11 -part a -file input
+```
+
 ### Day 12 -
 ### Day 13 -
 ### Day 14 -

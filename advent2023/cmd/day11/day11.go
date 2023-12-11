@@ -7,11 +7,50 @@ import (
 	"strings"
 )
 
+type galaxy struct {
+	num int // identifier of the galaxy
+	x   int // x co-ord of the galaxy
+	y   int // y co-ord of the galaxy
+}
+
+func noGalaxiesHere(grid [][]byte, column int) bool {
+	for y := 0; y < len(grid); y++ {
+		if grid[y][column] != '.' {
+			return false
+		}
+	}
+	return true
+}
+
+func extendColumnHere(column int, columnArray []int) bool {
+	for _, val := range columnArray {
+		if val == column {
+			return true
+		}
+	}
+	return false
+}
+
+func createGalaxies(skyGridExt [][]byte) []galaxy {
+	var galaxyCount int = 1
+	galaxyList := make([]galaxy, 0)
+
+	for y := 0; y < len(skyGridExt); y++ {
+		for x := 0; x < len(skyGridExt[y]); x++ {
+			if skyGridExt[y][x] == '#' {
+				galaxyList = append(galaxyList, galaxy{galaxyCount, x, y})
+				galaxyCount++
+			}
+		}
+	}
+
+	return galaxyList
+}
+
 //
 //
 
 func day11(filename string, part byte, debug bool) int {
-	var results int
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
@@ -23,20 +62,71 @@ func day11(filename string, part byte, debug bool) int {
 		}
 	}
 
-	// Check for row being empty of Galaxies
+	// Check for row being empty of Galaxies. Add an extra line if an empty line is found
 
-	utils.Print2DArrayByte(skyGrid)
+	if debug {
+		utils.Print2DArrayByte(skyGrid)
+	}
 
 	for i := 0; i < len(skyGrid); i++ {
 		if strings.Contains(string(skyGrid[i]), "#") {
-			fmt.Println("skyGrid[i]:", skyGrid[i], "contains a galaxy")
 		} else {
 			skyGrid = slices.Insert(skyGrid, i, skyGrid[i])
-			fmt.Println("skyGrid[i]:", skyGrid[i], "is empty")
+			i++
 		}
 	}
 
-	return results
+	// Check for a column being empty of Galaxies
+
+	var columnsFound []int
+	for i := 0; i < len(skyGrid[0]); i++ {
+		if noGalaxiesHere(skyGrid, i) {
+			columnsFound = append(columnsFound, i)
+		}
+	}
+
+	// Extend the skyGrid with the new columns
+	skyGridExt := make([][]byte, len(skyGrid))
+	for line, skyGridLine := range skyGrid {
+		skyGridExt[line] = make([]byte, len(skyGrid[line])+len(columnsFound))
+		var pos int
+		for key, value := range skyGridLine {
+			if extendColumnHere(key, columnsFound) {
+				skyGridExt[line][pos] = '.'
+				skyGridExt[line][pos+1] = byte(value)
+				pos += 2
+			} else {
+				skyGridExt[line][pos] = byte(value)
+				pos++
+			}
+
+		}
+	}
+
+	// Find the galaxies and build a list with an identifier and coords
+	galaxyList := createGalaxies(skyGridExt)
+
+	var sumLengths int
+	for _, i := range galaxyList {
+		for _, j := range galaxyList {
+			if i != j {
+				sumLengths += utils.ManhattanDistance2D(i.x, i.y, j.x, j.y)
+			}
+		}
+	}
+
+	if debug {
+		fmt.Println(columnsFound)
+		fmt.Println("skyGrid:", len(skyGrid), len(skyGrid[0]))
+		fmt.Println("skyGridExt:", len(skyGridExt), len(skyGridExt[0]))
+	}
+
+	if debug {
+		fmt.Println("====================================")
+		utils.Print2DArrayByte(skyGridExt)
+	}
+
+	return sumLengths / 2
 }
 
 // Main routine
