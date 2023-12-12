@@ -26,21 +26,9 @@ import (
 //
 // multiplied by hand's rank to get a hand's score. Add up the scores to get result
 
-type handStruct struct {
-	cards    string
-	bid      int
-	handtype string
-	five     bool
-	four     bool
-	three    bool
-	two      int
-	one      int
-	rank     int
-}
-
 // CardCompare. Returns TRUE if firstCard is stronger than secondCard
-func cardCompare(firstCard string, secondCard string) bool {
-	cardStrength := []byte{'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'}
+func cardCompareB(firstCard string, secondCard string) bool {
+	cardStrength := []byte{'A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J'}
 	for f := 0; f < len(firstCard); f++ {
 		for _, s := range cardStrength {
 			if byte(firstCard[f]) == s && byte(secondCard[f]) != s {
@@ -54,7 +42,7 @@ func cardCompare(firstCard string, secondCard string) bool {
 	return false
 }
 
-func rankCards(cardHands []handStruct, typeIndex map[string][]int) {
+func rankCardsB(cardHands []handStruct, typeIndex map[string][]int) {
 	//types := []string{"FIVE", "FOUR", "FULLHOUSE", "THREE", "TWOPAIR", "ONEPAIR", "HIGHCARD"}
 	var currRank int = 1
 
@@ -80,7 +68,7 @@ func rankCards(cardHands []handStruct, typeIndex map[string][]int) {
 					for sortPosOuter, locOuter := range locations {
 						for sortPosInner, locInner := range locations {
 							if sortPosOuter != sortPosInner {
-								if cardCompare(cardHands[locOuter].cards, cardHands[locInner].cards) {
+								if cardCompareB(cardHands[locOuter].cards, cardHands[locInner].cards) {
 									if cardHands[locOuter].rank < cardHands[locInner].rank {
 										tempRank := cardHands[locOuter].rank
 										cardHands[locOuter].rank = cardHands[locInner].rank
@@ -100,29 +88,7 @@ func rankCards(cardHands []handStruct, typeIndex map[string][]int) {
 	}
 }
 
-func getHandType(cardHand handStruct) string {
-	if cardHand.five {
-		return "FIVE"
-	}
-	if cardHand.four {
-		return "FOUR"
-	}
-	if cardHand.three && cardHand.two != 0 {
-		return "FULLHOUSE"
-	}
-	if cardHand.three && cardHand.one == 2 {
-		return "THREE"
-	}
-	if cardHand.two == 4 {
-		return "TWOPAIR"
-	}
-	if cardHand.two == 2 {
-		return "ONEPAIR"
-	}
-	return "HIGHCARD"
-}
-
-func day07(filename string, part byte, debug bool) int {
+func day07b(filename string, part byte, debug bool) int {
 	var result int
 
 	puzzleInput, _ := utils.ReadFile(filename)
@@ -137,8 +103,16 @@ func day07(filename string, part byte, debug bool) int {
 	}
 
 	for i := 0; i < len(cardHands); i++ {
+		joker := 0
 		for _, j := range cardHands[i].cards {
 			count := strings.Count(cardHands[i].cards, string(j))
+			// This is where part 2 comes in. We need to test out any Jokers here
+			// and change the card TYPE based on what works best.
+
+			if j == 'J' {
+				joker = count
+			}
+
 			if debug {
 				fmt.Printf("Hand: %s Count char: %c %d\n", cardHands[i].cards, j, count)
 			}
@@ -158,15 +132,69 @@ func day07(filename string, part byte, debug bool) int {
 				panic("Got an unexpected number of cards")
 			}
 		}
+
 		handType := getHandType(cardHands[i])
 		cardHands[i].handtype = handType
 
-		location, ok := typeIndex[handType]
+		if joker > 0 {
+			if debug {
+				fmt.Println("Found joker", joker, cardHands[i].cards, cardHands[i].handtype)
+			}
+
+			switch cardHands[i].handtype {
+			case "FOUR":
+				cardHands[i].handtype = "FIVE"
+			case "FULLHOUSE":
+				cardHands[i].handtype = "FIVE"
+			case "THREE":
+				switch joker {
+				case 1:
+					cardHands[i].handtype = "FOUR"
+				case 2:
+					cardHands[i].handtype = "FIVE"
+				case 3: // If jokers=3 and handtype == "THREE" then the jokers are the THREE so becomes a FOUR
+					cardHands[i].handtype = "FOUR"
+				default:
+					panic("wrong number of jokers in THREE")
+				}
+			case "TWOPAIR": // **** No!
+				switch joker {
+				case 1:
+					cardHands[i].handtype = "FULLHOUSE"
+				case 2:
+					cardHands[i].handtype = "FOUR"
+				default:
+					panic("Wrong count of jokers in TWOPAIR")
+				}
+			case "ONEPAIR":
+				switch joker {
+				case 1:
+					cardHands[i].handtype = "THREE"
+				case 2:
+					// Jokers == 2 and handtype == "ONEPAIR" means the jokers are the pair
+					cardHands[i].handtype = "THREE"
+				default:
+					panic("Wrong count of jokers in ONEPAIR")
+				}
+			case "HIGHCARD":
+				switch joker {
+				case 1:
+					cardHands[i].handtype = "ONEPAIR"
+				default:
+					panic("Wrong count of jokers in HIGHCARD")
+				}
+			}
+			if debug {
+				fmt.Println("After joker change", joker, cardHands[i].cards, cardHands[i].handtype)
+			}
+		}
+
+		location, ok := typeIndex[cardHands[i].handtype]
 		if ok {
 			location = append(location, i)
-			typeIndex[handType] = location
+			typeIndex[cardHands[i].handtype] = location
 		} else {
-			typeIndex[handType] = []int{i}
+			typeIndex[cardHands[i].handtype] = []int{i}
 		}
 
 		if debug {
@@ -175,7 +203,7 @@ func day07(filename string, part byte, debug bool) int {
 		}
 	}
 
-	rankCards(cardHands, typeIndex)
+	rankCardsB(cardHands, typeIndex)
 
 	// Now let's calculate the score of each hand and add them together
 	for i := range cardHands {
@@ -183,18 +211,4 @@ func day07(filename string, part byte, debug bool) int {
 	}
 
 	return result
-}
-
-// Main routine
-func main() {
-	filenamePtr, execPart, debug := utils.CatchUserInput()
-
-	switch execPart {
-	case 'a':
-		fmt.Printf("Result is: %d\n", day07(filenamePtr, execPart, debug))
-	case 'b':
-		fmt.Printf("Result is: %d\n", day07b(filenamePtr, execPart, debug))
-	default:
-		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
-	}
 }

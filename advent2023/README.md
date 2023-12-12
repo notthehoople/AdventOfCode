@@ -78,10 +78,13 @@ Expected to change to an equation to solve part 2 but my naive solution ran in u
 
 ### Day 7 - Camel Cards
 
+Long winded code. Could collapse part b into part a easily and reduce the amount of code but I'm behind on AoC so not going to do it.
+
 + [Day 7](cmd/day07/day07.go)
 
 ```
 ./day07 -part a -file input
+./day07 -part b -file input
 ```
 
 ### Day 8 - Haunted Wasteland
