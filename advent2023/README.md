@@ -76,7 +76,14 @@ Expected to change to an equation to solve part 2 but my naive solution ran in u
 ./day06 -part b -file input
 ```
 
-### Day 7 -
+### Day 7 - Camel Cards
+
++ [Day 7](cmd/day07/day07.go)
+
+```
+./day07 -part a -file input
+```
+
 ### Day 8 - Haunted Wasteland
 
 LCM needed to speed up part 2

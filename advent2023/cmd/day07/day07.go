@@ -38,21 +38,60 @@ type handStruct struct {
 	rank     int
 }
 
-func rankCards(cardHands []handStruct, typeIndex map[string][]int, numHands int) {
-	types := []string{"FIVE", "FOUR", "FULLHOUSE", "THREE", "TWOPAIR", "ONEPAIR", "HIGHCARD"}
+// CardCompare. Returns TRUE if firstCard is stronger than secondCard
+func cardCompare(firstCard string, secondCard string) bool {
+	cardStrength := []byte{'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'}
+	for f := 0; f < len(firstCard); f++ {
+		for _, s := range cardStrength {
+			if byte(firstCard[f]) == s && byte(secondCard[f]) != s {
+				return true
+			}
+			if byte(firstCard[f]) != s && byte(secondCard[f]) == s {
+				return false
+			}
+		}
+	}
+	return false
+}
+
+func rankCards(cardHands []handStruct, typeIndex map[string][]int) {
+	//types := []string{"FIVE", "FOUR", "FULLHOUSE", "THREE", "TWOPAIR", "ONEPAIR", "HIGHCARD"}
+	var currRank int = 1
+
+	types := []string{"HIGHCARD", "ONEPAIR", "TWOPAIR", "THREE", "FULLHOUSE", "FOUR", "FIVE"}
 
 	for _, i := range types {
-		fmt.Println(i, numHands)
 		locations, ok := typeIndex[i]
 		if ok {
 			if len(locations) == 1 {
-				fmt.Printf("only one hand of type %s\n", i)
-				cardHands[locations[0]].rank = numHands
-				numHands--
+				cardHands[locations[0]].rank = currRank
+				currRank++
 			} else {
 				for _, loc := range locations {
-					// Need to be able to sort the cards. Use a bubble sort rather than comp?
-					fmt.Println("Loc:", loc, i)
+					// Set the rank of each card. It will probably be wrong, but we'll sort and fix it
+					cardHands[loc].rank = currRank
+					currRank++
+				}
+
+				keepSorting := true
+				for keepSorting {
+					// Assume we stop looping
+					keepSorting = false
+					for sortPosOuter, locOuter := range locations {
+						for sortPosInner, locInner := range locations {
+							if sortPosOuter != sortPosInner {
+								if cardCompare(cardHands[locOuter].cards, cardHands[locInner].cards) {
+									if cardHands[locOuter].rank < cardHands[locInner].rank {
+										tempRank := cardHands[locOuter].rank
+										cardHands[locOuter].rank = cardHands[locInner].rank
+										cardHands[locInner].rank = tempRank
+										// We found something to change, so let's keep sorting
+										keepSorting = true
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		} else {
@@ -96,12 +135,13 @@ func day07(filename string, part byte, debug bool) int {
 		cardHands[i].cards = parts[0]
 		cardHands[i].bid, _ = strconv.Atoi(parts[1])
 	}
-	//fmt.Println(cardHands)
 
 	for i := 0; i < len(cardHands); i++ {
 		for _, j := range cardHands[i].cards {
 			count := strings.Count(cardHands[i].cards, string(j))
-			fmt.Printf("Hand: %s Count char: %c %d\n", cardHands[i].cards, j, count)
+			if debug {
+				fmt.Printf("Hand: %s Count char: %c %d\n", cardHands[i].cards, j, count)
+			}
 
 			switch count {
 			case 5:
@@ -129,12 +169,18 @@ func day07(filename string, part byte, debug bool) int {
 			typeIndex[handType] = []int{i}
 		}
 
-		fmt.Println(cardHands[i])
-		fmt.Println(typeIndex)
+		if debug {
+			fmt.Println(cardHands[i])
+			fmt.Println(typeIndex)
+		}
 	}
 
-	rankCards(cardHands, typeIndex, len(cardHands))
-	fmt.Println(cardHands)
+	rankCards(cardHands, typeIndex)
+
+	// Now let's calculate the score of each hand and add them together
+	for i := range cardHands {
+		result += (cardHands[i].rank * cardHands[i].bid)
+	}
 
 	return result
 }
