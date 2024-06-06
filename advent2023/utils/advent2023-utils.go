@@ -56,6 +56,12 @@ func ConvertInputToNumbers(stringList []string) []int {
 	return numberList
 }
 
+func PrintArrayString(toPrint []string) {
+	for y := 0; y < len(toPrint); y++ {
+		fmt.Printf("%s\n", toPrint[y])
+	}
+}
+
 func Print2DArrayByte(toPrint [][]byte) {
 	for y := 0; y < len(toPrint); y++ {
 		for x := 0; x < len(toPrint[0]); x++ {
