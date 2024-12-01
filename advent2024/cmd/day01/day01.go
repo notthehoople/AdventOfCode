@@ -6,8 +6,18 @@ import (
 	"slices"
 )
 
-// Part 1: 
+// countNumber used in part b to count the number of times an element appears in a list
+func countNumber(listToSearch []int, intToFind int) int {
+	var count int
+	for _, item := range listToSearch {
+		if item == intToFind {
+			count++
+		}
+	}
+	return count
+}
 
+// calcDistance used in part a to calc the distance between slice elements
 func calcDistance(firstList []int, secondList []int) int {
 	var result int
 
@@ -26,15 +36,23 @@ func day01(filename string, part byte, debug bool) int {
 	firstList := make([]int, inputLength)
 	secondList := make([]int, inputLength)
 
+	for i, puzzleLine := range puzzleInput {
+		fmt.Sscanf(puzzleLine, "%d   %d\n", &firstList[i], &secondList[i])
+	}
+
 	if part == 'a' {
-		for i, puzzleLine := range puzzleInput {
-			fmt.Sscanf(puzzleLine, "%d   %d\n", &firstList[i], &secondList[i])
-		}
+		// Part 1: Find the distances between the 2 lists.
 
 		slices.Sort(firstList)
 		slices.Sort(secondList)
 		
 		return calcDistance(firstList, secondList)
+	}
+
+	// Part B - find the similarity score between the two lists
+	for _, item := range firstList {
+		count := countNumber(secondList, item)
+		result += count * item
 	}
 
 	return result
