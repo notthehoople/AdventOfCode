@@ -14,7 +14,15 @@ go build
 
 ## Days of Advent
 
-### Day 1 -
+### Day 1 - Historian Hysteria
+
++ [Day 1](cmd/day01/day01.go)
+
+```
+./day01 -part a -file input
+./day01 -part b -file input
+```
+
 ### Day 2 -
 ### Day 3 -
 ### Day 4 - 
