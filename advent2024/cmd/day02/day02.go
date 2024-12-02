@@ -7,7 +7,34 @@ import (
 	"strings"
 )
 
-// countNumber used in part b to count the number of times an element appears in a list
+func isReportSafeWithTolerate(reportToCheck []int) bool {
+	// Check using isReportSafe
+	// Check if removing a digit makes it safe
+
+	if isReportSafe(reportToCheck) {
+		return true
+	}
+
+	// Ok, so the report isn't safe. Let's remove a digit at a time and re-test
+	for i:=0; i < len(reportToCheck); i++ {
+
+		slicePos := 0
+		tolerateSlice := make([]int, len(reportToCheck)-1)
+		for j:=0; j < len(reportToCheck); j++ {
+			if j != i {
+				tolerateSlice[slicePos] = reportToCheck[j]
+				slicePos++
+			}
+		}
+
+		if isReportSafe(tolerateSlice) {
+			return true
+		}
+
+	}
+	return false
+}
+
 func isReportSafe(reportToCheck []int) bool {
 	var ascending string = "unset"
 
@@ -44,25 +71,25 @@ func day02(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
-	if part == 'a' {
-		// Part 1: Find the distances between the 2 lists.
+	for _, puzzleLine := range puzzleInput {
+		puzzleItems := strings.Split(puzzleLine, " ")
 
-		for _, puzzleLine := range puzzleInput {
-			puzzleItems := strings.Split(puzzleLine, " ")
+		var reportVals []int
+		for _, value := range puzzleItems {
+			singleVal, _ := strconv.Atoi(value)
+			reportVals = append(reportVals, singleVal)
+		}
 
-			var reportVals []int
-			for _, value := range puzzleItems {
-				singleVal, _ := strconv.Atoi(value)
-				reportVals = append(reportVals, singleVal)
-			}
-
+		if part == 'a' {
 			if isReportSafe(reportVals) {
 				result++
 			}
+		} else {
+			// part b
+			if isReportSafeWithTolerate(reportVals) {
+				result++
+			}
 		}
-
-		//return calcDistance(firstList, secondList)
-		return result
 	}
 
 	return result
