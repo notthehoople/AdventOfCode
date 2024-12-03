@@ -20,8 +20,11 @@ advent20??/src/day??/day??
 
 # Input files, as AoC ask us not to commit the personal puzzle inputs
 **/input
+**/input.txt
 **/test-input
 **/test-input?
+**/test-input.txt
+**/test-input?.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
