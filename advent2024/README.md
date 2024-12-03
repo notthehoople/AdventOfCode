@@ -25,14 +25,22 @@ go build
 
 ### Day 2 - Red-Nosed Reports
 
-+ [Day 2](cmd/day01/day02.go)
++ [Day 2](cmd/day02/day02.go)
 
 ```
-./day01 -part a -file input
-./day01 -part b -file input
+./day02 -part a -file input
+./day02 -part b -file input
 ```
 
-### Day 3 -
+### Day 3 - Mull It Over
+
++ [Day 3](cmd/day03/day03.go)
+
+```
+./day03 -part a -file input
+./day03 -part b -file input
+```
+
 ### Day 4 - 
 ### Day 5 - 
 ### Day 6 -
