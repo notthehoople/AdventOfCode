@@ -11,21 +11,52 @@ func day03(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
-	for _, puzzleLine := range puzzleInput {
-
-		reg := regexp.MustCompile(`mul\(\d+,\d+\)`)
-		regMatched := reg.FindAllStringSubmatch(puzzleLine, -1)
-		//fmt.Println(regMatched, len(regMatched))
+	if part == 'a' {
+		for _, puzzleLine := range puzzleInput {
+			reg := regexp.MustCompile(`mul\(\d+,\d+\)`)
+			regMatched := reg.FindAllStringSubmatch(puzzleLine, -1)
 		
-		for _, item := range regMatched {
-			var firstNum, secondNum int
-
-			fmt.Sscanf(item[0], "mul(%d,%d)", &firstNum, &secondNum)
-			//fmt.Println(item[0], firstNum, secondNum)
-
-			result += firstNum * secondNum
+			for _, item := range regMatched {
+				var firstNum, secondNum int
+				fmt.Sscanf(item[0], "mul(%d,%d)", &firstNum, &secondNum)
+				result += firstNum * secondNum
+			}
 		}
-	}	
+		return result
+	}
+
+	// Part 2: we need to take notice of the do() and don't() commands in the instruction list
+	var useStatement bool = true
+
+	for _, puzzleLine := range puzzleInput {
+		reg := regexp.MustCompile(`mul\(\d+,\d+\)|do\(\)|don't\(\)`)
+		regMatched := reg.FindAllStringSubmatch(puzzleLine, -1)
+	
+		if debug {
+			fmt.Println(regMatched)
+		}
+		for _, item := range regMatched {
+
+			if debug {
+				fmt.Println(item)
+			}
+
+			switch item[0] {
+			case "do()":
+				useStatement = true
+			case "don't()":
+				useStatement = false
+			default:
+				if useStatement {
+					var firstNum, secondNum int
+					fmt.Sscanf(item[0], "mul(%d,%d)", &firstNum, &secondNum)
+					result += firstNum * secondNum
+				}
+			}
+			
+		}
+	}
+
 	return result
 }
 
