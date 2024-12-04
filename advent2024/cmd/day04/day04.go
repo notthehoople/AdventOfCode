@@ -5,6 +5,45 @@ import (
 	"fmt"
 )
 
+// checkForXmas - part b. Checking for a cross of MAS or SAM
+func checkForXmas(puzzleInput []string, x int, y int, mas string, sam string, maxX int, maxY int) int {
+	// Ditch the easy situations for speed
+	// If the top left of the X doesn't match either an "M" or "S" then exit
+	if puzzleInput[y][x] != mas[0] && puzzleInput[y][x] != sam[0] {
+		return 0
+	}
+
+	// We're looking to the left and down ONLY. Check our boundaries and return if we're too close to the edges
+	if x+2 >= maxX || y+2 >= maxY {
+		return 0
+	}
+
+	// If the middle square isn't an 'A' then it can't be an X-MAS
+	if puzzleInput[y+1][x+1] != 'A' {
+		return 0
+	}
+
+	// Now check for MAS going down to the left and SAM going down to the left
+	gotMAS := checkForString(puzzleInput, x, y, 1, 1, mas, maxX, maxY)
+	gotSAM := checkForString(puzzleInput, x, y, 1, 1, sam, maxX, maxY)
+	// Now check for MAS going down to the right and SAM going down to the right
+	gotbackMAS := checkForString(puzzleInput, x+2, y, -1, 1, mas, maxX, maxY)
+	gotbackSAM := checkForString(puzzleInput, x+2, y, -1, 1, sam, maxX, maxY)
+
+	// If we got a MAS doing down to the left and EITHER a MAS or a SAM going down to the right, we have an X
+	if gotMAS == 1 && (gotbackMAS == 1 || gotbackSAM == 1) {
+		return 1
+	}
+	// If we got a SAM doing down to the left and EITHER a MAS or a SAM going down to the right, we have an X
+	if gotSAM == 1 && (gotbackMAS == 1 || gotbackSAM == 1) {
+		return 1
+	}
+
+	// We got nothing :-(
+	return 0
+}
+
+// part a. Checking for the searchString in whatever direction we're asked to. Also referenced in part b
 func checkForString(puzzleInput []string, x int, y int, chgX int, chgY int, searchString string, maxX int, maxY int) int {
 
 	if puzzleInput[y][x] != searchString[0] {
@@ -34,11 +73,12 @@ func day04(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
+	maxX := len(puzzleInput[0])
+	maxY := len(puzzleInput)
+
 	if part == 'a' {
 		xmas := "XMAS"
 		samx := "SAMX"
-		maxX := len(puzzleInput[0])
-		maxY := len(puzzleInput)
 
 		for y := 0; y < len(puzzleInput); y++ {
 			for x := 0; x < len(puzzleInput[y]); x++ {
@@ -67,7 +107,19 @@ func day04(filename string, part byte, debug bool) int {
 
 		return result
 	}
-	return 0
+
+	mas := "MAS"
+	sam := "SAM"
+
+	for y := 0; y < len(puzzleInput); y++ {
+		for x := 0; x < len(puzzleInput[y]); x++ {
+
+			// Starting from top left of the X we look 3 down to the right. If we don't see an 'A' in the middle we quit
+			result += checkForXmas(puzzleInput, x, y, mas, sam, maxX, maxY)
+		}
+	}
+
+	return result
 }
 
 // Main routine
