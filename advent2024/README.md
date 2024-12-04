@@ -41,7 +41,15 @@ go build
 ./day03 -part b -file input
 ```
 
-### Day 4 - 
+### Day 4 - Ceres Search
+
++ [Day 4](cmd/day04/day04.go)
+
+```
+./day04 -part a -file input
+./day04 -part b -file input
+```
+
 ### Day 5 - 
 ### Day 6 -
 ### Day 7 -
