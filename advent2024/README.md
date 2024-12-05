@@ -50,7 +50,14 @@ go build
 ./day04 -part b -file input
 ```
 
-### Day 5 - 
+### Day 5 - Print Queue
+
++ [Day 5](cmd/day05/day05.go)
+
+```
+./day05 -part a -file input
+```
+
 ### Day 6 -
 ### Day 7 -
 ### Day 8 - 
