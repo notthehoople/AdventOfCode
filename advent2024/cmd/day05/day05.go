@@ -7,6 +7,37 @@ import (
 	"strings"
 )
 
+// correctPageOrder
+func correctPageOrder(pages string, orderRules [100][100]bool) int {
+	// Convert all the pages from string to int and store in pageNums
+	// For each digit in the pageNums list, check that it is in the correct order based on the orderRules
+	// if numbers are in the wrong order, swap the digits and start again
+
+	pageSet := strings.Split(pages, ",")
+	pageNums := make([]int, len(pageSet))
+	for key, pageStr := range pageSet {
+		page, _ := strconv.Atoi(pageStr)
+		pageNums[key] = page
+	}
+
+	// There must be a better way of doing this, but it's late and I can't think of it. So....messing with loop variable values
+	i := 1
+	for i < len(pageNums) {
+		for j := 0; j < i; j++ {
+			if !orderRules[pageNums[j]][pageNums[i]] {
+				pageNums[j], pageNums[i] = pageNums[i], pageNums[j]
+				j = i
+				i = 1
+				continue
+			}
+		}
+		i++
+	}
+
+	//fmt.Println("Middle number:", len(pageNums)/2)
+	return pageNums[len(pageNums)/2]
+}
+
 // validatePageOrder
 func validatePageOrder(pages string, orderRules [100][100]bool) int {
 	// Convert all the pages from string to int and store in pageNums
@@ -61,8 +92,21 @@ func day05(filename string, part byte, debug bool) int {
 		}
 	}
 
+	if part == 'a' {
+		for _, pages := range printPages {
+			result += validatePageOrder(pages, orderRules)
+		}
+
+		return result
+	}
+
+	// part b. Strangely easier than part a
+
 	for _, pages := range printPages {
-		result += validatePageOrder(pages, orderRules)
+		// We only care about the pages that are INVALID. Check for INVALID page sets, then correct them when found
+		if validatePageOrder(pages, orderRules) == 0 {
+			result += correctPageOrder(pages, orderRules)
+		}
 	}
 
 	return result
