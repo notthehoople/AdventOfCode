@@ -78,7 +78,15 @@ go build
 ```
 
 ### Day 8 - 
-### Day 9 -
+### Day 9 - Disk Fragmenter
+
++ [Day 9](cmd/day09/day09.go)
+
+```
+./day09 -part a -file input
+
+```
+
 ### Day 10 -
 ### Day 11 -
 ### Day 12 -
