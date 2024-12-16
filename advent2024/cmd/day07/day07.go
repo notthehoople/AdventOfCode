@@ -23,15 +23,26 @@ func buildSlice(inputString string) []int {
 	return numSlice
 }
 
-func calcSumRecurse(workingResults []int, number int) []int {
+func joinNumbers(sumNum int, number int) int {
+	wholeString := strconv.Itoa(sumNum) + strconv.Itoa(number)
+
+	wholeNumber, _ := strconv.Atoi(wholeString)
+	return wholeNumber
+}
+
+func calcSumDetail(workingResults []int, number int, part byte) []int {
 
 	for item, sumNum := range workingResults {
 		if item < len(workingResults) {
 			workingResults[item] = sumNum + number
 		}
-		thing := sumNum * number
-		workingResults = append(workingResults, thing)
+		workingResults = append(workingResults, sumNum*number)
 
+		// For part b we have a new operator. || which joins the number to the left with the number to the right e.g. 12 || 34 becomes 1234
+		if part == 'b' {
+			joinedNumber := joinNumbers(sumNum, number)
+			workingResults = append(workingResults, joinedNumber)
+		}
 	}
 
 	if Debug {
@@ -41,7 +52,7 @@ func calcSumRecurse(workingResults []int, number int) []int {
 	return workingResults
 }
 
-func calcSum(numbers []int, resultLookingFor int) int {
+func calcSum(numbers []int, resultLookingFor int, part byte) int {
 
 	workingResults := make([]int, 0)
 
@@ -60,7 +71,7 @@ func calcSum(numbers []int, resultLookingFor int) int {
 				fmt.Println("workingResults at this point is:", workingResults)
 			}
 
-			workingResults = calcSumRecurse(workingResults, number)
+			workingResults = calcSumDetail(workingResults, number, part)
 		}
 	}
 
@@ -94,7 +105,7 @@ func day07(filename string, part byte) int {
 		//numOperands := len(numbers) - 1
 		//fmt.Println("numOperands", numOperands, "numbers:", numbers)
 
-		result += calcSum(numbers, resultNum)
+		result += calcSum(numbers, resultNum, part)
 	}
 
 	return result
