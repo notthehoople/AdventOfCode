@@ -67,7 +67,14 @@ go build
 ./day06 -part a -file input
 ```
 
-### Day 7 -
+### Day 7 - Bridge Repair
+
++ [Day 7](cmd/day07/day07.go)
+
+```
+./day07 -part a -file input
+```
+
 ### Day 8 - 
 ### Day 9 -
 ### Day 10 -
