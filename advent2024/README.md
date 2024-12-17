@@ -84,7 +84,7 @@ go build
 
 ```
 ./day09 -part a -file input
-
+./day09 -part b -file input
 ```
 
 ### Day 10 -
