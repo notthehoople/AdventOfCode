@@ -94,7 +94,14 @@ go build
 ### Day 14 -
 ### Day 15 -
 ### Day 16 -
-### Day 17 -
+### Day 17 - Chronospatial Computer
+
++ [Day 17](cmd/day17/day17.go)
+
+```
+./day17 -part a -file input
+```
+
 ### Day 18 -
 ### Day 19 -
 ### Day 20 -
