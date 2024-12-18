@@ -96,10 +96,13 @@ go build
 ### Day 16 -
 ### Day 17 - Chronospatial Computer
 
+This one was nasty. My code won't work for other inputs - I manually worked out where the repetition happened using a spreadsheet (it was at the first 7 digits of the program) so I used that as the basis of my calculation. It gets the right answer in a few seconds, but isn't a good bit of code.
+
 + [Day 17](cmd/day17/day17.go)
 
 ```
 ./day17 -part a -file input
+./day17 -part b -file input
 ```
 
 ### Day 18 -

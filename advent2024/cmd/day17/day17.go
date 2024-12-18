@@ -9,6 +9,91 @@ import (
 
 var Debug bool
 
+func solvePartB(program []int, startRegB int, startRegC int) int {
+
+	for startRegA := 3867547; ; startRegA += 4194304 {
+		regA := startRegA
+		regB := startRegB
+		regC := startRegC
+
+		if startRegA%1000000000 == 0 {
+			fmt.Printf("Top level start regA: %d regB: %d regC: %d\n", regA, regB, regC)
+		}
+
+		generatedProg := make([]int, 0)
+
+		instPtr := 0 // Instruction Pointer - where are we in the program?
+		var instruction, operand int
+
+		//fmt.Println("Program:", program)
+
+		for instPtr < len(program) {
+			// Need to bound these reads and make sure we're not at the end of the program
+
+			instruction = program[instPtr]
+			operand = program[instPtr+1]
+			instPtr += 2
+
+			switch instruction {
+			case 0: // adv - division. Numberator is value in regA; denominator is 2^combo operand
+				//fmt.Println("adv")
+				combo := getCombo(operand, regA, regB, regC)
+				regA = regA >> combo
+
+			case 1: // bxl - bitwise XOR of register B and the instructions literal operand. Stores in regB
+				//fmt.Println("bxl")
+				regB = regB ^ operand
+
+			case 2: // bst - calc value of its combo operand modulo 8. Writes value to regB
+				//fmt.Println("bst")
+				combo := getCombo(operand, regA, regB, regC)
+				regB = combo % 8
+
+			case 3: // jnz - does nothing if the A register is 0
+				//fmt.Println("jnz")
+				if regA != 0 {
+					instPtr = operand
+				}
+
+			case 4: // bxc
+				//fmt.Println("bxc")
+				regB = regB ^ regC
+
+			case 5: // out
+				//fmt.Println("out")
+				combo := getCombo(operand, regA, regB, regC) % 8
+				generatedProg = append(generatedProg, combo)
+				//fmt.Println(program)
+				if program[len(generatedProg)-1] != combo {
+					instPtr = len(program)
+					continue
+				} else if len(generatedProg) == len(program) {
+					// We have a winner!
+					return startRegA
+				} else if program[len(generatedProg)-1] == generatedProg[len(generatedProg)-1] {
+					//fmt.Printf("startRegA: %d program: %d generatedProg: %d\n", startRegA, program[len(generatedProg)-1], combo)
+					//fmt.Println(generatedProg)
+				}
+
+			case 6: // bdv
+				//fmt.Println("bdv")
+				combo := getCombo(operand, regA, regB, regC)
+				regB = regA >> combo
+
+			case 7: // cdv
+				//fmt.Println("cdv")
+				combo := getCombo(operand, regA, regB, regC)
+				regC = regA >> combo
+			}
+		}
+
+	}
+
+	//fmt.Printf("\nregA: %d regB: %d regC: %d\n", regA, regB, regC)
+
+	return 0
+}
+
 func getCombo(operand int, regA int, regB int, regC int) int {
 	switch operand {
 	case 4:
@@ -23,6 +108,8 @@ func getCombo(operand int, regA int, regB int, regC int) int {
 }
 
 func day17(filename string, part byte) int {
+	var result int
+
 	//Puzzle Input:
 	//- line 1: Register A: <num>
 	//- line 2: Register B: 0
@@ -48,6 +135,11 @@ func day17(filename string, part byte) int {
 
 	if Debug {
 		fmt.Printf("regA: %d regB: %d regC: %d\n", regA, regB, regC)
+	}
+
+	if part == 'b' {
+		result = solvePartB(program, regB, regC)
+		return result
 	}
 
 	instPtr := 0 // Instruction Pointer - where are we in the program?
@@ -106,7 +198,7 @@ func day17(filename string, part byte) int {
 
 	fmt.Printf("\nregA: %d regB: %d regC: %d\n", regA, regB, regC)
 
-	return 0
+	return result
 }
 
 // Main routine
