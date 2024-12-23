@@ -87,7 +87,14 @@ go build
 ./day09 -part b -file input
 ```
 
-### Day 10 -
+### Day 10 - Hoof It
+
++ [Day 10](cmd/day10/day10.go)
+
+```
+./day10 -part a -file input
+```
+
 ### Day 11 -
 ### Day 12 -
 ### Day 13 -

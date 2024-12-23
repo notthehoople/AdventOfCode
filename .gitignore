@@ -25,6 +25,7 @@ advent20??/src/day??/day??
 **/test-input?
 **/test-input.txt
 **/test-input?.txt
+**/test?-input.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
