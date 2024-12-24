@@ -118,6 +118,13 @@ This one was nasty. My code won't work for other inputs - I manually worked out 
 ### Day 20 -
 ### Day 21 -
 ### Day 22 - 
-### Day 23 - 
+### Day 23 - LAN Party
+
++ [Day 23](cmd/day23/day23.go)
+
+```
+./day23 -part a -file input
+```
+
 ### Day 24 - 
 ### Day 25 -
