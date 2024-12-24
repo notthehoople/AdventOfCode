@@ -79,7 +79,6 @@ func day10(filename string, part byte) int {
 		landscape[key] = make([]int, len(puzzleLine))
 
 		for lineKey, lineItem := range puzzleLine {
-			//fmt.Printf("key: %d item: %d\n", lineKey, lineItem-'0')
 			landscape[key][lineKey] = int(lineItem - '0')
 		}
 	}
@@ -88,7 +87,11 @@ func day10(filename string, part byte) int {
 		utils.Print2DArrayInt(landscape)
 	}
 
-	return calcTrailheadScores(landscape)
+	if part == 'a' {
+		return calcTrailheadScores(landscape)
+	}
+
+	return calcTrailheadScoresPartB(landscape)
 }
 
 // Main routine
