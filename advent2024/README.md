@@ -126,11 +126,18 @@ This one was nasty. My code won't work for other inputs - I manually worked out 
 ./day23 -part a -file input
 ```
 
-### Day 24 - 
+### Day 24 - Crossed Wires
+
++ [Day 24](cmd/day24/day24.go)
+
+```
+./day24 -part a -file input
+```
+
 ### Day 25 - Code Chronicle
 
 + [Day 25](cmd/day25/day25.go)
 
 ```
 ./day25 -part a -file input
-`
+```
