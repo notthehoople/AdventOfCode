@@ -127,4 +127,10 @@ This one was nasty. My code won't work for other inputs - I manually worked out 
 ```
 
 ### Day 24 - 
-### Day 25 -
+### Day 25 - Code Chronicle
+
++ [Day 25](cmd/day25/day25.go)
+
+```
+./day25 -part a -file input
+`
