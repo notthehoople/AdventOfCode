@@ -5,6 +5,7 @@
 ## Progress
 | Year  | Go Repo | Python Repo | Stars by 25th | Overall |
 | :---: | :---: | :---: | :-----------: | :-----: |
+| 2025 | [Advent 2025](advent2025) |  | 0 | 0 |
 | 2024 | [Advent 2024](advent2024) | [Advent 2024-py](python/advent2024) | 22 | 22 |
 | 2023 | [Advent 2023](advent2023) |  | 20 | 21 |
 | 2022 | [Advent 2022](advent2022) |  | 28 | 28 |
