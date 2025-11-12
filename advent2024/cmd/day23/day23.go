@@ -17,6 +17,10 @@ type Connected struct {
 	third  string
 }
 
+type AnyConnect struct {
+	item []string
+}
+
 func buildLANMap(puzzleInput []string) map[string]map[string]bool {
 	lanMap := make(map[string]map[string]bool)
 
@@ -38,7 +42,32 @@ func buildLANMap(puzzleInput []string) map[string]map[string]bool {
 	return lanMap
 }
 
-func calcTComputers(lanMap map[string]map[string]bool) int {
+func calcAllComputers(lanMap map[string]map[string]bool, connectedMap map[Connected]bool) map[Connected]bool {
+
+	for key, value := range lanMap {
+		if len(value) <= 1 {
+			continue
+		}
+
+		for one := range connectedMap {
+			if one.first == key || one.second == key || one.third == key {
+				fmt.Println("Already there:", key)
+			} else {
+				if _, ok := lanMap[key][one.first]; ok {
+					fmt.Println("Need to add to list:", key)
+				} else if _, ok := lanMap[key][one.second]; ok {
+					fmt.Println("Need to add to list:", key)
+				} else if _, ok := lanMap[key][one.third]; ok {
+					fmt.Println("Need to add to list:", key)
+				}
+			}
+		}
+	}
+
+	return connectedMap
+}
+
+func calcTComputers(lanMap map[string]map[string]bool, part byte) int {
 	var count int
 	// Find 3 connected computers. Disgard all those without a computer that starts with a 't'
 
@@ -64,6 +93,12 @@ func calcTComputers(lanMap map[string]map[string]bool) int {
 			}
 		}
 	}
+	fmt.Println("Len of lanMap is:", len(lanMap))
+	fmt.Println("Len of ConnectedMap is:", len(connectedMap))
+
+	if part == 'b' {
+		calcAllComputers(lanMap, connectedMap)
+	}
 
 	for key, value := range connectedMap {
 		if Debug {
@@ -85,7 +120,7 @@ func day23(filename string, part byte) int {
 
 	//fmt.Println(lanMap)
 
-	result = calcTComputers(lanMap)
+	result = calcTComputers(lanMap, part)
 
 	return result
 }

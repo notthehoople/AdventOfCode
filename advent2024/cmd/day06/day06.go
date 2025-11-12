@@ -92,6 +92,16 @@ func day06(filename string, part byte, debug bool) int {
 		}
 	}
 
+	// Part b: add an obstruction that makes the guards route into an infinite loop
+	// Perhaps need to put a number for the guards route instead of an 'X'
+	// Add an obstruction at each point on the map. Set the guard moving.
+	// When the guard is traversing a route with all the same numbers on the ground then answer
+	// Continue until have tested every position in the map
+	//
+	// Run through part a to build a map of where the guard goes already. No point in trying
+	// to put an obsticle in places that the guard doesn't go!
+	// Then replace each 'X' with an obstacle to see if it makes an infinite loop for the guard
+
 	return result
 }
 
