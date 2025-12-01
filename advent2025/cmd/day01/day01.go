@@ -5,35 +5,10 @@ import (
 	"fmt"
 )
 
-// countNumber used in part b to count the number of times an element appears in a list
-func countNumber(listToSearch []int, intToFind int) int {
-	var count int
-	for _, item := range listToSearch {
-		if item == intToFind {
-			count++
-		}
-	}
-	return count
-}
-
-// calcDistance used in part a to calc the distance between slice elements
-func calcDistance(firstList []int, secondList []int) int {
-	var result int
-
-	for i := 0; i < len(firstList); i++ {
-		result += utils.Abs(firstList[i] - secondList[i])
-	}
-	return result
-}
-
 func day01(filename string, part byte, debug bool) int {
 	var result int
 
 	puzzleInput, _ := utils.ReadFile(filename)
-	//inputLength := len(puzzleInput)
-
-	//firstList := make([]int, inputLength)
-	//secondList := make([]int, inputLength)
 
 	direction := 'L'
 	steps := 0
@@ -44,24 +19,58 @@ func day01(filename string, part byte, debug bool) int {
 			fmt.Printf("%c %d\n", direction, steps)
 		}
 
-		if direction == 'L' {
-			position = (position - steps%100 + 100) % 100
-		} else {
-			position = (position + steps) % 100
-		}
+		if part == 'a' {
+			if direction == 'L' {
+				position = (position - steps%100 + 100) % 100
+			} else {
+				position = (position + steps) % 100
+			}
 
-		if position == 0 {
-			result++
+			if position == 0 {
+				result++
+			}
+		} else { // part b
+			// Couldn't work out the clever way of doing this so gone with brute force
+
+			var dir, oldposition int
+			if direction == 'L' {
+				dir = -1
+			} else {
+				dir = 1
+			}
+
+			oldposition = position
+			if steps >= 100 {
+				result += steps / 100
+			}
+
+			position += (steps % 100) * dir
+			// if we're going over the top then we've crossed 0. Only count it if we didn't end up on 0 as that's handled later
+			if position > 99 {
+				position -= 100
+				if position != 0 && oldposition != 0 {
+					result++
+				}
+			} else if position < 0 {
+				// if we've gone under 0 then we've crossed 0. Only count it if we didn't end up on 0 as that's handled later
+				position += 100
+				if position != 0 && oldposition != 0 {
+					result++
+				}
+			}
+			// If we've landed on 0, increment "crossings"
+			if position == 0 {
+				result++
+			}
 		}
 
 		if debug {
-			fmt.Println(position)
+			fmt.Println("Position: ", position)
 		}
 	}
 
 	if part == 'a' {
-		// Part 1: Find the distances between the 2 lists.
-
+		// Part 1: Find the number of times the position is set to 0
 		return result
 	}
 
