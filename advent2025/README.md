@@ -21,7 +21,7 @@ To run each day use:
 ```
 unless specified differently below
 
-### Day 1 -
+### Day 1 - Day 1: Secret Entrance
 
 + [Day 1](cmd/day01/day01.go)
 

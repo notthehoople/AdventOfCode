@@ -3,7 +3,6 @@ package main
 import (
 	"AdventOfCode-go/advent2025/utils"
 	"fmt"
-	"slices"
 )
 
 // countNumber used in part b to count the number of times an element appears in a list
@@ -31,29 +30,42 @@ func day01(filename string, part byte, debug bool) int {
 	var result int
 
 	puzzleInput, _ := utils.ReadFile(filename)
-	inputLength := len(puzzleInput)
+	//inputLength := len(puzzleInput)
 
-	firstList := make([]int, inputLength)
-	secondList := make([]int, inputLength)
+	//firstList := make([]int, inputLength)
+	//secondList := make([]int, inputLength)
 
-	for i, puzzleLine := range puzzleInput {
-		fmt.Sscanf(puzzleLine, "%d   %d\n", &firstList[i], &secondList[i])
+	direction := 'L'
+	steps := 0
+	position := 50
+	for _, puzzleLine := range puzzleInput {
+		fmt.Sscanf(puzzleLine, "%c%d\n", &direction, &steps)
+		if debug {
+			fmt.Printf("%c %d\n", direction, steps)
+		}
+
+		if direction == 'L' {
+			position = (position - steps%100 + 100) % 100
+		} else {
+			position = (position + steps) % 100
+		}
+
+		if position == 0 {
+			result++
+		}
+
+		if debug {
+			fmt.Println(position)
+		}
 	}
 
 	if part == 'a' {
 		// Part 1: Find the distances between the 2 lists.
 
-		slices.Sort(firstList)
-		slices.Sort(secondList)
-
-		return calcDistance(firstList, secondList)
+		return result
 	}
 
 	// Part B - find the similarity score between the two lists
-	for _, item := range firstList {
-		count := countNumber(secondList, item)
-		result += count * item
-	}
 
 	return result
 }
