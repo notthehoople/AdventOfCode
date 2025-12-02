@@ -21,11 +21,14 @@ To run each day use:
 ```
 unless specified differently below
 
-### Day 1 - Day 1: Secret Entrance
+### Day 1 - Secret Entrance
 
 + [Day 1](cmd/day01/day01.go)
 
-### Day 2 -
+### Day 2 - Gift Shop
+
++ [Day 2](cmd/day02/day02.go)
+
 ### Day 3 -
 ### Day 4 -
 ### Day 5 -

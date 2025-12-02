@@ -27,6 +27,8 @@ advent20??/src/day??/day??
 **/test-input?.txt
 **/test?-input.txt
 
+.vscode
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
