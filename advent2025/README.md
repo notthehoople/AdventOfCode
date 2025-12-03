@@ -29,7 +29,10 @@ unless specified differently below
 
 + [Day 2](cmd/day02/day02.go)
 
-### Day 3 -
+### Day 3 - Lobby
+
++ [Day 3](cmd/day03/day03.go)
+
 ### Day 4 -
 ### Day 5 -
 ### Day 6 -
