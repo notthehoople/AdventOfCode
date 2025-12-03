@@ -5,39 +5,44 @@ import (
 	"fmt"
 )
 
+func findMaxNumber(batteryBank string, startPos int, maxDigits int) (int, int) {
+	var maxNext, maxNextPos int = 0, 0
+
+	// Subtract 1 from maxDigits as we start at Pos 0
+	maxDigits--
+	for i := startPos; i < len(batteryBank)-maxDigits; i++ {
+		if int(batteryBank[i]-'0') > maxNext {
+			maxNext = int(batteryBank[i] - '0')
+			maxNextPos = i + 1
+		}
+	}
+
+	return maxNext, maxNextPos
+}
+
 func day03(filename string, part byte, debug bool) int {
-	var result int
+	var result, characters int
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
+	if part == 'a' {
+		characters = 2
+	} else {
+		characters = 12
+	}
+
 	for _, batteryBank := range puzzleInput {
 
-		var maxPos, maxPower int = 0, 0
-		for i, battery := range batteryBank {
-			// Look for the highest FIRST battery power. Can't be at the last position on the line
+		var joltage int = 0
+		var nextPos int = 0
+		var maxPower int = 0
+		for count := characters; count > 0; count-- {
 
-			currBattery := int(battery - '0')
-
-			if (currBattery > maxPower) && (i != len(batteryBank)-1) {
-				maxPower = currBattery
-				maxPos = i
-			}
+			maxPower, nextPos = findMaxNumber(batteryBank, nextPos, count)
+			joltage = joltage*10 + maxPower
 
 		}
-
-		// After we have the highest FIRST battery power, look for the next highest in the rest of the string
-
-		var maxNext int = 0
-		for i := maxPos + 1; i < len(batteryBank); i++ {
-			if int(batteryBank[i]-'0') > maxNext {
-				maxNext = int(batteryBank[i] - '0')
-			}
-		}
-
-		result += maxPower*10 + maxNext
-		if debug {
-			fmt.Printf("MaxPower: %d MaxNext: %d Actual: %d\n", maxPower, maxNext, maxPower*10+maxNext)
-		}
+		result += joltage
 	}
 
 	return result
