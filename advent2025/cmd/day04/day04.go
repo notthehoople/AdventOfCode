@@ -44,7 +44,7 @@ func adjacentRolls(currentPos Coords, areaMap map[Coords]byte, debug bool) int {
 	return count
 }
 
-func day03(filename string, part byte, debug bool) int {
+func day04(filename string, part byte, debug bool) int {
 	var result int
 
 	puzzleInput, _ := utils.ReadFile(filename)
@@ -106,6 +106,6 @@ func main() {
 	if execPart == 'z' {
 		fmt.Println("Bad part choice. Available choices are 'a' and 'b'")
 	} else {
-		fmt.Printf("Result is: %d\n", day03(filenamePtr, execPart, debug))
+		fmt.Printf("Result is: %d\n", day04(filenamePtr, execPart, debug))
 	}
 }
