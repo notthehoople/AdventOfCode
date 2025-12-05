@@ -33,7 +33,10 @@ unless specified differently below
 
 + [Day 3](cmd/day03/day03.go)
 
-### Day 4 -
+### Day 4 - Printing Department
+
++ [Day 4](cmd/day04/day04.go)
+
 ### Day 5 -
 ### Day 6 -
 ### Day 7 -
