@@ -49,9 +49,8 @@ func day03(filename string, part byte, debug bool) int {
 
 	puzzleInput, _ := utils.ReadFile(filename)
 
+	// Build the map of the printing department
 	areaMap := make(map[Coords]byte)
-
-	//var currentPos Coords
 
 	for y := 0; y < len(puzzleInput); y++ {
 		for x := 0; x < len(puzzleInput[y]); x++ {
@@ -63,12 +62,36 @@ func day03(filename string, part byte, debug bool) int {
 		}
 	}
 
-	// Now look for all rolls of paper '@' that have fewer than 4 rolls of paper in the 8 adjacent spaces.
-	for currentPos := range areaMap {
-		if areaMap[currentPos] == '@' {
-			count := adjacentRolls(currentPos, areaMap, debug)
-			if count < 4 {
-				result++
+	if part == 'a' {
+		// Now look for all rolls of paper '@' that have fewer than 4 rolls of paper in the 8 adjacent spaces.
+		for currentPos := range areaMap {
+			if areaMap[currentPos] == '@' {
+				count := adjacentRolls(currentPos, areaMap, debug)
+				if count < 4 {
+					result++
+				}
+			}
+		}
+	} else {
+		// Look for all rolls of paper '@' that have fewer than 4 rolls of paper in the 8 adjacent spaces
+		// Remove each then repeat the search until we can't remove any more
+
+		looping := true
+		var removedRolls int
+		for looping {
+			removedRolls = 0
+			for currentPos := range areaMap {
+				if areaMap[currentPos] == '@' {
+					count := adjacentRolls(currentPos, areaMap, debug)
+					if count < 4 {
+						areaMap[currentPos] = 'x'
+						removedRolls++
+						result++
+					}
+				}
+			}
+			if removedRolls == 0 {
+				looping = false
 			}
 		}
 	}
