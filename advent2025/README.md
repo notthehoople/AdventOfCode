@@ -37,7 +37,10 @@ unless specified differently below
 
 + [Day 4](cmd/day04/day04.go)
 
-### Day 5 -
+### Day 5 - Cafeteria
+
++ [Day 5](cmd/day05/day05.go)
+
 ### Day 6 -
 ### Day 7 -
 ### Day 8 -
