@@ -12,6 +12,28 @@ type freshRange struct {
 	end   int
 }
 
+func smallest(first int, second int) int {
+	if first < second {
+		return first
+	}
+	return second
+}
+
+func largest(first int, second int) int {
+	if first > second {
+		return first
+	}
+	return second
+}
+
+func overlappingRange(first freshRange, second freshRange) bool {
+	if ((first.end >= second.start) && (first.end <= second.end)) ||
+		((first.start >= second.start) && (first.start <= second.end)) {
+		return true
+	}
+	return false
+}
+
 func day05(filename string, part byte, debug bool) int {
 	var result int
 
@@ -45,20 +67,55 @@ func day05(filename string, part byte, debug bool) int {
 				ingredientRange := strings.Split(puzzleLine, "-")
 				ingredientDB[i].start, _ = strconv.Atoi(ingredientRange[0])
 				ingredientDB[i].end, _ = strconv.Atoi(ingredientRange[1])
+
 			}
 		} else {
-			// Check each ingredient in the fresh ingredient DB we previously built
-			ingredient, _ := strconv.Atoi(puzzleLine)
-			for _, freshStuff := range ingredientDB {
-				if ingredient >= freshStuff.start && ingredient <= freshStuff.end {
-					result++
-					break
+
+			if part == 'a' {
+				// Check each ingredient in the fresh ingredient DB we previously built
+				ingredient, _ := strconv.Atoi(puzzleLine)
+				for _, freshStuff := range ingredientDB {
+					if ingredient >= freshStuff.start && ingredient <= freshStuff.end {
+						result++
+						break
+					}
 				}
+			} else {
+				break
 			}
 		}
 	}
 
-	//fmt.Println(ingredientDB)
+	if part == 'a' {
+		return result
+	}
+
+	// part b. Don't process the ingredient list. Focus on the DB
+
+	// Need to work out how many unique fresh IDs there are
+	// Use the ranges in the DB
+	// look for overlapping ranges and COMBINE them
+	// once everything has been combined, add up the remaining IDs
+
+	fmt.Println(ingredientDB)
+	expandedDB := make([]freshRange, countArraySize)
+
+	for i := 0; i < len(ingredientDB); i++ {
+		for j := i + 1; j < len(ingredientDB); j++ {
+			if overlappingRange(ingredientDB[i], ingredientDB[j]) {
+				// Combine the ranges
+				fmt.Println("Overlapping ranges:", ingredientDB[i], ingredientDB[j])
+
+				expandedDB[i].start = smallest(ingredientDB[i].start, ingredientDB[j].start)
+				expandedDB[i].end = largest(ingredientDB[i].end, ingredientDB[j].end)
+				// To combine the ranges, take the smallest start and the largest end and add them together
+			}
+		}
+		// If nothing has been put into the expandedDB array at this point, just copy from ingredientsDB
+		// Need to deal with multiple entries. How?
+		// Once an overlap has been found should we remove that entry from the ingredientDB?
+	}
+	fmt.Println(expandedDB)
 
 	return result
 }
