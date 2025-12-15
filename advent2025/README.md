@@ -41,7 +41,10 @@ unless specified differently below
 
 + [Day 5](cmd/day05/day05.go)
 
-### Day 6 -
+### Day 6 - Trash Compactor
+
++ [Day 6](cmd/day06/day06.go)
+
 ### Day 7 -
 ### Day 8 -
 ### Day 9 -
