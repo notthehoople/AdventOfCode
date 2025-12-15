@@ -97,25 +97,69 @@ func day05(filename string, part byte, debug bool) int {
 	// look for overlapping ranges and COMBINE them
 	// once everything has been combined, add up the remaining IDs
 
-	fmt.Println(ingredientDB)
-	expandedDB := make([]freshRange, countArraySize)
+	expandedDB := make(map[freshRange]bool, 0)
 
-	for i := 0; i < len(ingredientDB); i++ {
-		for j := i + 1; j < len(ingredientDB); j++ {
-			if overlappingRange(ingredientDB[i], ingredientDB[j]) {
+	for _, ingredientRange := range ingredientDB {
+		var didOverlap bool = false
+
+		for expandedRange := range expandedDB {
+
+			if overlappingRange(ingredientRange, expandedRange) {
 				// Combine the ranges
-				fmt.Println("Overlapping ranges:", ingredientDB[i], ingredientDB[j])
+				didOverlap = true
 
-				expandedDB[i].start = smallest(ingredientDB[i].start, ingredientDB[j].start)
-				expandedDB[i].end = largest(ingredientDB[i].end, ingredientDB[j].end)
-				// To combine the ranges, take the smallest start and the largest end and add them together
+				overlapRange := freshRange{smallest(ingredientRange.start, expandedRange.start), largest(ingredientRange.end, expandedRange.end)}
+				expandedDB[overlapRange] = true
+
+				if overlapRange != ingredientRange {
+					delete(expandedDB, ingredientRange)
+				}
+
+				if overlapRange != expandedRange {
+					delete(expandedDB, expandedRange)
+				}
 			}
 		}
-		// If nothing has been put into the expandedDB array at this point, just copy from ingredientsDB
-		// Need to deal with multiple entries. How?
-		// Once an overlap has been found should we remove that entry from the ingredientDB?
+
+		// If no overlap then just add that ingredient range to our list
+		if !didOverlap {
+			expandedDB[ingredientRange] = true
+		}
 	}
-	fmt.Println(expandedDB)
+
+	// Now repeatedly loop through our expanded range looking for ranges that might overlap. Combine them, then look again
+	var madeAChange bool = true
+	for madeAChange {
+		madeAChange = false
+		for firstItem := range expandedDB {
+			for secondItem := range expandedDB {
+				if firstItem != secondItem {
+					if overlappingRange(firstItem, secondItem) {
+						// Combine the ranges
+
+						madeAChange = true
+
+						overlapRange := freshRange{smallest(firstItem.start, secondItem.start), largest(firstItem.end, secondItem.end)}
+						expandedDB[overlapRange] = true
+
+						if overlapRange != firstItem {
+							delete(expandedDB, firstItem)
+						}
+
+						if overlapRange != secondItem {
+							delete(expandedDB, secondItem)
+						}
+
+					}
+				}
+			}
+		}
+	}
+
+	// Sum up all the fresh ingredients in all the ranges
+	for i := range expandedDB {
+		result += i.end - i.start + 1
+	}
 
 	return result
 }
@@ -130,3 +174,20 @@ func main() {
 		fmt.Printf("Result is: %d\n", day05(filenamePtr, execPart, debug))
 	}
 }
+
+/*
+
+List 1 - original list of stuff
+List 2 - new, expanded list of stuff
+
+For each entry in List 1
+  check through List 2
+    if nothing overlapping, append to List 2
+	if overlapping
+	  change overlapping entry to include List 1 entry
+	    check through all of List 2
+		  doesn't anything else now overlap?
+		  if overlap
+		    combine entries and remove 1 of them
+
+*/
